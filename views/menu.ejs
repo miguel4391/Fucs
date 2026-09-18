@@ -1,0 +1,88 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    Criar Ficha de Unidade Curricular
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Criar Nova FUC</h5>
+                    <p class="card-text">Escolha esta opção para criar uma nova Ficha de Unidade Curricular</p>
+                    <% if(session.role == "administrador" || session.role=="gestor"){ %>
+                        <a href="/landing" class="btn btn-primary">Aceder</a>
+                    <% }else{ %>
+                        <a hidden href="/landing" class="btn btn-primary" >Aceder</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    Editar Ficha de Unidade Curricular
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Editar FUC</h5>
+                    <p class="card-text">Escolha esta opção para editar uma Ficha de Unidade Curricular já existente</p>
+                    <a href="editaCursoAno" class="btn btn-primary">Aceder</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header" style="background-color: #beebf1;">
+                    Criar Relatório da Unidade Curricular
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Criar RUC</h5>
+                    <p class="card-text">Escolha esta opção para criar ou editar um Relatório de Unidade Curricular</p>
+                    <a href="editaRUC" class="btn btn-primary">Aceder</a>
+                </div>
+            </div>
+        </div>
+        <% if(session.role=="gestor" || session.role=="administrador" || session.role=="coordenador"){ %>
+            <div class="col-4 mt-3" style="margin-left: auto; margin-right:auto;">
+                <div class="card">
+                    <div class="card-header" style="background-color: #f7f78b;">
+                        Gestão de Acessos
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Gestão de Responsabilidades Académicas</h5>
+                        <p class="card-text">Escolha esta opção para gerir perfis de acessos e de edição das FUC para: Coordenadores de Ciclo de Estudos e Responsáveis de UC. Permite ainda adicionar "Outros docentes” que colaboram nas UC.</p>
+                        <a href="/regentesAno" class="btn btn-primary">Aceder</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 mt-3" style="margin-left: auto; margin-right:auto;">
+                <div class="card">
+                    <div class="card-header" style="background-color: #8bf79d;">
+                        RAC - Relatório Anual de Curso
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Criar RAC</h5>
+                        <p class="card-text">Escolha esta opção para criar ou editar um Relatório do Ciclo de Estudos</p>
+                        <a href="/editaRAC" class="btn btn-primary">Aceder</a>
+                    </div>
+                </div>
+            </div>
+             <% if(session.role=="gestor" || session.role=="administrador"){ %>
+                <div class="col-4 mt-3" style="margin-left: auto; margin-right:auto;">
+                    <div class="card">
+                        <div class="card-header">
+                            Eliminar Ficha de Unidade Curricular 
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Eliminar FUC</h5>
+                            <p class="card-text">Escolha esta opção para eliminar FUCs que estejam duplicadas ou que deixaram de estar em vigor</p>
+                            <a href="/delFucsAno" class="btn btn-primary">Aceder</a>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

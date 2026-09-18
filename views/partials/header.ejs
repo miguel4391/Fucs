@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/stylesheets/main.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="/vendor/jquery/jquery-3.7.1.min.js"></script>
+    <script src="/vendor/popper/popper.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+   
+    <!-- Font Awsome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    
+    
+    <title>Fucs UAtlantica</title>
+    
+  </head>
+  <body>
+        <nav class="navbar">
+            <a class="navbar-brand" href="/" style="max-width: 900px;"><img src="/img/logo.png" class="logo mx-3" alt="logo"><span class="mx-3">Menu principal</span></a>
+            
+            <div><a class="btn btn-sm btn-secundary mx-5 px-5" href="/logout">Sair</a></div>
+        </nav>
+        <div class="container">
+            <% if(error && error.length > 0 ){ %>
+                <div class="alert alert-danger">
+                    <%= error %>    
+                </div>
+            <% } %>
+        </div>
+        <div class="container">
+            <% if(success && success.length > 0 ){ %>
+                <div class="alert alert-success">
+                    <%= success %>    
+                </div>
+            <% } %>
+        </div>

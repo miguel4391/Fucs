@@ -1,0 +1,1026 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+    <form method='post' action='../setRelUC'>
+        <input type="hidden" id="idrelUC" name="idrelUC" value="<%= relUC[0] ? relUC[0].idrelUC : 0 %>"/>
+        <input type="hidden" id="idCe" name="idCe" value="1"/>
+        <input type="hidden" id="idUC" name="idUC" value="<%= uc[0].idfucs %>"/>
+        <div class="row">
+            <h2>Relatório UC</h2>
+            <div class="col-6">
+                <h4>Ano Letivo</h4>
+                <input class="form-control form-control-sm" id="anoLetivo" name="anoLetivo" value="<%= anoLetivo.replace('_', '/') %>" readonly></input>
+            </div>
+            <!--<div class="col-6">
+                <h4>Semestre Letivo</h4>
+                <select id="semestreLetivo" name="semestreLetivo" class="form-control form-control-sm">
+                    <% if(relUC[0]){
+                        if(relUC[0].semestre == "1º"){ %>
+                            <option value="1_semestre" selected>1º Semestre</option>
+                            <option value="2_semestre">2º Semestre</option>
+                        } else {%>
+                            <option value="1_semestre">1º Semestre</option>
+                            <option value="2_semestre" selected>2º Semestre</option>
+                        <% }
+                     } else { %>
+                    <option value="1_semestre">1º Semestre</option>
+                    <option value="2_semestre">2º Semestre</option>
+                    <% } %>
+                </select>
+            </div>-->
+        </div>
+        <div class="row mt-4">
+            <table class="table table-striped table-sm table-hover">
+                <thead class="table-dark align-middle">
+                    <tr>
+                        <th class="">Docente Responsável</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input id="nomeDocente" name="nomeDocente" class="form-control form-control-sm" value="<%= uc[0].doc1Nome %>" readonly/></td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-4">
+            <table class="table table-striped table-sm table-hover">
+                <thead class="table-dark align-middle">
+                    <tr>
+                        <th class="">Unidade Curricular</th>
+                        <th style="max-width: 100px;">Observações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input id="nomeUC" name="nomeUC" class="form-control form-control-sm" value="<%= uc[0].nomeUCPt %>" readonly/></td>
+                        <td style="max-width: 100px;"><input id="obs" name="obs" class="form-control form-control-sm" value="<%= uc[0].regime %>" readonly/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-4">
+            <table class="table table-striped table-sm table-hover">
+                <thead class="table-dark align-middle">
+                    <tr>
+                        <th class="">Ciclo de Estudos</th>
+                        <th style="max-width: 30px;">Ano</th>
+                        <th style="max-width: 30px;">Semestre</th>
+                        <th style="max-width: 30px;">ECTS</th>
+                        <th style="max-width: 30px;">Total de Horas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input id="nomeCE" name="nomeCE" class="form-control form-control-sm" value="<%= uc[0].nomeCE %>" readonly/></td>
+                        <td style="max-width: 30px;"><input id="ano" name="ano" class="form-control form-control-sm" value="<%= uc[0].ano %>" readonly/></td>
+                        <td style="max-width: 30px;"><input id="semestre" name="semestre" class="form-control form-control-sm" value="<%= uc[0].semestre %>" readonly/></td>
+                        <td style="max-width: 30px;"><input id="ects" name="ects" class="form-control form-control-sm" value="<%= uc[0].ECTS %>" readonly /></td>
+                        <td style="max-width: 30px;"><input id="totHoras" name="totHoras" class="form-control form-control-sm" value="<%= uc[0].horasTrab %>" readonly/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-striped table-sm table-hover">
+                <thead class="table-dark align-middle">
+                    <tr>
+                        <th rowspan="2">Tipologia</th>
+                        <th colspan="10">Horas de contacto</th>
+                    </tr>
+                    <tr>
+                        <th>T</th>
+                        <th>TP</th>
+                        <th>PL</th>
+                        <th>TC</th>
+                        <th>S</th>
+                        <th>E</th>
+                        <th>OT</th>
+                        <th>O</th>
+                        <th>Total</th>
+                        <th>%EaD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th></th>
+                    <th><input id="horasT" name="horasT" class="form-control form-control-sm" value="<%= uc[0].T_horasC %>" readonly/></th>
+                    <th><input id="horasTP" name="horasTP" class="form-control form-control-sm" value="<%= uc[0].TP_horasC %>" readonly/></th>
+                    <th><input id="horasPL" name="horasPL" class="form-control form-control-sm" value="<%= uc[0].PL_horasC %>" readonly/></th>
+                    <th><input id="horasTC" name="horasTC" class="form-control form-control-sm" value="<%= uc[0].TC_horasC %>" readonly/></th>
+                    <th><input id="horasS" name="horasS" class="form-control form-control-sm" value="<%= uc[0].S_horasC %>" readonly/></th>
+                    <th><input id="horasE" name="horasE" class="form-control form-control-sm" value="<%= uc[0].E_horasC %>" readonly/></th>
+                    <th><input id="horasOT" name="horasOT" class="form-control form-control-sm" value="<%= uc[0].OT_horasC %>" readonly/></th>
+                    <th><input id="horasO" name="horasO" class="form-control form-control-sm" value="<%= uc[0].O_horasC %>" readonly/></th>
+                    <th><input id="horasTot" name="horasTot" class="form-control form-control-sm" value="<%= uc[0].horasContac %>" readonly/></th>
+                    <th><input id="horasEaD" name="horasEaD" class="form-control form-control-sm" value="<%= uc[0].perDist %>" readonly/></th>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h5>1- Pessoal Docente</h5>
+            </div>
+            <table class="table table-striped table-sm table-hover">
+                <thead class="table-dark align-middle">
+                    <tr>
+                        <th rowspan="2" style="min-width: 300px;">Nome do docente</th>
+                        <!--<th rowspan="2" style="max-width: 10px;">Nº de turmas</th>-->
+                        <th colspan="8">Horas de contacto</th>
+                        <th colspan="2">Nº horas de contacto</th>
+                        <th rowspan="2" >% Horas contacto dadas</th>
+                    </tr>
+                    <tr>
+                        <th style="max-width: 10px;">T</th>
+                        <th style="max-width: 10px;">TP</th>
+                        <th style="max-width: 10px;">PL</th>
+                        <th style="max-width: 10px;">TC</th>
+                        <th style="max-width: 10px;">S</th>
+                        <th style="max-width: 10px;">E</th>
+                        <th style="max-width: 10px;">OT</th>
+                        <th style="max-width: 10px;">O</th>
+                        <th style="max-width: 10px;">Previstas</th>
+                        <th style="max-width: 10px;">Lecionadas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input id="nomeDoc1" name="nomeDoc1" class="form-control form-control-sm" value="<%= uc[0].doc1Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas1" name="nrTurmas1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc1 : ''%>"></td>-->
+                        <td><input id="horasTdoc1" name="horasTdoc1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1T : ''%>"/></td>
+                        <td><input id="horasTPdoc1" name="horasTPdoc1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1TP : ''%>"/></td>
+                        <td><input id="horasPLdoc1" name="horasPLdoc1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1PL : ''%>"/></td>
+                        <td><input id="horasTCdoc1" name="horasTCdoc1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1TC : ''%>"/></td>
+                        <td><input id="horasSdoc1" name="horasSdoc1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1S : ''%>"/></td>
+                        <td><input id="horasEdoc1" name="horasEdoc1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1E : ''%>"/></td>
+                        <td><input id="horasOTdoc1" name="horasOTdoc1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1OT : ''%>"/></td>
+                        <td><input id="horasOdoc1" name="horasOdoc1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1O : ''%>"/></td>
+                        <td><input id="aulasPrev1" name="aulasPrev1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1AulasPrev : ''%>" oninput="calculateRatio1()"/></td>
+                        <td><input id="aulasLecio1" name="aulasLecio1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1AulasLec : ''%>" oninput="calculateRatio1()"/></td>
+                        <td><input id="percAulasDadas1" name="percAulasDadas1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc1PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc1,
+                            #horasTPdoc1,
+                            #horasPLdoc1,
+                            #horasTCdoc1,
+                            #horasSdoc1,
+                            #horasEdoc1,
+                            #horasOTdoc1,
+                            #horasOdoc1
+                        `, function () {
+                            calculateAulasPrev1();
+                        });
+                        function calculateAulasPrev1(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc1',
+                                '#horasTPdoc1',
+                                '#horasPLdoc1',
+                                '#horasTCdoc1',
+                                '#horasSdoc1',
+                                '#horasEdoc1',
+                                '#horasOTdoc1',
+                                '#horasOdoc1'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev1').val(total);
+                        }
+                        function calculateRatio1() {
+                            let a = parseFloat($("#aulasPrev1").val());
+                            let b = parseFloat($("#aulasLecio1").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas1").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas1").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc2" name="nomeDoc2" class="form-control form-control-sm" value="<%= uc[0].doc2Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas2" name="nrTurmas2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc2 : ''%>"></td>-->
+                        <td><input id="horasTdoc2" name="horasTdoc2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2T : ''%>"/></td>
+                        <td><input id="horasTPdoc2" name="horasTPdoc2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2TP : ''%>"/></td>
+                        <td><input id="horasPLdoc2" name="horasPLdoc2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2PL : ''%>"/></td>
+                        <td><input id="horasTCdoc2" name="horasTCdoc2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2TC : ''%>"/></td>
+                        <td><input id="horasSdoc2" name="horasSdoc2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2S : ''%>"/></td>
+                        <td><input id="horasEdoc2" name="horasEdoc2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2E : ''%>"/></td>
+                        <td><input id="horasOTdoc2" name="horasOTdoc2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2OT : ''%>"/></td>
+                        <td><input id="horasOdoc2" name="horasOdoc2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2O : ''%>"/></td>
+                        <td><input id="aulasPrev2" name="aulasPrev2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2AulasPrev : ''%>" oninput="calculateRatio2()"/></td>
+                        <td><input id="aulasLecio2" name="aulasLecio2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2AulasLec : ''%>" oninput="calculateRatio2()"/></td>
+                        <td><input id="percAulasDadas2" name="percAulasDadas2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc2PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc2,
+                            #horasTPdoc2,
+                            #horasPLdoc2,
+                            #horasTCdoc2,
+                            #horasSdoc2,
+                            #horasEdoc2,
+                            #horasOTdoc2,
+                            #horasOdoc2
+                        `, function () {
+                            calculateAulasPrev2();
+                        });
+                        function calculateAulasPrev2(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc2',
+                                '#horasTPdoc2',
+                                '#horasPLdoc2',
+                                '#horasTCdoc2',
+                                '#horasSdoc2',
+                                '#horasEdoc2',
+                                '#horasOTdoc2',
+                                '#horasOdoc2'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev2').val(total);
+                        }
+                        function calculateRatio2() {
+                            let a = parseFloat($("#aulasPrev2").val());
+                            let b = parseFloat($("#aulasLecio2").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas2").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas2").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc3" name="nomeDoc3" class="form-control form-control-sm" value="<%= uc[0].doc3Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas3" name="nrTurmas3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc3 : ''%>"></td>-->
+                        <td><input id="horasTdoc3" name="horasTdoc3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3T : ''%>"/></td>
+                        <td><input id="horasTPdoc3" name="horasTPdoc3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3TP : ''%>"/></td>
+                        <td><input id="horasPLdoc3" name="horasPLdoc3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3PL : ''%>"/></td>
+                        <td><input id="horasTCdoc3" name="horasTCdoc3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3TC : ''%>"/></td>
+                        <td><input id="horasSdoc3" name="horasSdoc3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3S : ''%>"/></td>
+                        <td><input id="horasEdoc3" name="horasEdoc3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3E : ''%>"/></td>
+                        <td><input id="horasOTdoc3" name="horasOTdoc3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3OT : ''%>"/></td>
+                        <td><input id="horasOdoc3" name="horasOdoc3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3O : ''%>"/></td>
+                        <td><input id="aulasPrev3" name="aulasPrev3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3AulasPrev : ''%>" oninput="calculateRatio3()"/></td>
+                        <td><input id="aulasLecio3" name="aulasLecio3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3AulasLec : ''%>" oninput="calculateRatio3()"/></td>
+                        <td><input id="percAulasDadas3" name="percAulasDadas3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc3PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc3,
+                            #horasTPdoc3,
+                            #horasPLdoc3,
+                            #horasTCdoc3,
+                            #horasSdoc3,
+                            #horasEdoc3,
+                            #horasOTdoc3,
+                            #horasOdoc3
+                        `, function () {
+                            calculateAulasPrev3();
+                        });
+                        function calculateAulasPrev3(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc3',
+                                '#horasTPdoc3',
+                                '#horasPLdoc3',
+                                '#horasTCdoc3',
+                                '#horasSdoc3',
+                                '#horasEdoc3',
+                                '#horasOTdoc3',
+                                '#horasOdoc3'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev3').val(total);
+                        }
+                        function calculateRatio3() {
+                            let a = parseFloat($("#aulasPrev3").val());
+                            let b = parseFloat($("#aulasLecio3").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas3").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas3").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc4" name="nomeDoc4" class="form-control form-control-sm" value="<%= uc[0].doc4Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas4" name="nrTurmas4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc4 : ''%>"></td>-->
+                        <td><input id="horasTdoc4" name="horasTdoc4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4T : ''%>"/></td>
+                        <td><input id="horasTPdoc4" name="horasTPdoc4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4TP : ''%>"/></td>
+                        <td><input id="horasPLdoc4" name="horasPLdoc4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4PL : ''%>"/></td>
+                        <td><input id="horasTCdoc4" name="horasTCdoc4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4TC : ''%>"/></td>
+                        <td><input id="horasSdoc4" name="horasSdoc4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4S : ''%>"/></td>
+                        <td><input id="horasEdoc4" name="horasEdoc4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4E : ''%>"/></td>
+                        <td><input id="horasOTdoc4" name="horasOTdoc4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4OT : ''%>"/></td>
+                        <td><input id="horasOdoc4" name="horasOdoc4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4O : ''%>"/></td>
+                        <td><input id="aulasPrev4" name="aulasPrev4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4AulasPrev : ''%>" oninput="calculateRatio4()"/></td>
+                        <td><input id="aulasLecio4" name="aulasLecio4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4AulasLec : ''%>" oninput="calculateRatio4()"/></td>
+                        <td><input id="percAulasDadas4" name="percAulasDadas4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc4PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc4,
+                            #horasTPdoc4,
+                            #horasPLdoc4,
+                            #horasTCdoc4,
+                            #horasSdoc4,
+                            #horasEdoc4,
+                            #horasOTdoc4,
+                            #horasOdoc4
+                        `, function () {
+                            calculateAulasPrev4();
+                        });
+                        function calculateAulasPrev4(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc4',
+                                '#horasTPdoc4',
+                                '#horasPLdoc4',
+                                '#horasTCdoc4',
+                                '#horasSdoc4',
+                                '#horasEdoc4',
+                                '#horasOTdoc4',
+                                '#horasOdoc4'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev4').val(total);
+                        }
+                        function calculateRatio4() {
+                            let a = parseFloat($("#aulasPrev4").val());
+                            let b = parseFloat($("#aulasLecio4").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas4").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas4").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc5" name="nomeDoc5" class="form-control form-control-sm" value="<%= uc[0].doc5Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas5" name="nrTurmas5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc5 : ''%>"></td>-->
+                        <td><input id="horasTdoc5" name="horasTdoc5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5T : ''%>"/></td>
+                        <td><input id="horasTPdoc5" name="horasTPdoc5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5TP : ''%>"/></td>
+                        <td><input id="horasPLdoc5" name="horasPLdoc5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5PL : ''%>"/></td>
+                        <td><input id="horasTCdoc5" name="horasTCdoc5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5TC : ''%>"/></td>
+                        <td><input id="horasSdoc5" name="horasSdoc5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5S : ''%>"/></td>
+                        <td><input id="horasEdoc5" name="horasEdoc5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5E : ''%>"/></td>
+                        <td><input id="horasOTdoc5" name="horasOTdoc5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5OT : ''%>"/></td>
+                        <td><input id="horasOdoc5" name="horasOdoc5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5O : ''%>"/></td>
+                        <td><input id="aulasPrev5" name="aulasPrev5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5AulasPrev : ''%>" oninput="calculateRatio5()"/></td>
+                        <td><input id="aulasLecio5" name="aulasLecio5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5AulasLec : ''%>" oninput="calculateRatio5()"/></td>
+                        <td><input id="percAulasDadas5" name="percAulasDadas5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc5PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc5,
+                            #horasTPdoc5,
+                            #horasPLdoc5,
+                            #horasTCdoc5,
+                            #horasSdoc5,
+                            #horasEdoc5,
+                            #horasOTdoc5,
+                            #horasOdoc5
+                        `, function () {
+                            calculateAulasPrev5();
+                        });
+                        function calculateAulasPrev5(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc5',
+                                '#horasTPdoc5',
+                                '#horasPLdoc5',
+                                '#horasTCdoc5',
+                                '#horasSdoc5',
+                                '#horasEdoc5',
+                                '#horasOTdoc5',
+                                '#horasOdoc5'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev5').val(total);
+                        }
+                        function calculateRatio5() {
+                            let a = parseFloat($("#aulasPrev5").val());
+                            let b = parseFloat($("#aulasLecio5").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas5").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas5").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc6" name="nomeDoc6" class="form-control form-control-sm" value="<%= uc[0].doc6Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas6" name="nrTurmas6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc6 : ''%>"></td>-->
+                        <td><input id="horasTdoc6" name="horasTdoc6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6T : ''%>"/></td>
+                        <td><input id="horasTPdoc6" name="horasTPdoc6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6TP : ''%>"/></td>
+                        <td><input id="horasPLdoc6" name="horasPLdoc6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6PL : ''%>"/></td>
+                        <td><input id="horasTCdoc6" name="horasTCdoc6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6TC : ''%>"/></td>
+                        <td><input id="horasSdoc6" name="horasSdoc6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6S : ''%>"/></td>
+                        <td><input id="horasEdoc6" name="horasEdoc6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6E : ''%>"/></td>
+                        <td><input id="horasOTdoc6" name="horasOTdoc6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6OT : ''%>" /></td>
+                        <td><input id="horasOdoc6" name="horasOdoc6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6O : ''%>"/></td>
+                        <td><input id="aulasPrev6" name="aulasPrev6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6AulasPrev : ''%>" oninput="calculateRatio6()"/></td>
+                        <td><input id="aulasLecio6" name="aulasLecio6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6AulasLec : ''%>" oninput="calculateRatio6()"/></td>
+                        <td><input id="percAulasDadas6" name="percAulasDadas6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc6PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc6,
+                            #horasTPdoc6,
+                            #horasPLdoc6,
+                            #horasTCdoc6,
+                            #horasSdoc6,
+                            #horasEdoc6,
+                            #horasOTdoc6,
+                            #horasOdoc6
+                        `, function () {
+                            calculateAulasPrev6();
+                        });
+                        function calculateAulasPrev6(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc6',
+                                '#horasTPdoc6',
+                                '#horasPLdoc6',
+                                '#horasTCdoc6',
+                                '#horasSdoc6',
+                                '#horasEdoc6',
+                                '#horasOTdoc6',
+                                '#horasOdoc6'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev6').val(total);
+                        }
+                        function calculateRatio6() {
+                            let a = parseFloat($("#aulasPrev6").val());
+                            let b = parseFloat($("#aulasLecio6").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas6").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas6").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc7" name="nomeDoc7" class="form-control form-control-sm" value="<%= uc[0].doc7Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas7" name="nrTurmas7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc7 : ''%>"></td>-->
+                        <td><input id="horasTdoc7" name="horasTdoc7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7T : ''%>"/></td>
+                        <td><input id="horasTPdoc7" name="horasTPdoc7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7TP : ''%>"/></td>
+                        <td><input id="horasPLdoc7" name="horasPLdoc7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7PL : ''%>"/></td>
+                        <td><input id="horasTCdoc7" name="horasTCdoc7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7TC : ''%>"/></td>
+                        <td><input id="horasSdoc7" name="horasSdoc7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7S : ''%>"/></td>
+                        <td><input id="horasEdoc7" name="horasEdoc7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7E : ''%>"/></td>
+                        <td><input id="horasOTdoc7" name="horasOTdoc7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7OT : ''%>"/></td>
+                        <td><input id="horasOdoc7" name="horasOdoc7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7O : ''%>"/></td>
+                        <td><input id="aulasPrev7" name="aulasPrev7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7AulasPrev : ''%>" oninput="calculateRatio7()"/></td>
+                        <td><input id="aulasLecio7" name="aulasLecio7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7AulasLec : ''%>" oninput="calculateRatio7()"/></td>
+                        <td><input id="percAulasDadas7" name="percAulasDadas7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc7PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc7,
+                            #horasTPdoc7,
+                            #horasPLdoc7,
+                            #horasTCdoc7,
+                            #horasSdoc7,
+                            #horasEdoc7,
+                            #horasOTdoc7,
+                            #horasOdoc7
+                        `, function () {
+                            calculateAulasPrev7();
+                        });
+                        function calculateAulasPrev7(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc7',
+                                '#horasTPdoc7',
+                                '#horasPLdoc7',
+                                '#horasTCdoc7',
+                                '#horasSdoc7',
+                                '#horasEdoc7',
+                                '#horasOTdoc7',
+                                '#horasOdoc7'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev7').val(total);
+                        }
+                        function calculateRatio7() {
+                            let a = parseFloat($("#aulasPrev7").val());
+                            let b = parseFloat($("#aulasLecio7").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas7").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas7").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc8" name="nomeDoc8" class="form-control form-control-sm" value="<%= uc[0].doc8Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas8" name="nrTurmas8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc8 : ''%>"></td>-->
+                        <td><input id="horasTdoc8" name="horasTdoc8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8T : ''%>"/></td>
+                        <td><input id="horasTPdoc8" name="horasTPdoc8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8TP : ''%>"/></td>
+                        <td><input id="horasPLdoc8" name="horasPLdoc8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8PL : ''%>"/></td>
+                        <td><input id="horasTCdoc8" name="horasTCdoc8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8TC : ''%>"/></td>
+                        <td><input id="horasSdoc8" name="horasSdoc8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8S : ''%>"/></td>
+                        <td><input id="horasEdoc8" name="horasEdoc8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8E : ''%>"/></td>
+                        <td><input id="horasOTdoc8" name="horasOTdoc8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8OT : ''%>"/></td>
+                        <td><input id="horasOdoc8" name="horasOdoc8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8O : ''%>"/></td>
+                        <td><input id="aulasPrev8" name="aulasPrev8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8AulasPrev : ''%>" oninput="calculateRatio8()"/></td>
+                        <td><input id="aulasLecio8" name="aulasLecio8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8AulasLec : ''%>" oninput="calculateRatio8()"/></td>
+                        <td><input id="percAulasDadas8" name="percAulasDadas8" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc8PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc8,
+                            #horasTPdoc8,
+                            #horasPLdoc8,
+                            #horasTCdoc8,
+                            #horasSdoc8,
+                            #horasEdoc8,
+                            #horasOTdoc8,
+                            #horasOdoc8
+                        `, function () {
+                            calculateAulasPrev8();
+                        });
+                        function calculateAulasPrev8(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc8',
+                                '#horasTPdoc8',
+                                '#horasPLdoc8',
+                                '#horasTCdoc8',
+                                '#horasSdoc8',
+                                '#horasEdoc8',
+                                '#horasOTdoc8',
+                                '#horasOdoc8'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev8').val(total);
+                        }
+                        function calculateRatio8() {
+                            let a = parseFloat($("#aulasPrev8").val());
+                            let b = parseFloat($("#aulasLecio8").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas8").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas8").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc9" name="nomeDoc9" class="form-control form-control-sm" value="<%= uc[0].doc9Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas9" name="nrTurmas9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc9 : ''%>"></td>-->
+                        <td><input id="horasTdoc9" name="horasTdoc9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9T : ''%>"/></td>
+                        <td><input id="horasTPdoc9" name="horasTPdoc9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9TP : ''%>"/></td>
+                        <td><input id="horasPLdoc9" name="horasPLdoc9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9PL : ''%>"/></td>
+                        <td><input id="horasTCdoc9" name="horasTCdoc9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9TC : ''%>"/></td>
+                        <td><input id="horasSdoc9" name="horasSdoc9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9S : ''%>"/></td>
+                        <td><input id="horasEdoc9" name="horasEdoc9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9E : ''%>"/></td>
+                        <td><input id="horasOTdoc9" name="horasOTdoc9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9OT : ''%>"/></td>
+                        <td><input id="horasOdoc9" name="horasOdoc9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9O : ''%>"/></td>
+                        <td><input id="aulasPrev9" name="aulasPrev9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9AulasPrev : ''%>" oninput="calculateRatio9()"/></td>
+                        <td><input id="aulasLecio9" name="aulasLecio9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9AulasLec : ''%>"oninput="calculateRatio9()"/></td>
+                        <td><input id="percAulasDadas9" name="percAulasDadas9" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc9PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc9,
+                            #horasTPdoc9,
+                            #horasPLdoc9,
+                            #horasTCdoc9,
+                            #horasSdoc9,
+                            #horasEdoc9,
+                            #horasOTdoc9,
+                            #horasOdoc9
+                        `, function () {
+                            calculateAulasPrev9();
+                        });
+                        function calculateAulasPrev9(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc9',
+                                '#horasTPdoc9',
+                                '#horasPLdoc9',
+                                '#horasTCdoc9',
+                                '#horasSdoc9',
+                                '#horasEdoc9',
+                                '#horasOTdoc9',
+                                '#horasOdoc9'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev9').val(total);
+                        }
+                        function calculateRatio9() {
+                            let a = parseFloat($("#aulasPrev9").val());
+                            let b = parseFloat($("#aulasLecio9").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas9").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas9").val("");
+                            }
+                        }
+                    </script>
+                    <tr>
+                        <td><input id="nomeDoc10" name="nomeDoc10" class="form-control form-control-sm" value="<%= uc[0].doc10Nome %>" readonly></td>
+                        <!--<td><input id="nrTurmas10" name="nrTurmas10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].nrTurmDoc10 : ''%>"></td>-->
+                        <td><input id="horasTdoc10" name="horasTdoc10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10T : ''%>"/></td>
+                        <td><input id="horasTPdoc10" name="horasTPdoc10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10TP : ''%>"/></td>
+                        <td><input id="horasPLdoc10" name="horasPLdoc10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10PL : ''%>"/></td>
+                        <td><input id="horasTCdoc10" name="horasTCdoc10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10TC : ''%>"/></td>
+                        <td><input id="horasSdoc10" name="horasSdoc10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10S : ''%>"/></td>
+                        <td><input id="horasEdoc10" name="horasEdoc10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10E : ''%>"/></td>
+                        <td><input id="horasOTdoc10" name="horasOTdoc10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10OT : ''%>"/></td>
+                        <td><input id="horasOdoc10" name="horasOdoc10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10O : ''%>"/></td>
+                        <td><input id="aulasPrev10" name="aulasPrev10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10AulasPrev : ''%>" oninput="calculateRatio10()"/></td>
+                        <td><input id="aulasLecio10" name="aulasLecio10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10AulasLec : ''%>" oninput="calculateRatio10()"/></td>
+                        <td><input id="percAulasDadas10" name="percAulasDadas10" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].doc10PrecAulas : ''%>" readonly/></td>
+                    </tr>
+                    <script>
+                        $(document).on('input', `
+                            #horasTdoc10,
+                            #horasTPdoc10,
+                            #horasPLdoc10,
+                            #horasTCdoc10,
+                            #horasSdoc10,
+                            #horasEdoc10,
+                            #horasOTdoc10,
+                            #horasOdoc10
+                        `, function () {
+                            calculateAulasPrev10();
+                        });
+                        function calculateAulasPrev10(){
+                            let total = 0;
+
+                            const fields = [
+                                '#horasTdoc10',
+                                '#horasTPdoc10',
+                                '#horasPLdoc10',
+                                '#horasTCdoc10',
+                                '#horasSdoc10',
+                                '#horasEdoc10',
+                                '#horasOTdoc10',
+                                '#horasOdoc10'
+                            ];
+
+                            fields.forEach(function(selector) {
+                                let val = parseFloat($(selector).val()) || 0;
+                                total += val;
+                            });
+
+                            $('#aulasPrev10').val(total);
+                        }
+                        function calculateRatio10() {
+                            let a = parseFloat($("#aulasPrev10").val());
+                            let b = parseFloat($("#aulasLecio10").val());
+
+                            if (!isNaN(a) && !isNaN(b) && b !== 0) {
+                                $("#percAulasDadas10").val((b / a * 100).toFixed(2));
+                            } else {
+                                $("#percAulasDadas10").val("");
+                            }
+                        }
+                    </script>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h5>2- Momentos de avaliação</h5>
+            </div>
+            <div class="col-6">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark align-middle">
+                        <tr>
+                            <th>Avaliação contínua</th>
+                            <th>Datas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input id="momAvalCont1" name="momAvalCont1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].momAvalCont1 : ''%>"></td>
+                            <td><input id="dtaAvalCont1" name="dtaAvalCont1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalCont1 : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td><input id="momAvalCont2" name="momAvalCont2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].momAvalCont2 : ''%>"></td>
+                            <td><input id="dtaAvalCont2" name="dtaAvalCont2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalCont2 : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td><input id="momAvalCont3" name="momAvalCont3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].momAvalCont3 : ''%>"></td>
+                            <td><input id="dtaAvalCont3" name="dtaAvalCont3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalCont3 : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td><input id="momAvalCont4" name="momAvalCont4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].momAvalCont4 : ''%>"></td>
+                            <td><input id="dtaAvalCont4" name="dtaAvalCont4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalCont4 : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td><input id="momAvalCont5" name="momAvalCont5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].momAvalCont5 : ''%>"></td>
+                            <td><input id="dtaAvalCont5" name="dtaAvalCont5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalCont5 : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td><input id="momAvalCont6" name="momAvalCont6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].momAvalCont6 : ''%>"></td>
+                            <td><input id="dtaAvalCont6" name="dtaAvalCont6" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalCont6 : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td><input id="momAvalCont7" name="momAvalCont7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].momAvalCont7 : ''%>"></td>
+                            <td><input id="dtaAvalCont7" name="dtaAvalCont7" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalCont7 : ''%>"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark align-middle">
+                        <tr>
+                            <th>Avaliação final</th>
+                            <th>Datas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Exame da época normal</td>
+                            <td><input id="dtaAvalEpNorm" name="dtaAvalEpNorm" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalFimEN : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td>Exame da época extraordinária</td>
+                            <td><input id="dtaAvalEpExtra" name="dtaAvalEpExtra" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalFimEE : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td>Exame da época especial estudantes estatuto trab.-estudante</td>
+                            <td><input id="dtaAvalEpTrabEst" name="dtaAvalEpTrabEst" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalFimET : ''%>"></td>
+                        </tr>
+                        <tr>
+                            <td>Exame da época especial para estudantes finalistas</td>
+                            <td><input id="dtaAvalEpFin" name="dtaAvalEpFin" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].dtaAvalFimEF : ''%>"></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h5>3- Análise estatística</h5>
+            </div>
+            <table class="table table-striped table-sm table-hover">
+                <thead class="table-dark align-middle">
+                    <tr>
+                        <th>Distribuição dos estudantes</th>
+                        <th style="max-width: 50px;">Nº de estudantes</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>A - Estudantes INSCRITOS na UC</b> (ver pauta dos serviços académicos)</td>
+                        <td style="max-width: 50px;"><input id="estudA" name="estudA" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudA : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td><b>B - Estudantes AVALIADOS</b> (em pelo menos um dos momentos de avaliação)</td>
+                        <td style="max-width: 50px;"><input id="estudB" name="estudB" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudB : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td><b>C - Estudantes APROVADOS:</b></td>
+                        <td style="max-width: 50px;"><input id="estudC" name="estudC" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;C1 - em avaliação contínua;</td>
+                        <td style="max-width: 50px;"><input id="estudC1" name="estudC1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC1 : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;C2 - em avaliação final: época normal;</td>
+                        <td style="max-width: 50px;"><input id="estudC2" name="estudC2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC2 : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;C3 - em avaliação final: época extraordinária;</td>
+                        <td style="max-width: 50px;"><input id="estudC3" name="estudC3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC3 : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;C4 - em avaliação final: época especial para estudantes finalistas;</td>
+                        <td style="max-width: 50px;"><input id="estudC4" name="estudC4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC4 : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;C5 - em avaliação final: época especial para estud/ estatuto trab. estudante;</td>
+                        <td style="max-width: 50px;"><input id="estudC5" name="estudC5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC5 : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td><b>D - Estudantes REPROVADOS</b></td>
+                        <td style="max-width: 50px;"><input id="estudD" name="estudD" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudD : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;D1 - avaliados;</td>
+                        <td style="max-width: 50px;"><input id="estudD1" name="estudD1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudD1 : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;D2 - não avaliados;</td>
+                        <td style="max-width: 50px;"><input id="estudD2" name="estudD2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudD2 : 0 %>"></td>
+                    </tr>
+                    <tr>
+                        <td><b>E - Distribuição da CLASSIFICAÇÃO dos ESTUDANTES APROVADOS:</b></td>
+                        <td style="max-width: 50px;"><input id="estudE" name="estudE" class="form-control form-control-sm" disabled></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;E1 - estudantes com notas entre 10 e 13 valores;</td>
+                        <td style="max-width: 50px;"><input id="estudE1" name="estudE1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudE1 : 0 %>" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;E2 - estudantes com notas entre 14 e 15 valores;</td>
+                        <td style="max-width: 50px;"><input id="estudE2" name="estudE2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudE2 : 0 %>" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;&nbsp;E3 - estudantes com notas entre 16 e 20 valores;</td>
+                        <td style="max-width: 50px;"><input id="estudE3" name="estudE3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudE3 : 0 %>" readonly></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="col-3">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark align-middle">
+                        <tr>
+                            <th>Nota</th>
+                            <th>Nº Estudantes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10</td>
+                            <td><input id="nota10" name="nota10" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota10 : 0 %>" oninput="calculateRatioE1()"></td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td><input id="nota11" name="nota11" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota11 : 0 %>" oninput="calculateRatioE1()"></td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td><input id="nota12" name="nota12" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota12 : 0 %>" oninput="calculateRatioE1()"></td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td><input id="nota13" name="nota13" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota13 : 0 %>" oninput="calculateRatioE1()"></td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td><input id="nota14" name="nota14" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota14 : 0 %>" oninput="calculateRatioE2()"></td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td><input id="nota15" name="nota15" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota15 : 0 %>" oninput="calculateRatioE2()"></td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td><input id="nota16" name="nota16" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota16 : 0 %>" oninput="calculateRatioE3()"></td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td><input id="nota17" name="nota17" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota17 : 0 %>" oninput="calculateRatioE3()"></td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td><input id="nota18" name="nota18" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota18 : 0 %>" oninput="calculateRatioE3()"></td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td><input id="nota19" name="nota19" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota19 : 0 %>" oninput="calculateRatioE3()"></td>
+                        </tr>
+                        <tr>
+                            <td>20</td>
+                            <td><input id="nota20" name="nota20" class="form-control form-control-sm number" value="<%= relUC[0] ? relUC[0].nota20 : 0 %>" oninput="calculateRatioE3()"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <script>
+                    function calculateRatioE1() {
+                        let a = parseFloat($("#nota10").val());
+                        let b = parseFloat($("#nota11").val());
+                        let c = parseFloat($("#nota12").val());
+                        let d = parseFloat($("#nota13").val());
+
+                        if (!isNaN(a) && !isNaN(b) && !isNaN(c) && !isNaN(d) ) {
+                            $("#estudE1").val(a+b+c+d);
+                        } else {
+                            $("#estudE1").val("");
+                        }
+                    }
+                    function calculateRatioE2() {
+                        let a = parseFloat($("#nota14").val());
+                        let b = parseFloat($("#nota15").val());
+                        if (!isNaN(a) && !isNaN(b) ) {
+                            $("#estudE2").val(a+b);
+                        } else {
+                            $("#estudE2").val("");
+                        }
+                    }
+
+                    function calculateRatioE3() {
+                        let a = parseFloat($("#nota16").val());
+                        let b = parseFloat($("#nota17").val());
+                        let c = parseFloat($("#nota18").val());
+                        let d = parseFloat($("#nota19").val());
+                        let e = parseFloat($("#nota20").val());
+
+                        if (!isNaN(a) && !isNaN(b) && !isNaN(c) && !isNaN(d) && !isNaN(e) ) {
+                            $("#estudE3").val(a+b+c+d+e);
+                        } else {
+                            $("#estudE3").val("");
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h5>4- Comentários, críticas e conclusões</h5>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto">
+                        <span style="font-size: 10 !important; color: rgb(104, 104, 104);">
+                           A título de exemplo: comente, acerca da carga horária e funcionamento da UC é ou não a mais adequada; apresente igualmente uma análise crítica acerca dos resultados alcançados, atendendo ao sucesso escolar; se for o caso, apresente críticas construtivas e pontos de melhoria (adequação dos conteúdos, recursos didáticos, metodologias de avaliação); a título de conclusão, apresente ainda uma breve síntese e se for o caso, uma proposta enquanto plano de ação para melhorias a implementar no próximo ano letivo. 
+                        </span>
+                    </div>
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 15000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbObsCount" class="">0</span></div>
+                </div>
+                
+            </div>
+            <div class="col-12">
+                <textarea id="comentarios" name="comentarios" maxlength="15001" rows="10" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbObsCount" uimaxlength="15000" ><%= relUC[0] ? relUC[0].comentarios : ''%></textarea>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-4">
+                <button class="btn btn-sm btn-primary w-100" type="sumbit">Gravar</button>
+            </div>
+            <div class="col-4">
+                <a href="/pdfRelUc/<%= uc[0].idfucs %>/<%= uc[0].nomeUCPt %>/<%= anoLetivo %>/<%= uc[0].nomeCE %>" class="btn btn-sm btn-danger w-100" target="_blank">Criar PDF</a>
+            </div>
+            <div class="col-4">
+                <a href="/pdfSendRUC/<%= relUC[0] ? relUC[0].idrelUC : 0 %>" class="btn btn-sm btn-danger w-100" target="_blank">Submeter RUC</a>
+            </div> 
+        </div>
+    </form>
+</div>
+
+
+
+<%- include('partials/footer') %>

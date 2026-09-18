@@ -1,0 +1,2136 @@
+<%- include('partials/header') %>
+
+
+<style>
+    .blueheader{
+        background-color: #4d4b4b;
+        color:#fff;
+    }
+    table{
+        width: 100%;
+    }
+    
+    th{
+        background-color: #4d4b4b;
+        color:#fff;
+        
+        padding: 0.7em;
+    }
+    .fs-04{
+	    font-size: .75em;
+    	font-style: italic;
+    }
+        .locked-select {
+        pointer-events: none;
+    }
+    </style>
+    <!-- <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select all textareas
+            const textareas = document.querySelectorAll("textarea");
+
+            textareas.forEach((textarea) => {
+                // Prevent paste
+                textarea.addEventListener("paste", function (e) {
+                    e.preventDefault();
+                    alert("Paste is disabled!");
+                });
+
+                // Prevent copy
+                textarea.addEventListener("copy", function (e) {
+                    e.preventDefault();
+                    alert("Copy is disabled!");
+                });
+
+                // Prevent cut
+                textarea.addEventListener("cut", function (e) {
+                    e.preventDefault();
+                    alert("Cut is disabled!");
+                });
+            });
+        });
+    </script> -->
+
+    
+    <div class="container">
+        <form method='post' action='../editaUc'>
+            <input type="hidden" id="codFuc" name="codFuc" value="<%= fuc[0].idfucs %>">
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table>
+                        <thead>	
+                            <tr><th><label class="mx-3">Designação da Unidade Curricular</label></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form-floating">
+                                    <% if(role=="gestor"){ %>
+                                        <input type="text" class="form-control form-control-sm" id="ptTitle" name="ptTitle" placeholder="nomePt" value="<%= fuc[0].nomeUCPt %>" >
+                                    <% }else{ %>
+                                        <input type="text" class="form-control form-control-sm" id="ptTitle" name="ptTitle" placeholder="nomePt" value="<%= fuc[0].nomeUCPt %>"  readonly>
+                                    <% } %>
+                                        <label for="ptTitle">PT:</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-floating mb-3">
+                                    <% if(role=="gestor"){ %>
+                                        <input type="text" class="form-control form-control-sm" id="enTitle" name="enTitle" placeholder="nomePt" value="<%= fuc[0].noemUCEn %>">
+                                    <% }else{ %>
+                                        <input type="text" class="form-control form-control-sm" id="enTitle" name="enTitle" placeholder="nomePt" value="<%= fuc[0].noemUCEn %>"  readonly>
+                                    <% } %>
+                                        <label for="enTitle">EN:</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table>
+                        <thead>
+                            <tr><th><label class="mx-3">Designação do Ciclo de Estudos</label></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                <% if(role=="gestor"){ %>
+                                    <input type="text" class="form-control form-control-sm" id="nomeCe" name="nomeCe" placeholder="nomeCe" value="<%= fuc[0].nomeCE %>">
+                                <% }else{ %>
+                                    <input type="text" class="form-control form-control-sm" id="nomeCe" name="nomeCe" placeholder="nomeCe" value="<%= fuc[0].nomeCE %>" readonly>
+                                <% } %>
+                                    <input type="hidden" class="form-control form-control-sm" id="ceSigla" name="ceSigla" placeholder="ceSigla" value="<%= fuc[0].curso_sigla %>">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Código UC</th>
+                                <th>Sigla da área científica</th>
+                                <th>Ano</th>
+                                <th>Semestre</th>
+                                <th>Escolher</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" class="form-control form-control-sm" id="codUC" name="codUC" placeholder="Não preencher" disabled="disabled"></td>
+                                <td>
+                                <% if(role=="gestor"){ %>
+                                    <input type="text" class="form-control form-control-sm" id="sigla" name="sigla" value="<%= fuc[0].areaCienc %>">
+                                <% }else{ %>
+                                    <input type="text" class="form-control form-control-sm" id="sigla" name="sigla" value="<%= fuc[0].areaCienc %>" readonly>
+                                <% } %>
+                                </td>
+                                <td>
+                                <% if(role=="gestor"){ %>
+                                    <select id="ano" name="ano" class="form-select form-select-sm">
+                                <% }else{ %>
+                                    <select id="ano" name="ano" class="form-select form-select-sm locked-select">
+                                <% } %>
+                                        <% if(fuc[0].ano=="1º") {%>
+                                            <option value="1º" selected>1º</option>
+                                            <option value="2º">2º</option>
+                                            <option value="3º">3º</option>
+                                            <option value="4º">4º</option>
+                                        <% }else if(fuc[0].ano=="2º") {%>
+                                            <option value="1º">1º</option>
+                                            <option value="2º" selected>2º</option>
+                                            <option value="3º">3º</option>
+                                            <option value="4º">4º</option>
+                                        <% }else if(fuc[0].ano=="3º") {%>
+                                            <option value="1º">1º</option>
+                                            <option value="2º">2º</option>
+                                            <option value="3º" selected>3º</option>
+                                            <option value="4º">4º</option>
+                                        <% }else if(fuc[0].ano=="4º") {%>
+                                            <option value="1º">1º</option>
+                                            <option value="2º">2º</option>
+                                            <option value="3º">3º</option>
+                                            <option value="4º" selected>4º</option>
+                                        <% } %>
+                                    </select>
+                                </td>
+                                <td>
+                                <% if(role=="gestor"){ %>
+                                    <select id="semestre" name="semestre" class="form-select form-select-sm">
+                                <% }else{ %>
+                                    <select id="semestre" name="semestre" class="form-select form-select-sm locked-select">
+                                <% } %>
+                                        <% if(fuc[0].semestre=="1º") {%>
+                                            <option value="1º" selected>1º</option>
+                                            <option value="2º">2º</option>
+                                        <% }else if(fuc[0].semestre=="2º") {%>
+                                            <option value="1º">1º</option>
+                                            <option value="2º" selected>2º</option>
+                                        <% } %>
+                                    </select>
+                                </td>
+                                <td>
+                                <% if(role=="gestor"){ %>
+                                    <select id="caracter" name="caracter" class="form-select form-select-sm">
+                                <% }else{ %>
+                                    <select id="caracter" name="caracter" class="form-select form-select-sm locked-select">
+                                <% } %>
+                                        <% if(fuc[0].regime =="obrigatoria") {%>
+                                            <option value="obrigatoria" selected >Obrigatória</option>
+                                            <option value="optativa">Optativa</option>    
+                                        <% }else{ %>
+                                            <option value="obrigatoria">Obrigatória</option>
+                                            <option value="optativa" selected >Optativa</option>
+                                        <% } %>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Duração</th>
+                                <th>Nº horas de trabalho</th>
+                                <th>Nº de horas de contacto</th>
+                                <th>ECTS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                <% if(role=="gestor"){ %>
+                                    <select id="duracao" name="duracao" class="form-select form-select-sm">
+                                <% }else{ %>
+                                    <select id="duracao" name="duracao" class="form-select form-select-sm locked-select">
+                                <% } %>
+                                        <% switch (fuc[0].duracao) { 
+                                            case "semestral" : %> 
+                                                <option value="semestral" selected >Semestral</option>
+                                                <option value="anual">Anual</option>
+                                                <option value="trimestral">Trimestral</option>
+                                            <% break;
+                                            case "anual" : %>
+                                                <option value="semestral">Semestral</option>
+                                                <option value="anual">Anual</option>
+                                                <option value="trimestral">Trimestral</option>
+                                            <% break;
+                                            case "trimestral": %>
+                                                <option value="semestral">Semestral</option>
+                                                <option value="anual">Anual</option>
+                                                <option value="trimestral">Trimestral</option>
+                                            <% break;
+                                           } %>
+                                    </select>
+                                </td>
+                                <% if(role=="gestor"){ %>
+                                    <td><input type="text" class="form-control form-control-sm" id="horasTrab" name="horasTrab" value="<%= fuc[0].horasTrab %>" > </td>
+                                    <td><input type="text" class="form-control form-control-sm" id="horasCont" name="horasCont" value="<%= fuc[0].horasContac %>" > </td>
+                                    <td><input type="text" class="form-control form-control-sm" id="ects" name="ects" value="<%= fuc[0].ECTS %>" ></td>
+                                <% }else{ %>
+                                    <td><input type="text" class="form-control form-control-sm" id="horasTrab" name="horasTrab" value="<%= fuc[0].horasTrab %>" readonly> </td>
+                                    <td><input type="text" class="form-control form-control-sm" id="horasCont" name="horasCont" value="<%= fuc[0].horasContac %>" readonly> </td>
+                                    <td><input type="text" class="form-control form-control-sm" id="ects" name="ects" value="<%= fuc[0].ECTS %>" readonly></td>
+                                <% } %>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Horas de contacto: tipologia</th>
+                                <th>Nº horas de contacto presencial</th>
+                                <th>Nº horas assíncrono à distância</th>
+                                <th>Nº horas síncronas à distância</th>
+                            </tr>
+                        </thead>
+                        <% if(role=="gestor"){ %>
+                            </tbody>
+                                <tr>
+                                    <td>Teórico (T)</td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsT" name="hrsT" placeholder="horas teóricas de contato" value="<%= fuc[0].T_horasC %>" ></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsAssT" name="hrsAssT" placeholder="horas teóricas assincronas" value="<%= fuc[0].T_horasAss %>"  ></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsSincT" name="hrsSincT" placeholder="horas teóricas sincronas" value="<%= fuc[0].T_horasSinc %>"  ></td>
+                                </tr>
+                                <tr>
+                                    <td>Teórico-praticas (TP)</td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsTp" name="hrsTp" placeholder="horas teórico-práticas de contato" value="<%= fuc[0].TP_horasC %>" ></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsAssTp" name="hrsAssTp" placeholder="horas teórico-práticas assincronas" value="<%= fuc[0].TP_horasAss %>" ></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsSincTp" name="hrsSincTp" placeholder="horas teórico-práticas sincronas" value="<%= fuc[0].TP_horasSinc %>" ></td>
+                                </tr>
+                                <tr>
+                                    <td>Prático e laboratorial (PL)</td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsPl" name="hrsPl" placeholder="horas prático e laboratorial de contato" value="<%= fuc[0].PL_horasC %>"  ></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsAssPl" name="hrsAssPl" placeholder="horas prático e laboriatorial assincronas" value="<%= fuc[0].PL_horasAss %>" ></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsSincPl" name="hrsSincPl" placeholder="horas prático e laboratoriais sincronas" value="<%= fuc[0].PL_horasSinc %>" ></td>
+                                </tr>
+                                <tr>
+                                    <td>Trabalho de campo (TC)</td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsTc" name="hrsTc" placeholder="horas trabalho de campo de contato" value="<%= fuc[0].TC_horasC %>" ></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsAssTc" name="hrsAssTc" placeholder="horas trabalho de campo assincronas" value="<%= fuc[0].TC_horasAss %>" ></td>
+                                    <td><input type="text" class="form-control form-control-sm" id="hrsSincTc" name="hrsSincTc" placeholder="horas trabalho de campo sincronas" value="<%= fuc[0].TC_horasSinc %>" ></td>
+                                </tr>
+                                <tr>
+                                    <td>Seminário (S)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsS" name="hrsS" placeholder="horas de seminário de contato" value="<%= fuc[0].S_horasC %>"  ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssS" name="hrsAssS" placeholder="horas de seminário assincronas" value="<%= fuc[0].S_horasAss %>" ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincS" name="hrsSincS" placeholder="hors de seminário sincronas" value="<%= fuc[0].S_horasSinc %>" ></td>
+                            </tr>
+                            <tr>
+                                <td>Estágio (E)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsE" name="hrsE" placeholder="horas de estágio de contato" value="<%= fuc[0].E_horasC %>" ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssE" name="hrsAssE" placeholder="horas de estágio assincronas" value="<%= fuc[0].E_horasAss %>" ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincE" name="hrsSincE" placeholder="horas de estágio sincronas" value="<%= fuc[0].E_horasSinc %>" ></td>
+                            </tr>
+                            <tr>
+                                <td>Orientação toturial (OT)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsOt" name="hrsOt" placeholder="horas de orientação toturial de contato" value="<%= fuc[0].OT_horasC %>"  ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssOt" name="hrsAssOt" placeholder="horas de orientação toturial assincronas" value="<%= fuc[0].OT_horasAss %>" ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincOt" name="hrsSincOt" placeholder="horas de orientação toturial sincronas" value="<%= fuc[0].OT_horasSinc %>" ></td>
+                            </tr>
+                            <tr>
+                                <td>Outra (O)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsO" name="hrsO" placeholder="horas outras de contato" value="<%= fuc[0].O_horasC %>"  ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssO" name="hrsAssO" placeholder="horas outras assincronas" value="<%= fuc[0].O_horasAss %>"  ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincO" name="hrsSincO" placeholder="horas outras sincronas" value="<%= fuc[0].O_horasSinc %>" ></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total do nº de horas</strong></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsTot" name="hrsTot" placeholder="horas total de contato" value="<%= fuc[0].total_horasC %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssTot" name="hrsAssTot" placeholder="horas total assincronas" value="<%= fuc[0].total_horasAss %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincTot" name="hrsSincTot" placeholder="horas total sincronas" value="<%= fuc[0].total_horasSinc %>" readonly></td>
+                            </tr>
+                        <tbody>
+                    <% }else{ %>
+                        </tbody>
+                            <tr>
+                                <td>Teórico (T)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsT" name="hrsT" placeholder="horas teóricas de contato" value="<%= fuc[0].T_horasC %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssT" name="hrsAssT" placeholder="horas teóricas assincronas" value="<%= fuc[0].T_horasAss %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincT" name="hrsSincT" placeholder="horas teóricas sincronas" value="<%= fuc[0].T_horasSinc %>" readonly ></td>
+                            </tr>
+                            <tr>
+                                <td>Teórico-praticas (TP)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsTp" name="hrsTp" placeholder="horas teórico-práticas de contato" value="<%= fuc[0].TP_horasC %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssTp" name="hrsAssTp" placeholder="horas teórico-práticas assincronas" value="<%= fuc[0].TP_horasAss %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincTp" name="hrsSincTp" placeholder="horas teórico-práticas sincronas" value="<%= fuc[0].TP_horasSinc %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Prático e laboratorial (PL)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsPl" name="hrsPl" placeholder="horas prático e laboratorial de contato" value="<%= fuc[0].PL_horasC %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssPl" name="hrsAssPl" placeholder="horas prático e laboriatorial assincronas" value="<%= fuc[0].PL_horasAss %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincPl" name="hrsSincPl" placeholder="horas prático e laboratoriais sincronas" value="<%= fuc[0].PL_horasSinc %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Trabalho de campo (TC)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsTc" name="hrsTc" placeholder="horas trabalho de campo de contato" value="<%= fuc[0].TC_horasC %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssTc" name="hrsAssTc" placeholder="horas trabalho de campo assincronas" value="<%= fuc[0].TC_horasAss %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincTc" name="hrsSincTc" placeholder="horas trabalho de campo sincronas" value="<%= fuc[0].TC_horasSinc %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Seminário (S)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsS" name="hrsS" placeholder="horas de seminário de contato" value="<%= fuc[0].S_horasC %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssS" name="hrsAssS" placeholder="horas de seminário assincronas" value="<%= fuc[0].S_horasAss %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincS" name="hrsSincS" placeholder="hors de seminário sincronas" value="<%= fuc[0].S_horasSinc %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Estágio (E)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsE" name="hrsE" placeholder="horas de estágio de contato" value="<%= fuc[0].E_horasC %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssE" name="hrsAssE" placeholder="horas de estágio assincronas" value="<%= fuc[0].E_horasAss %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincE" name="hrsSincE" placeholder="horas de estágio sincronas" value="<%= fuc[0].E_horasSinc %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Orientação toturial (OT)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsOt" name="hrsOt" placeholder="horas de orientação toturial de contato" value="<%= fuc[0].OT_horasC %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssOt" name="hrsAssOt" placeholder="horas de orientação toturial assincronas" value="<%= fuc[0].OT_horasAss %>" readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincOt" name="hrsSincOt" placeholder="horas de orientação toturial sincronas" value="<%= fuc[0].OT_horasSinc %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Outra (O)</td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsO" name="hrsO" placeholder="horas outras de contato" value="<%= fuc[0].O_horasC %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssO" name="hrsAssO" placeholder="horas outras assincronas" value="<%= fuc[0].O_horasAss %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincO" name="hrsSincO" placeholder="horas outras sincronas" value="<%= fuc[0].O_horasSinc %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total do nº de horas</strong></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsTot" name="hrsTot" placeholder="horas total de contato" value="<%= fuc[0].total_horasC %>" readonly ></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsAssTot" name="hrsAssTot" placeholder="horas total assincronas" value="<%= fuc[0].total_horasAss %>"  readonly></td>
+                                <td><input type="text" class="form-control form-control-sm" id="hrsSincTot" name="hrsSincTot" placeholder="horas total sincronas" value="<%= fuc[0].total_horasSinc %>" readonly></td>
+                            </tr>
+                        <tbody>
+                    <% } %>
+                </table>
+                <table>
+                    <thead>
+                        <tr><th colspan="5">Hora de contacto (%)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Presenciais:</td>
+                            <td><input type="text" class="form-control form-control-sm" id="hrsPres" name="hrsPres" value="<%= fuc[0].percPresent %>" readonly ><td>
+                            <td>À distância:</td>
+                            <td><input type="text" class="form-control form-control-sm" id="hrsDist" name="hrsDist" value="<%= fuc[0].perDist %>" readonly ><td>
+                        </tr>
+                        <script>
+                        document.querySelectorAll('.integer-only').forEach(input => {
+
+                            input.addEventListener('input', function() {
+
+                                this.value = this.value.replace(/[^0-9]/g, '');
+
+                            });
+
+                        });
+                        document.querySelectorAll('.horas').forEach(input => {
+
+                            input.addEventListener('keydown', function(e) {
+
+                                if (
+                                    e.key === '.' ||
+                                    e.key === ',' ||
+                                    e.key === 'e' ||
+                                    e.key === 'E' ||
+                                    e.key === '-' ||
+                                    e.key === '+'
+                                ) {
+                                    e.preventDefault();
+                                }
+
+                            });
+
+                        });
+
+                        function toNumber(value) {
+                            return parseFloat(value) || 0;
+                        }
+
+                        function calcularHoras() {
+
+                            // Horas presenciais (coluna 2)
+                            let totalContacto =
+                                toNumber(document.getElementById('hrsT').value) +
+                                toNumber(document.getElementById('hrsTp').value) +
+                                toNumber(document.getElementById('hrsPl').value) +
+                                toNumber(document.getElementById('hrsTc').value) +
+                                toNumber(document.getElementById('hrsS').value) +
+                                toNumber(document.getElementById('hrsE').value) +
+                                toNumber(document.getElementById('hrsOt').value) +
+                                toNumber(document.getElementById('hrsO').value);
+
+                            // Horas assíncronas (coluna 3)
+                            let totalAss =
+                                toNumber(document.getElementById('hrsAssT').value) +
+                                toNumber(document.getElementById('hrsAssTp').value) +
+                                toNumber(document.getElementById('hrsAssPl').value) +
+                                toNumber(document.getElementById('hrsAssTc').value) +
+                                toNumber(document.getElementById('hrsAssS').value) +
+                                toNumber(document.getElementById('hrsAssE').value) +
+                                toNumber(document.getElementById('hrsAssOt').value) +
+                                toNumber(document.getElementById('hrsAssO').value);
+
+                            // Horas síncronas à distância (coluna 4)
+                            let totalSinc =
+                                toNumber(document.getElementById('hrsSincT').value) +
+                                toNumber(document.getElementById('hrsSincTp').value) +
+                                toNumber(document.getElementById('hrsSincPl').value) +
+                                toNumber(document.getElementById('hrsSincTc').value) +
+                                toNumber(document.getElementById('hrsSincS').value) +
+                                toNumber(document.getElementById('hrsSincE').value) +
+                                toNumber(document.getElementById('hrsSincOt').value) +
+                                toNumber(document.getElementById('hrsSincO').value);
+
+                            // Totais
+                            document.getElementById('hrsTot').value = totalContacto;
+                            document.getElementById('hrsAssTot').value = totalAss;
+                            document.getElementById('hrsSincTot').value = totalSinc;
+
+                            // Percentagens
+                            let totalGeral = totalContacto + totalAss + totalSinc;
+
+                            if (totalGeral > 0) {
+
+                                let percPresencial =
+                                    (totalContacto / totalGeral) * 100;
+
+                                let percDistancia =
+                                    ((totalAss + totalSinc) / totalGeral) * 100;
+
+                                document.getElementById('hrsPres').value =
+                                    percPresencial.toFixed(2);
+
+                                document.getElementById('hrsDist').value =
+                                    percDistancia.toFixed(2);
+
+                            } else {
+
+                                document.getElementById('hrsPres').value = '';
+                                document.getElementById('hrsDist').value = '';
+
+                            }
+                        }
+
+                        // Adiciona o evento a todos os campos de horas
+                        document.querySelectorAll('input[id^="hrs"]').forEach(input => {
+
+                            if (
+                                input.id !== 'hrsTot' &&
+                                input.id !== 'hrsAssTot' &&
+                                input.id !== 'hrsSincTot' &&
+                                input.id !== 'hrsPres' &&
+                                input.id !== 'hrsDist'
+                            ) {
+                                input.addEventListener('input', calcularHoras);
+                            }
+
+                        });
+
+                        // cálculo inicial
+                        calcularHoras();
+
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th colspan="3">Docente responsável e respetiva carga letiva na unidade curricular</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeResp">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeResp"
+                                        name="nomeResp">
+                                        <option>------------------------------</option>
+
+                                        <%
+                                            let grau = fuc[0].doc1Grau;
+
+                                            const docente = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc1Nome);
+                                            
+                                            if (docente && docente.especialDoc === 1) {
+                                                console.log('Grau', docente.grauDoc)
+                                                grau = (docente.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= grau %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc1Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    
+                                    <input type="text" class="form-control form-control-sm" id="grauResp" name="grauResp" placeholder="grauResp"  value="<%= grau %>" readonly >
+                                    <label for="grauResp">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catResp" name="catResp" placeholder="catResp"  value="<%= fuc[0].doc1Cat %>" readonly>
+                                    <label for="catResp">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaResp" name="cargaResp" placeholder="cargaResp" value="<%= fuc[0].doc1Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaResp">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeResp');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauResp').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catResp').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeResp')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                    </tbody>
+                    <thead>
+                        <tr><th colspan="3">Outros docentes e respetivas cargas letivas na unidade curricular</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc1">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc1"
+                                        name="nomeDoc1">
+                                        <option>------------------------------</option>
+
+                                        <%
+                                            grau = fuc[0].doc2Grau;
+
+                                            const docente2 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc2Nome);
+                                            
+                                            if (docente2 && docente2.especialDoc === 1) {
+                                                console.log('Grau', docente2.grauDoc)
+                                                grau = (docente2.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= grau %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc2Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc1" name="grauDoc1" placeholder="grauDoc1" value="<%= fuc[0].doc2Grau %>" readonly>
+                                    <label for="grauDoc1">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc1" name="catDoc1" placeholder="catDoc1" value="<%= fuc[0].doc2Cat %>" readonly>
+                                    <label for="catDoc1">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc1" name="cargaDoc1" placeholder="cargaDoc1" value="<%= fuc[0].doc2Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc1">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc1');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc1').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc1').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc1')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc2">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc2"
+                                        name="nomeDoc2">
+                                        <option>------------------------------</option>
+
+                                        <%
+                                            grau = fuc[0].doc3Grau;
+
+                                            const docente3 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc3Nome);
+                                            
+                                            if (docente3 && docente3.especialDoc === 1) {
+                                                console.log('Grau', docente3.grauDoc)
+                                                grau = (docente3.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= grau %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc3Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc2" name="grauDoc2" placeholder="grauDoc2" value="<%= fuc[0].doc3Grau %>" readonly>
+                                    <label for="grauDoc2">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc2" name="catDoc2" placeholder="catDoc2" value="<%= fuc[0].doc3Cat %>" readonly>
+                                    <label for="catDoc2">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc2" name="cargaDoc2" placeholder="cargaDoc2" value="<%= fuc[0].doc3Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc2">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc2');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc2').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc2').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc2')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        
+                        <tr><td><a class="btn btn-sm" id="addDoc3">Adicionar Docente</a> </td></tr>
+                        
+                        <tr id="doc3Div" style="display: none;">
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc3">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc3"
+                                        name="nomeDoc3">
+                                        <option>------------------------------</option>
+                                        <%
+                                            grau = fuc[0].doc4Grau;
+
+                                            const docente4 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc4Nome);
+                                            
+                                            if (docente4 && docente4.especialDoc === 1) {
+                                                console.log('Grau', docente4.grauDoc)
+                                                grau = (docente4.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= doc.grauDocExt %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc4Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="doc3Div1" style="display: none;">
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc3" name="grauDoc3" placeholder="grauDoc3" value="<%= fuc[0].doc4Grau %>" readonly>
+                                    <label for="grauDoc3">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc3" name="catDoc3" placeholder="catDoc3" value="<%= fuc[0].doc4Cat %>" readonly>
+                                    <label for="catDoc3">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc3" name="cargaDoc3" placeholder="cargaDoc3" value="<%= fuc[0].doc4Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc3">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc3');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc3').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc3').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc3')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        <tr id="doc3Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc4">Adicionar Docente</a> </td></tr>
+                        <script>
+                            $(document).ready(function(){
+                                if($('#nomeDoc3').val() != ""){
+                                    $("#doc3Div1").show();
+                                    $("#doc3Div").show();
+                                    $("#addDoc3").hide();
+                                    $("#doc3Div2").show();
+                                }
+                                $("#addDoc3").click(function(){
+                                    $("#doc3Div").show();
+                                    $("#doc3Div1").show();
+                                    $("#doc3Div2").show();
+                                    $("#addDoc3").hide();
+                                });
+                            });
+                        </script>
+
+                        <tr id="doc4Div" style="display: none;">
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc4">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc4"
+                                        name="nomeDoc4">
+                                        <option>------------------------------</option>
+                                        <%
+                                            grau = fuc[0].doc5Grau;
+
+                                            const docente5 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc5Nome);
+                                            
+                                            if (docente5 && docente5.especialDoc === 1) {
+                                                console.log('Grau', docente5.grauDoc)
+                                                grau = (docente5.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= doc.grauDocExt %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc5Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="doc4Div1" style="display: none;">
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc4" name="grauDoc4" placeholder="grauDoc4" value="<%= fuc[0].doc5Grau %>" readonly>
+                                    <label for="grauDoc4">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc4" name="catDoc4" placeholder="catDoc4" value="<%= fuc[0].doc5Cat %>" readonly>
+                                    <label for="catDoc4">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc4" name="cargaDoc4" placeholder="cargaDoc4" value="<%= fuc[0].doc5Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc4">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc4');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc4').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc4').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc4')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        <tr id="doc4Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc5">Adicionar Docente</a> </td></tr>
+                        <script>
+                            $(document).ready(function(){
+                                $("#addDoc4").click(function(){
+                                    $("#doc4Div").show();
+                                    $("#doc4Div1").show();
+                                    $("#doc4Div2").show();
+                                    $("#addDoc4").hide();
+                                });
+                            });
+                        </script>
+
+                        <tr id="doc5Div" style="display: none;">
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc5">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc5"
+                                        name="nomeDoc5">
+                                        <option>------------------------------</option>
+                                        <%
+                                            grau = fuc[0].doc6Grau;
+
+                                            const docente6 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc6Nome);
+                                            
+                                            if (docente6 && docente6.especialDoc === 1) {
+                                                console.log('Grau', docente6.grauDoc)
+                                                grau = (docente6.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= doc.grauDocExt %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc6Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="doc5Div1" style="display: none;">
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc5" name="grauDoc5" placeholder="grauDoc5" value="<%= fuc[0].doc6Grau %>" readonly>
+                                    <label for="grauDoc5">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc5" name="catDoc5" placeholder="catDoc5" value="<%= fuc[0].doc6Cat %>" readonly>
+                                    <label for="catDoc5">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc5" name="cargaDoc5" placeholder="cargaDoc5" value="<%= fuc[0].doc6Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc5">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc5');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc5').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc5').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc5')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        <tr id="doc5Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc6">Adicionar Docente</a> </td></tr>
+                        <script>
+                            $(document).ready(function(){
+                                $("#addDoc5").click(function(){
+                                    $("#doc5Div").show();
+                                    $("#doc5Div1").show();
+                                    $("#doc5Div2").show();
+                                    $("#addDoc5").hide();
+                                });
+                            });
+                        </script>
+
+                        <tr id="doc6Div" style="display: none;">
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc6">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc6"
+                                        name="nomeDoc6">
+                                        <option>------------------------------</option>
+                                        <%
+                                            grau = fuc[0].doc7Grau;
+
+                                            const docente7 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc7Nome);
+                                            
+                                            if (docente7 && docente7.especialDoc === 1) {
+                                                console.log('Grau', docente7.grauDoc)
+                                                grau = (docente7.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= doc.grauDocExt %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc7Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="doc6Div1" style="display: none;">
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc6" name="grauDoc6" placeholder="grauDoc6" value="<%= fuc[0].doc7Grau %>" readonly>
+                                    <label for="grauDoc6">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc6" name="catDoc6" placeholder="catDoc6" value="<%= fuc[0].doc7Cat %>" readonly>
+                                    <label for="catDoc6">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc6" name="cargaDoc6" placeholder="cargaDoc6" value="<%= fuc[0].doc7Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc6">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc6');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc6').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc6').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc6')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        <tr id="doc6Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc7">Adicionar Docente</a> </td></tr>
+                        <script>
+                            $(document).ready(function(){
+                                $("#addDoc6").click(function(){
+                                    $("#doc6Div").show();
+                                    $("#doc6Div1").show();
+                                    $("#doc6Div2").show();
+                                    $("#addDoc6").hide();
+                                });
+                            });
+                        </script>
+
+                        <tr id="doc7Div" style="display: none;">
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc7">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc7"
+                                        name="nomeDoc7">
+                                        <option>------------------------------</option>
+                                        <%
+                                            grau = fuc[0].doc8Grau;
+
+                                            const docente8 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc8Nome);
+                                            
+                                            if (docente8 && docente8.especialDoc === 1) {
+                                                console.log('Grau', docente8.grauDoc)
+                                                grau = (docente8.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= doc.grauDocExt %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc8Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="doc7Div1" style="display: none;">
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc7" name="grauDoc7" placeholder="grauDoc7" value="<%= fuc[0].doc8Grau %>" readonly>
+                                    <label for="grauDoc7">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc7" name="catDoc7" placeholder="catDoc7" value="<%= fuc[0].doc8Cat %>" readonly>
+                                    <label for="catDoc7">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc7" name="cargaDoc7" placeholder="cargaDoc7" value="<%= fuc[0].doc9Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc7">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc7');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc7').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc7').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc7')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        <tr id="doc7Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc8">Adicionar Docente</a> </td></tr>
+                        <script>
+                            $(document).ready(function(){
+                                $("#addDoc7").click(function(){
+                                    $("#doc7Div").show();
+                                    $("#doc7Div1").show();
+                                    $("#doc7Div2").show();
+                                    $("#addDoc7").hide();
+                                });
+                            });
+                        </script>
+
+                        <tr id="doc8Div" style="display: none;">
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc8">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc8"
+                                        name="nomeDoc8">
+                                        <option>------------------------------</option>
+                                        <%
+                                            grau = fuc[0].doc9Grau;
+
+                                            const docente9 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc9Nome);
+                                            
+                                            if (docente9 && docente9.especialDoc === 1) {
+                                                console.log('Grau', docente9.grauDoc)
+                                                grau = (docente9.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= doc.grauDocExt %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc9Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="doc8Div1" style="display: none;">
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc8" name="grauDoc8" placeholder="grauDoc8" value="<%= fuc[0].doc9Grau %>" readonly>
+                                    <label for="grauDoc8">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc8" name="catDoc8" placeholder="catDoc8" value="<%= fuc[0].doc9Cat %>" readonly>
+                                    <label for="catDoc8">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc8" name="cargaDoc8" placeholder="cargaDoc8" value="<%= fuc[0].doc9Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc8">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc8');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc8').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc8').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc8')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        <tr id="doc8Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc9">Adicionar Docente</a> </td></tr>
+                        <script>
+                            $(document).ready(function(){
+                                $("#addDoc8").click(function(){
+                                    $("#doc8Div").show();
+                                    $("#doc8Div1").show();
+                                    $("#doc8Div2").show();
+                                    $("#addDoc8").hide();
+                                });
+                            });
+                        </script>
+
+                        <tr id="doc9Div" style="display: none;">
+                            <td colspan="3">
+                                <div class="form">
+                                    <label for="nomeDoc9">Nome completo:</label>
+                                    <select 
+                                        class="form-select form-select-sm locked-select"
+                                        id="nomeDoc9"
+                                        name="nomeDoc9">
+                                        <option>------------------------------</option>
+                                        <%
+                                            grau = fuc[0].doc10Grau;
+
+                                            const docente10 = listaDoc.find(doc => doc.nomeDoc === fuc[0].doc10Nome);
+                                            
+                                            if (docente10 && docente10.especialDoc === 1) {
+                                                console.log('Grau', docente.grauDoc)
+                                                grau = (docente10.grauDoc == 5)
+                                                    ? "Doutoramento - Especialista"
+                                                    : "Especialista";
+
+                                                console.log('Grau final', grau)
+                                            }
+                                        %>
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option 
+                                                value="<%= doc.nomeDoc %>"
+                                                data-grau="<%= doc.grauDocExt %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                <%= doc.nomeDoc === fuc[0].doc10Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="doc9Div1" style="display: none;">
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="grauDoc9" name="grauDoc9" placeholder="grauDoc9" value="<%= fuc[0].doc10Grau %>" readonly>
+                                    <label for="grauDoc9">Grau académico:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="catDoc9" name="catDoc9" placeholder="catDoc9" value="<%= fuc[0].doc10Cat %>" readonly>
+                                    <label for="catDoc9">Categoria profissional:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="cargaDoc9" name="cargaDoc9" placeholder="cargaDoc9" value="<%= fuc[0].doc10Carga %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="cargaDoc9">Carga Letiva:</label>
+                                </div>
+                            </td>
+                            <script>
+                                function updateDocenteInfo() {
+
+                                    let select =
+                                        document.getElementById('nomeDoc9');
+
+                                    let option =
+                                        select.options[select.selectedIndex];
+
+                                    document.getElementById('grauDoc9').value =
+                                        option.dataset.grau || '';
+
+                                    document.getElementById('catDoc9').value =
+                                        option.dataset.cat || '';
+                                }
+
+                                // initial load
+                                updateDocenteInfo();
+
+                                // onchange
+                                document.getElementById('nomeDoc9')
+                                    .addEventListener('change', updateDocenteInfo);
+
+                            </script>
+                        </tr>
+                        <script>
+                            $(document).ready(function(){
+                                $("#addDoc9").click(function(){
+                                    $("#doc9Div").show();
+                                    $("#doc9Div1").show();
+                                    $("#addDoc9").hide();
+                                });
+                            });
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Objetivos de aprendizagem e a sua compatibilidade com o método (conhecimentos, aptidões e competências a desenvolver pelos estudantes) <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="objetivos" name="objetivos" rows="5" maxlength="1000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].conteudos %></textarea>
+                                <span class="pull-right label label-default" id="charNum"></span>
+                                <script>
+                                    var text_max = 1000;
+                                    $("#charNum").html('0 / ' + text_max);
+    
+                                    $("#objetivos").keyup(function(){
+                                        var text_length = $('#objetivos').val().length;
+                                        var text_remaining = text_max-text_length;
+                                        $('#charNum').html(text_length + ' / ' + text_max);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Learning outcomes and its compatibility with teaching methods (Knowledge, skills and competences to be developed by students) <span class="fs-04">(1000 characters spaces included)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="objetivosEn" name="objetivosEn" rows="5" maxlength="1000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].conteudosEn %></textarea>
+                                <span class="pull-right label label-default" id="charNumEn"></span>
+                                <script>
+                                    var text_max = 1000;
+                                    $("#charNumEn").html('0 / ' + text_max);
+    
+                                    $("#objetivosEn").keyup(function(){
+                                        var text_length = $('#objetivosEn').val().length;
+                                        var text_remaining = text_max-text_length;
+                                        $('#charNumEn').html(text_length + ' / ' + text_max);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Conteúdos programáticos <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="conteudos" name="conteudos" rows="5" maxlength="1000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].obetivos %></textarea>
+                                <span class="pull-right label label-default" id="charNum2"></span>
+                                <script>
+                                    var text_max = 1000;
+                                    $("#charNum2").html('0 / ' + text_max);
+    
+                                    $("#conteudos").keyup(function(){
+                                        var text_length = $('#conteudos').val().length;
+                                        var text_remaining = text_max-text_length;
+                                        $('#charNum2').html(text_length + ' / ' + text_max);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Syllabus <span class="fs-04">(1000 characters soaces included)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <script>
+                                    function countChar2En(val){
+                                        let len = val.value.length;
+                                        if(len >= 1000){
+                                            val.value = val.value.substring(0,1000);
+                                        }else{
+                                            $('#charNum2En').text(1000-len);
+                                        }
+                                    };
+                                </script>
+                                <textarea id="conteudosEn" name="conteudosEn" rows="5" maxlength="1000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].obetivosEn %></textarea>
+                                <span class="pull-right label label-default" id="charNum2En"></span>
+                                <script>
+                                    var text_max = 1000;
+                                    $("#charNum2En").html('0 / ' + text_max);
+    
+                                    $("#conteudosEn").keyup(function(){
+                                        var text_length = $('#conteudosEn').val().length;
+                                        var text_remaining = text_max-text_length;
+                                        $('#charNum2En').html(text_length + ' / ' + text_max);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Demonstração da coerência dos conteúdos programáticos com os objetivos de aprendizagem da unidade curricular <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="demoCont" name="demoCont" rows="5" maxlength="1000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].demoConte %></textarea>
+                                <span class="pull-right label label-default" id="charNum3"></span>
+                                <script>
+                                    var text_max = 1000;
+                                    $("#charNum3").html('0 / ' + text_max);
+    
+                                    $("#demoCont").keyup(function(){
+                                        var text_length = $('#demoCont').val().length;
+                                        var text_remaining = text_max-text_length;
+                                        $('#charNum3').html(text_length + ' / ' + text_max);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Demonstration of the syllabus coherence with the curricular unit’s intended learning outcomes <span class="fs-04">(1000 characters soaces included)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="demoContEn" name="demoContEn" rows="5" maxlength="1000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].demoConteEn %></textarea>
+                                <span class="pull-right label label-default" id="charNum3En"></span>
+                                <script>
+                                    var text_max = 1000;
+                                    $("#charNum3En").html('0 / ' + text_max);
+    
+                                    $("#demoContEn").keyup(function(){
+                                        var text_length = $('#demoContEn').val().length;
+                                        var text_remaining = text_max-text_length;
+                                        $('#charNum3En').html(text_length + ' / ' + text_max);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Metodologias de ensino e de aprendizagem específicas da unidade curricular articuladas com o modelo pedagógico <span class="fs-04">(3000 caracteres incluindo espaços)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="metod" name="metod" rows="5" maxlength="3000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].metodos %></textarea>
+                                <span class="pull-right label label-default" id="charNum4"></span>
+                                <script>
+                                    var text_max3 = 3000;
+                                    $("#charNum4").html('0 / ' + text_max3);
+    
+                                    $("#metod").keyup(function(){
+                                        var text_length = $('#metod').val().length;
+                                        var text_remaining = text_max3-text_length;
+                                        $('#charNum4').html(text_length + ' / ' + text_max3);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Specific teaching and learning methodologies of the curricular unit in articulation with the pedagogic model <span class="fs-04">(3000 characters soaces included)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="metodEn" name="metodEn" rows="5" maxlength="3000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].metodosEn %></textarea>
+                                <span class="pull-right label label-default" id="charNum4En"></span>
+                                <script>
+                                    var text_max3 = 3000;
+                                    $("#charNum4En").html('0 / ' + text_max3);
+    
+                                    $("#metodEn").keyup(function(){
+                                        var text_length = $('#metodEn').val().length;
+                                        var text_remaining = text_max3-text_length;
+                                        $('#charNum4En').html(text_length + ' / ' + text_max3);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Avaliação <span class="fs-04">(3000 caracteres incluindo espaços)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="aval" name="aval" rows="5" maxlength="3000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].avaliacao %></textarea>
+                                <span class="pull-right label label-default" id="charNum5"></span>
+                                <script>
+                                    var text_max3 = 3000;
+                                    $("#charNum5").html('0 / ' + text_max3);
+    
+                                    $("#aval").keyup(function(){
+                                        var text_length = $('#aval').val().length;
+                                        var text_remaining = text_max3-text_length;
+                                        $('#charNum5').html(text_length + ' / ' + text_max3);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Evaluation <span class="fs-04">(3000 characters soaces included)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="avalEn" name="avalEn" rows="5" maxlength="3000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].avaliacaoEn %></textarea>
+                                <span class="pull-right label label-default" id="charNum5En"></span>
+                                <script>
+                                    var text_max3 = 3000;
+                                    $("#charNum5En").html('0 / ' + text_max3);
+    
+                                    $("#avalEn").keyup(function(){
+                                        var text_length = $('#avalEn').val().length;
+                                        var text_remaining = text_max3-text_length;
+                                        $('#charNum5En').html(text_length + ' / ' + text_max3);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Demonstração da coerência das metodologias de ensino e avaliação com os objetivos de aprendizagem da unidade curricular <span class="fs-04">(3000 caracteres incluindo espaços)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="demoCoer" name="demoCoer" rows="5" maxlength="3000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].demoMetodo %></textarea>
+                                <span class="pull-right label label-default" id="charNum6"></span>
+                                <script>
+                                    var text_max3 = 3000;
+                                    $("#charNum6").html('0 / ' + text_max3);
+    
+                                    $("#demoCoer").keyup(function(){
+                                        var text_length = $('#demoCoer').val().length;
+                                        var text_remaining = text_max3-text_length;
+                                        $('#charNum6').html(text_length + ' / ' + text_max3);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Demonstration of the teaching and evaluation methodologies in articulation with the curricular unit’s intended learning outcomes <span class="fs-04">(3000 characters soaces included)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="demoCoerEn" name="demoCoerEn" rows="5" maxlength="3000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].demoMetodoEn %></textarea>
+                                <span class="pull-right label label-default" id="charNum6En"></span>
+                                <script>
+                                    var text_max3 = 3000;
+                                    $("#charNum6En").html('0 / ' + text_max3);
+    
+                                    $("#demoCoerEn").keyup(function(){
+                                        var text_length = $('#demoCoerEn').val().length;
+                                        var text_remaining = text_max3-text_length;
+                                        $('#charNum6En').html(text_length + ' / ' + text_max3);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Bibliografia de consulta/ existência obrigatória (norma APA, 7.ª Edição) <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text"  id="biblio1" name="biblio1" class="form-control form-control-sm" maxlength="200" placeholder="Biblio" value="<%= fuc[0].biblio %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>></input>
+                                    <label for="biblio1">Bibliografia 1</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text"  id="biblio2" name="biblio2" class="form-control form-control-sm" maxlength="200" placeholder="Biblio" value="<%= fuc[0].biblio2 %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>></input>
+                                    <label for="biblio2">Bibliografia 2</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text"  id="biblio3" name="biblio3" class="form-control form-control-sm" maxlength="200" placeholder="Biblio" value="<%= fuc[0].biblio3 %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>></input>
+                                    <label for="biblio3">Bibliografia 3</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text"  id="biblio4" name="biblio4" class="form-control form-control-sm" maxlength="200" placeholder="Biblio" value="<%= fuc[0].biblio4 %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>></input>
+                                    <label for="biblio4">Bibliografia 4</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text"  id="biblio5" name="biblio5" class="form-control form-control-sm" maxlength="200" placeholder="Biblio" value="<%= fuc[0].biblio5 %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>></input>
+                                    <label for="biblio5">Bibliografia 5</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr><th>Observações <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <textarea id="obs" name="obs" rows="5" maxlength="1000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].obs %></textarea>
+                                <span class="pull-right label label-default" id="charNum8"></span>
+                                <script>
+                                    var text_max = 1000;
+                                    $("#charNum8").html('0 / ' + text_max);
+    
+                                    $("#obs").keyup(function(){
+                                        var text_length = $('#obs').val().length;
+                                        var text_remaining = text_max-text_length;
+                                        $('#charNum8').html(text_length + ' / ' + text_max);
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5">
+                <div class="col-12">
+                    <table>
+                        <thead>
+                            <tr><th>Observations <span class="fs-04">(1000 characters soaces included)</span></th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <textarea id="obsEn" name="obsEn" rows="5" maxlength="1000" class="form-control" <% if(fuc[0].editavel == 1){%> readonly <% } %>><%= fuc[0].obsEn %></textarea>
+                                    <span class="pull-right label label-default" id="charNum8En"></span>
+                                    <script>
+                                        var text_max = 1000;
+                                        $("#charNum8En").html('0 / ' + text_max);
+    
+                                        $("#obsEn").keyup(function(){
+                                            var text_length = $('#obsEn').val().length;
+                                            var text_remaining = text_max-text_length;
+                                            $('#charNum8En').html(text_length + ' / ' + text_max);
+                                        })
+                                    </script>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+	<!--
+            <div class="row mt-5 mb-5">
+                <div class="col-12">
+                    <table>
+                        <thead>
+                            <tr><th>Objectivos de Desenvolvimento Sustentável</th><tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #deede6">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods1" name="ods1" value="ods1">
+                                        <label class="form-check-label" for="ods1"><img src="/img/ods1.png" alt="ods1"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods2" name="ods2" value="ods2">
+                                        <label class="form-check-label" for="ods2"><img src="/img/ods2.png" alt="ods2"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods3" name="ods3" value="ods3">
+                                        <label class="form-check-label" for="ods3"><img src="/img/ods3.png" alt="ods3"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods4" name="ods4" value="ods4">
+                                        <label class="form-check-label" for="ods4"><img src="/img/ods4.png" alt="ods4"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods5" name="ods5" value="ods5">
+                                        <label class="form-check-label" for="ods5"><img src="/img/ods5.png" alt="ods5"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods6" name="ods6" value="ods6">
+                                        <label class="form-check-label" for="ods6"><img src="/img/ods6.png" alt="ods6"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods7" name="ods7" value="ods7">
+                                        <label class="form-check-label" for="ods7"><img src="/img/ods7.png" alt="ods7"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods8" name="ods8" value="ods8">
+                                        <label class="form-check-label" for="ods8"><img src="/img/ods8.png" alt="ods8"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods9" name="ods9" value="ods9">
+                                        <label class="form-check-label" for="ods9"><img src="/img/ods9.png" alt="ods9"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods10" name="ods10" value="ods10">
+                                        <label class="form-check-label" for="ods10"><img src="/img/ods10.png" alt="ods10"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods11" name="ods11" value="ods11">
+                                        <label class="form-check-label" for="ods11"><img src="/img/ods11.png" alt="ods11"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods12" name="ods12" value="ods12">
+                                        <label class="form-check-label" for="ods12"><img src="/img/ods12.png" alt="ods12"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods13" name="ods13" value="ods13">
+                                        <label class="form-check-label" for="ods13"><img src="/img/ods13.png" alt="ods13"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods14" name="ods14" value="ods14">
+                                        <label class="form-check-label" for="ods14"><img src="/img/ods14.png" alt="ods14"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods15" name="ods15" value="ods15">
+                                        <label class="form-check-label" for="ods15"><img src="/img/ods15.png" alt="ods15"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods16" name="ods16" value="ods16">
+                                        <label class="form-check-label" for="ods16"><img src="/img/ods16.png" alt="ods16"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="ods17" name="ods17" value="ods17">
+                                        <label class="form-check-label" for="ods17"><img src="/img/ods17.png" alt="ods17"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+		-->
+            <div class="row mt-5 mb-5">
+                <div class="col-12">
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="respFuc" name="respFuc" placeholder="respFuc" value="<%= fuc[0].docRespFuc %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="respFuc">Docente da UC Responsável pela revisão desta FUC:</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="coordCEResp" name="coordCEResp" placeholder="coordCEResp" value="<%= fuc[0].coordCe %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="coordCEResp">Coordenador do CE responsável pela validação:</label>
+                                </div>
+                            </td>
+                            <td class="px-3">
+                                <span style="display: none;"<% if(role == "docente"){%>style="display: none;" <% } %>>
+                                    <style>
+                                        .btn-toggle {
+                                            margin: 0 4rem;
+                                            padding: 0;
+                                            position: relative;
+                                            border: none;
+                                            height: 1.5rem;
+                                            width: 3rem;
+                                            border-radius: 1.5rem;
+                                            color: #6b7381 !important;
+                                            background: #bdc1c8 !important;
+                                        }
+                                        .btn-toggle:focus, .btn-toggle:focus.active, .btn-toggle.focus, .btn-toggle.focus.active {
+                                            outline: none;
+                                        }
+                                        .btn-toggle:before, .btn-toggle:after {
+                                            line-height: 1.5rem;
+                                            width: 4rem;
+                                            text-align: center;
+                                            font-weight: 900;
+                                            font-size: .7rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 1px;
+                                            position: absolute;
+                                            bottom: 0;
+                                            transition: opacity .25s;
+                                        }
+                                        .btn-toggle:before {
+                                            margin-right: 2px;
+                                            content: 'Bloqueado';
+                                            left: -5rem;
+                                        }
+                                        .btn-toggle:after {
+                                            margin-left: 2px;
+                                            content: 'Desbloqueado';
+                                            right: -5rem;
+                                            opacity: .5;
+                                        }
+                                        .btn-toggle > .handle {
+                                            position: absolute;
+                                            top: 0.1875rem;
+                                            left: 0.1875rem;
+                                            width: 1.125rem;
+                                            height: 1.125rem;
+                                            border-radius: 1.125rem;
+                                            background: #fff;
+                                            transition: left .25s;
+                                        }
+                                        .btn-toggle.active {
+                                            transition: background-color .25s;
+                                        }
+                                        .btn-toggle.active {
+                                            background-color: #0d6efd !important;
+                                        }
+                                        .btn-toggle.active > .handle {
+                                            left: 1.6875rem;
+                                            transition: left .25s;
+                                        }
+                                        .btn-toggle.active:before {
+                                            opacity: .5;
+                                        }
+                                        .btn-toggle.active:after {
+                                            opacity: 1;
+                                        }
+                                        
+                                    </style>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <input type="hidden" id="hiddenBloqueado" name="btnBloqueado" value="1">
+                                                <button type="button" class="btn btn-toggle" data-bs-toggle="button" aria-pressed="false" autocomplete="off" id="btnBloqueado">
+                                                    <div class="handle"></div>
+                                                </button>
+                                                <script>
+                                                    const btn = document.getElementById("btnBloqueado");
+                                                    const hidden = document.getElementById("hiddenBloqueado");
+
+                                                    btn.addEventListener("click", () => {
+                                                        const pressed = btn.getAttribute("aria-pressed") === "true";
+                                                        hidden.value = pressed ? "0" : "1";
+                                                    });
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="anoLectivo" name="anoLetivo" placeholder="anoLetivo" value="<%= fuc[0].anoLetivoFuc %>"readonly >
+                                    <label for="anoLetivo">Ano Letivo:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="dataRev" name="dataRev" placeholder="dataRev" value="<%= fuc[0].dtaRevFuc %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="dataRev">Data da revisão desta FUC:</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control form-control-sm" id="dataValid" name="dataValid" placeholder="dataValid" value="<%= fuc[0].dtaConfFuc %>" <% if(fuc[0].editavel == 1){%> readonly <% } %>>
+                                    <label for="dataValid">Data da validação desta FUC:</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+                <div class="row my-3">
+                    <button class="btn btn-sm btn-primary" type="sumbit" <% if(fuc[0].editavel == 1){%> disabled=disabled <% } %>>Gravar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+<%- include('partials/footer') %>

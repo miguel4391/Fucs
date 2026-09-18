@@ -1,0 +1,500 @@
+<%- include('partials/header') %>
+<script>
+    $(document).on('click', '.addDoc', function () {
+        const modal = new bootstrap.Modal(document.getElementById('docenteModal'));
+        clearModal();
+        $("#modalTitle").text("Adicionar Docente");
+       
+        $('#idFucModal').val($(this).data('id'));
+        $('#nomeUcModal').html($(this).data('nomefuc') + "<p>Adicionar outro docente</p>")
+        $('#doc2Modal').val($(this).data('doc2'));
+        $('#doc3Modal').val($(this).data('doc3'));
+        $('#doc4Modal').val($(this).data('doc4'));
+        $('#doc5Modal').val($(this).data('doc5'));
+        $('#doc6Modal').val($(this).data('doc6'));
+        $('#doc7Modal').val($(this).data('doc7'));
+        $('#doc8Modal').val($(this).data('doc8'));
+        $('#doc9Modal').val($(this).data('doc9'));
+        $('#doc10Modal').val($(this).data('doc10'));
+        modal.show();
+        getDocente();
+    })
+    $(document).on('click', '.saveDoc', function () {
+        $.post('/saveDocentes', {
+            idUc: $('#idFucModal').val(),
+            doc2: $('#doc2').val(),
+            doc3: $('#doc3').val(),
+            doc4: $('#doc4').val(),
+            doc5: $('#doc5').val(),
+            doc6: $('#doc6').val(),
+            doc7: $('#doc7').val(),
+            doc8: $('#doc8').val(),
+            doc9: $('#doc9').val(),
+            doc10: $('#doc10').val()
+        })
+        .done(function () {
+            $('#docenteModal').modal('hide');
+        });
+
+    });
+
+    function clearModal(){
+        $('#doc2Modal').val("");
+        $('#doc3Modal').val("");
+        $('#doc4Modal').val("");
+        $('#doc5Modal').val("");
+        $('#doc6Modal').val("");
+        $('#doc7Modal').val("");
+        $('#doc8Modal').val("");
+        $('#doc9Modal').val("");
+        $('#doc10Modal').val("");
+        $('#doc2').val(0);
+        $('#doc3').val(0);
+        $('#doc4').val(0);
+        $('#doc5').val(0);
+        $('#doc6').val(0);
+        $('#doc7').val(0);
+        $('#doc8').val(0);
+        $('#doc9').val(0);
+        $('#doc10').val(0);
+    }
+    function getDocente(){
+        for(let i = 2; i <= 10; i++) {
+            if($('#doc' + i + 'Modal').val()){
+                $('#doc' + i).val($('#doc' + i + 'Modal').val());
+            }
+        }
+    }
+</script>
+<!-- Begin Modal-->
+<div class="modal fade" id="docenteModal" name="docenteModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p><h5 class="modal-title" id="nomeUcModal"></h5></p>
+                
+                <input type="hidden" id="idFucModal" name="idFucModal">
+                <input type="hidden" id="doc2Modal" name="doc2Modal">
+                <input type="hidden" id="doc3Modal" name="doc3Modal">
+                <input type="hidden" id="doc4Modal" name="doc4Modal">
+                <input type="hidden" id="doc5Modal" name="doc5Modal">
+                <input type="hidden" id="doc6Modal" name="doc6Modal">
+                <input type="hidden" id="doc7Modal" name="doc7Modal">
+                <input type="hidden" id="doc8Modal" name="doc8Modal">
+                <input type="hidden" id="doc9Modal" name="doc9Modal">
+                <input type="hidden" id="doc10Modal" name="doc10Modal">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <select class="form-select" id="doc2" name="doc2">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+                <select class="form-select" id="doc3" name="doc3">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+                <select class="form-select" id="doc4" name="doc4">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+                <select class="form-select" id="doc5" name="doc5">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+                <select class="form-select" id="doc6" name="doc6">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+                <select class="form-select" id="doc7" name="doc7">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+                <select class="form-select" id="doc8" name="doc8">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+                <select class="form-select" id="doc9" name="doc9">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+                <select class="form-select" id="doc10" name="doc10">
+                    <option value="0">-------------------------------------</option>
+                    <% listaDoc.forEach(doc => { %>
+                        <option value="<%= doc.nomeDoc %>">
+                            <%= doc.nomeDoc %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" data-bs-dismiss="modal">Sair</a>
+                <a  id="btnSaveDocentes" class="btn btn-primary saveDoc">
+                    Guardar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal-->
+    <div class="container mt-5"> 
+        <div class="row">
+            <h2><%= curso[0].Curso %></h2>
+            <h2><%= anoLetivo %></h2>
+        </div>
+        <form action="/setRegentes/<%= curso[0].idCurso %>" method="post">
+            
+                <div class="row g-3 align-items-center mt-3">
+                    <div class="col-auto">
+                        <label class="form-sm form-label" for="tbNomeCoord"><strong>Coordenador do Ciclo de Estudos</strong></label>
+                    </div>
+                    <div class="col-6">
+                        <input type="hidden" id="tbNomeCoord" name="tbNomeCoord" class="form-control form-sm" value="<%= curso[0].NomeCoord %>">
+                        <!-- CSS do Select2 (colocar no <head>) -->
+                        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+                        <!-- jQuery e JS do Select2 (colocar antes do fecho do </body>) -->
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.js"></script>
+                        <!-- Estilos do Dropdown Personalizado -->
+                        <style>
+                        .custom-multiselect {
+                            position: relative;
+                            width: 100%;
+                            max-width: 400px;
+                            font-family: sans-serif;
+                        }
+
+                        .select-box {
+                            padding: 10px;
+                            border: 1px solid #ccc;
+                            border-radius: 4px;
+                            background-color: #fff;
+                            cursor: pointer;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        }
+
+                        .select-box::after {
+                            content: "▼";
+                            font-size: 0.8rem;
+                            color: #666;
+                        }
+
+                        .checkboxes-container {
+                            display: none;
+                            position: absolute;
+                            top: 100%;
+                            left: 0;
+                            right: 0;
+                            background-color: #fff;
+                            border: 1px solid #ccc;
+                            border-radius: 4px;
+                            max-height: 200px;
+                            overflow-y: auto;
+                            z-index: 1000;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        }
+
+                        .checkboxes-container label {
+                            display: block;
+                            padding: 8px 12px;
+                            cursor: pointer;
+                            margin: 0;
+                        }
+
+                        .checkboxes-container label:hover {
+                            background-color: #f0f0f0;
+                        }
+
+                        .checkboxes-container input {
+                            margin-right: 8px;
+                        }
+                        </style>
+
+                        <!-- Estrutura do Componente -->
+                        <div class="custom-multiselect">
+                        <div class="select-box" id="selectBox" onclick="toggleDropdown()">
+                            <span id="selectedText">Selecione os docentes...</span>
+                        </div>
+                        
+                        <div class="checkboxes-container" id="checkboxes">
+                            <% listaDoc.forEach(doc => { %>
+                            <label>
+                                <input 
+                                type="checkbox" 
+                                name="docente" 
+                                value="<%= doc.emailDoc %>"
+                                <%= doc.nomeDoc === curso[0].NomeCoord ? 'checked' : '' %>
+                                onchange="updateSelectedText()"
+                                />
+                                <%= doc.nomeDoc %>
+                            </label>
+                            <% }) %>
+                        </div>
+                        </div>
+
+                        <!-- Lógica JavaScript (Vanilla JS) -->
+                        <script>
+                        function toggleDropdown() {
+                            const container = document.getElementById('checkboxes');
+                            container.style.display = container.style.display === 'block' ? 'none' : 'block';
+                        }
+
+                        function updateSelectedText() {
+                            // 1. Obter todas as checkboxes selecionadas
+                            const checkboxes = document.querySelectorAll('#checkboxes input[type="checkbox"]:checked');
+                            const selectedText = document.getElementById('selectedText');
+                            
+                            // 2. Extrair os valores (emails) e o texto visível (nomes) dos labels
+                            const emails = [];
+                            const nomes = [];
+
+                            checkboxes.forEach(cb => {
+                            emails.push(cb.value);
+                            // Extrai apenas o texto do <label>, removendo espaços extra
+                            nomes.push(cb.parentElement.textContent.trim());
+                            });
+
+                            // 3. Atualizar o texto visível da caixa do dropdown
+                            if (checkboxes.length === 0) {
+                            selectedText.textContent = "Selecione os docentes...";
+                            } else if (checkboxes.length === 1) {
+                            selectedText.textContent = "1 docente selecionado";
+                            } else {
+                            selectedText.textContent = `${checkboxes.length} docentes selecionados`;
+                            }
+
+                            // 4. Atualizar os inputs tbCoordCurso e tbNomeCoord
+                            const inputCoord = document.getElementById('tbCoordCurso');
+                            const inputNomeCoord = document.getElementById('tbNomeCoord');
+
+                            if (inputCoord) {
+                            inputCoord.value = emails.length > 0 ? emails.join(';') + ';' : '';
+                            }
+
+                            if (inputNomeCoord) {
+                            inputNomeCoord.value = nomes.join('; ');
+                            }
+                        }
+
+                        // Fechar o dropdown ao clicar fora do elemento
+                        document.addEventListener('click', function(e) {
+                            const multiselect = document.querySelector('.custom-multiselect');
+                            if (multiselect && !multiselect.contains(e.target)) {
+                            document.getElementById('checkboxes').style.display = 'none';
+                            }
+                        });
+
+                        // Executa no arranque da página para preencher as caixas com os valores pré-selecionados pelo EJS
+                        //document.addEventListener('DOMContentLoaded', updateSelectedText);
+                        </script>
+                    </div>
+                </div>
+                <div class="row g-3 align-items-center mt-3">
+                    <div class="col-auto">
+                        <label class="form-sm form-label" for="tbCoordCurso"><strong>Login(s)</strong></label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" id="tbCoordCurso" name="tbCoordCurso"  class="form-control form-control-sm" style="color: #000000 !important; background-color: #ffffff !important;" value="<%= curso[0].Login %>" onchange="updateSelectedText()" readonly>
+                    </div>
+                </div>
+            
+            <div class="row mt-5">
+                <table class="table table-striped table-sm table-hover" id="tableCE" name="tableCE">
+                    <thead class="table-dark">
+                        <tr>
+                            <th></th>
+                            <th>Unidade Curricular</th>
+                            <th>Responsável de UC</th>
+                            <th>Login</th>
+                            <th class="text-center">Acrescentar outro docente</th>
+                            <th>Bloquear Edição de FUC</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <% docentes.forEach((docente) =>{ %>
+                            <tr>
+                                <td><%= docente.IdFuc %></td>
+                                <td><%= docente.UC %></td> 
+                                <td>
+                                    <select
+                                        class="form-select docente-select"
+                                        data-target="<%= docente.IdFuc %>"
+                                        name="<%= docente.IdFuc %>">
+
+                                        <option value="0">-------------------------------------</option>
+
+                                        <% listaDoc.forEach(doc => { %>
+
+                                            <option
+                                                value="<%= doc.nomeDoc %>"
+                                                data-email="<%= doc.emailDoc %>"
+                                                data-cat="<%= doc.catDoc %>"
+                                                data-grau="<%= doc.grauDocExt %>"
+                                                <%= doc.nomeDoc === docente.Nome ? 'selected' : '' %>>
+
+                                                <%= doc.nomeDoc %>
+
+                                            </option>
+
+                                        <% }) %>
+
+                                    </select>
+                                    <input
+                                        type="hidden"
+                                        id="cat_<%= docente.IdFuc %>"
+                                        name="<%= docente.IdFuc %>"
+                                        value="<%= docente.CatDoc || '' %>">
+
+                                    <input
+                                        type="hidden"
+                                        id="grau_<%= docente.IdFuc %>"
+                                        name="<%= docente.IdFuc %>"
+                                        value="<%= docente.GrauDocExt || '' %>">
+                                </td>
+
+                                <td>
+                                    <input 
+                                        type="text"
+                                        class="form-control"
+                                        id="login_<%= docente.IdFuc %>"
+                                        name="<%= docente.IdFuc %>"
+                                        value="<%= docente.Login %>" 
+                                        readonly />
+                                </td>
+
+                                <script>
+                                    document.querySelectorAll('.docente-select').forEach(select => {
+
+                                        function updateInfo() {
+
+                                            let targetId = select.dataset.target;
+
+                                            let selectedOption =
+                                                select.options[select.selectedIndex];
+
+                                            let email = selectedOption.dataset.email || '';
+                                            let cat   = selectedOption.dataset.cat || '';
+                                            let grau  = selectedOption.dataset.grau || '';
+
+                                            let loginInput =
+                                                document.getElementById('login_' + targetId);
+
+                                            let catInput =
+                                                document.getElementById('cat_' + targetId);
+
+                                            let grauInput =
+                                                document.getElementById('grau_' + targetId);
+
+                                            if (loginInput) loginInput.value = email;
+                                            if (catInput)   catInput.value = cat;
+                                            if (grauInput)  grauInput.value = grau;
+                                        }
+
+                                        updateInfo();
+                                        select.addEventListener('change', updateInfo);
+
+                                    });
+                                </script>
+                                <td class="text-center">
+                                    <a class="btn btn-sm-outline addDoc" 
+                                        data-id="<%= docente.IdFuc %>"
+                                        data-nomeFuc="<%= docente.UC %>"
+                                        data-doc2="<%= docente.doc2Nome %>"
+                                        data-doc3="<%= docente.doc3Nome %>"
+                                        data-doc4="<%= docente.doc4Nome %>"
+                                        data-doc5="<%= docente.doc5Nome %>"
+                                        data-doc6="<%= docente.doc6Nome %>"
+                                        data-doc7="<%= docente.doc7Nome %>"
+                                        data-doc8="<%= docente.doc8Nome %>"
+                                        data-doc9="<%= docente.doc9Nome %>"
+                                        data-doc10="<%= docente.doc10Nome %>">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <select class="form-select" aria-label="Editavel" id="<%= docente.IdFuc %>" name="<%= docente.IdFuc %>" value="<%= docente.Editavel %>">
+                                        <% if(docente.Editavel == 0){ %>
+                                            <option value="0" selected>Desbloqueado</option>
+                                            <option value="1">Bloqueado</option>
+                                        <% }else{ %>
+                                            <option value="0">Desbloqueado</option>
+                                            <option value="1" selected>Bloqueado</option>
+                                        <% } %>
+                                    </select>
+                                </td>
+                                
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-2"><div class="d-grid gap-2"><a href="/regentesAno" class="btn btn-secondary btn-sm">Voltar</a></div></div>
+                <div class="col-5"><div class="d-grid gap-2"><button type="submit" class="btn btn-primary btn-sm">Gravar</button></div></div>
+                <div class="col-2"><div class="d-grid gap-2"><button type="submit" class="btn btn-danger btn-sm" id="todos" name="todos">Gravar e Bloquear Todos</button></div></div>
+                <div class="col-2"><div class="d-grid gap-2"><button type="submit" class="btn btn-secondary btn-sm" id="unblk" name="unblk">Gravar e Desbloquear Todos</button></div></div>
+            </div>
+            <script>
+                $("#todos").on("click", function() {
+
+                    $("#tableCE tbody tr").each(function() {
+
+                        $(this)
+                            .find("td:last select")
+                            .val("1");
+
+                    });
+
+                });
+
+                $("#unblk").on("click", function() {
+
+                    $("#tableCE tbody tr").each(function() {
+
+                        $(this)
+                            .find("td:last select")
+                            .val("0");
+
+                    });
+
+                });
+            </script>
+        </form>
+    </div>
+<%- include('partials/footer') %>

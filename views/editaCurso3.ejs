@@ -1,0 +1,69 @@
+<%- include('partials/header') %>
+    <style>
+        .invisible{
+            display: none;
+        }
+    </style>
+    <div class="container mt-5">
+        <div class="row mt-5">
+            <div class="col-12 mt-5">
+                <label for="curso" class="form-label">Selecionar o Ciclo de Estudos</label>
+                <select id="curso" name="curso" class="form-select">
+                    <option value="0">----------------------------------------</option>
+                    <% cursos.forEach((curso) => { %>
+                        <option value="<%= curso.sigla %>"><%= curso.nomeExt %></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        <script>
+            $('#curso').on("change", function(){
+                $("#fuc").children().remove();
+                let ce = $(this).val();
+                if(typeof ce === "string" && ce != null && ce.length > 0){
+                    
+                    $.ajax({
+                        type: 'GET',
+                        url:'https://fucs.uatlantica.pt/getUC/' + ce,
+                        dataType: 'json'
+                    })
+                    .done((data)=>{
+                        let listItems = '<option value="0">----------------------------------------</option>';
+                        $.each(data, (key, value) =>{
+                            listItems += '<option value=' + value['idfucs'] + '>' + value['nomeUCPt'] + '</option>'
+                        })
+                        $("#fuc").append(listItems);
+                    })
+                    .fail((jqXHR, textStatus, err) => {
+                        console.log('AJAX error response: ', err);
+                    })
+                }
+            })
+        </script>
+        <div class="row mt-5">
+            <div class="col-12 mt-5">
+                <label for="fuc" class="form-label">Selecionar a Unidade Curricular</label>
+                <select id="fuc" name="fuc"  class="form-select">
+                    <option value="0">----------------------------------------</option>
+                </select>
+                <script>
+                    $('#fuc').on("change", function(){
+                        let fuc = $(this).val();
+                        if(fuc != null){
+                            if(fuc != '0') $("#sbmt").removeClass("invisible");
+                            else $("#sbmt").addClass("invisible");
+
+                            $("#btnSbmt").attr("href", "/getFuc/" + fuc)
+                        }
+                    })
+                </script>
+            </div>
+        </div>
+        <div id="sbmt" class="row mt-5 invisible">
+            <div class="col-12-mt-5">
+                <a href="#" id="btnSbmt" class="btn btn-sm btn-primary">Editar FUC</a>
+            </div>
+        </div>
+    </div>
+
+<%- include('partials/footer') %>

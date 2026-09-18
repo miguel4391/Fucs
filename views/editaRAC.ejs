@@ -1,0 +1,51 @@
+<%- include('partials/header') %>
+    <style>
+        .invisible{
+            display: none;
+        }
+    </style>
+    <div class="container mt-5">
+        <div class="row mt-5">
+            <div class="row mb-3">	
+                <h1>Criar RAC - Relatório Anual de Curso</h1>  
+            </div>
+            <div class="col-12 mt-5">
+                <label for="curso" class="form-label">Selecionar o Ciclo de Estudos</label>
+                <select id="curso" name="curso" class="form-select">
+                    <option value="0">----------------------------------------</option>
+                    <% cursos.forEach((curso) => { %>
+                        <option value="<%= curso.ID %>"><%= curso.Curso %></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12 mt-5">
+                <label for="anoCur" class="form-label">Selecionar o Ano Curricular</label>
+                <select id="anoCur" name="anoCur"  class="form-select">
+                    <option value="0">----------------------------------------</option>
+                    <option value="2025-26">2025-26</option>
+                    <!--<option value="2026-27">2026-27</option>-->
+                </select>
+                <script>
+                    $('#anoCur').on("change", function(){
+                        let anoCur = $(this).val();
+                        let ce = $("#curso").val();
+                        if(anoCur != null){
+                            if(anoCur != '0') $("#sbmt").removeClass("invisible");
+                            else $("#sbmt").addClass("invisible");
+
+                            $("#btnSbmt").attr("href", "/relCurso/" + ce + "/" + $('#anoCur').val().replace('-','_') )
+                        }
+                    })
+                </script>
+            </div>
+        </div>
+        <div id="sbmt" class="row mt-5 invisible">
+            <div class="col-12-mt-5">
+                <a href="#" id="btnSbmt" class="btn btn-sm btn-primary">Editar RAC</a>
+            </div>
+        </div>
+    </div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,38 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+	<div class="row">
+        <div class="col-xl-8">
+			<div class="container border ">
+                <div class="row m-5">
+					<form action="regentes" method="post">
+						<div class="row mb-3">	
+							<h1>Gestão de Responsabilidades Académicas</h1>
+                            <h1><%= anoLetivo.replace('_','/') %></h1>
+						</div>
+						<div class="row mb-3">
+                            <table class="table table-striped table-sm table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="text-center">Sigla</th>
+                                        <th class="text-center">Ciclo de Estudos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% cursos.forEach((curso) => { %>
+                                        <tr>
+                                            <td><a href="/regentes/<%= curso.Sigla %>/<%= anoLetivo %>"><%= curso.Sigla %></a></td>
+                                            <td><%= curso.Curso %></td>
+                                        </tr>
+                                    <% }) %>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('partials/footer') %>

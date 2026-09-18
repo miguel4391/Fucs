@@ -1,0 +1,1299 @@
+<%- include('partials/header') %>
+
+<style>
+.blueheader{
+	background-color: #4d4b4b;
+	color:#fff;
+}
+table{
+	width: 100%;
+}
+
+th{
+	background-color: #4d4b4b;
+	color:#fff;
+	
+	padding: 0.7em;
+}
+.fs-04{
+	font-size: .75em;
+	font-style: italic;
+}
+</style>
+
+
+<div class="container">
+	<form method='post' action='sendUc'>
+		<div class="row mt-5">
+			<div class="col-12">
+				<table>
+					<thead>	
+						<tr><th><label class="mx-3">Designação da Unidade Curricular</label></th></tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div class="form-floating">
+									<input type="text" class="form-control form-control-sm" id="ptTitle" name="ptTitle" placeholder="nomePt">
+									<label for="ptTitle">PT:</label>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-floating mb-3">
+									<input type="text" class="form-control form-control-sm" id="enTitle" name="enTitle" placeholder="nomePt">
+								<label for="enTitle">EN:</label>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row mt-5">
+			<div class="col-12">
+				<table>
+					<thead>
+						<tr><th><label class="mx-3">Designação do Ciclo de Estudos</label></th></tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<select id="nomeCe" name="nomeCe" class="form-select form-select-sm" onchange="setNomeCurso();" >
+									<option selected>-------------------</option>
+									<% cursos.forEach(function(curso) { %>
+										<option value="<%= curso.Sigla %>"><%= curso.Curso %></option>
+									<% }) %>
+								</select>
+								<input type="hidden" id="cursoExt" name="cursoExt" value="L-Ciências da Nutrição">
+								<script>
+									function setNomeCurso(){
+										$('#cursoExt').val($('#nomeCe :selected').text());
+									}
+								</script>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row mt-5">
+			<div class="col-12">
+				<table>
+					<thead>
+						<tr>
+							<th>Código UC</th>
+							<th>Sigla da área ciêntifica</th>
+							<th>Ano</th>
+							<th>Semestre</th>
+							<th>Escolher</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="text" class="form-control form-control-sm" id="codUC" name="codUC" placeholder="Não preencher" disabled="disabled"></td>
+							<td><input type="text" class="form-control form-control-sm" id="sigla" name="sigla"></td>
+							<td>
+								<select id="ano" name="ano" class="form-select form-select-sm">
+									<option vlaue="1º">1º</option>
+									<option vlaue="2º">2º</option>
+									<option vlaue="3º">3º</option>
+									<option vlaue="4º">4º</option>
+								</select>
+							</td>
+							<td>
+								<select id="semestre" name="semestre" class="form-select form-select-sm">
+									<option vlaue="1º">1º</option>
+									<option vlaue="2º">2º</option>
+								</select>
+							</td>
+							<td>
+								<select id="caracter" name="caracter" class="form-select form-select-sm">
+									<option value="obrigatoria">Obrigatória</option>
+									<option value="optativa">Optativa</option>
+								</select>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row mt-5">
+			<div class="col-12">
+				<table>
+					<thead>
+						<tr>
+							<th>Duração</th>
+							<th>Nº horas de trabalho</th>
+							<th>Nº de horas de contato</th>
+							<th>ECTS</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<select id="duracao" name="duracao" class="form-select form-select-sm">
+									<option value="semestral">Semestral</option>
+									<option value="anual">Anual</option>
+									<option value="trimestral">Trimestral</option>
+								</select>
+							</td>
+							<td><input type="text" class="form-control form-control-sm" id="horasTrab" name="horasTrab"></td>
+							<td><input type="text" class="form-control form-control-sm" id="horasCont" name="horasCont"></td>
+							<td><input type="text" class="form-control form-control-sm" id="ects" name="ects"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row mt-5">
+			<div class="col-12">
+				<table>
+					<thead>
+						<tr>
+							<th>Horas de contacto: tipologia</th>
+							<th>Nº horas de contacto</th>
+							<th>Nº horas assíncrono à distância</th>
+							<th>Nº horas sincronas à distância</th>
+						</tr>
+					</thead>
+					</tbody>
+						<tr>
+							<td>Teórico (T)</td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsT" name="hrsT" placeholder="horas teóricas de contato"></td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsAssT" name="hrsAssT" placeholder="horas teóricas assincronas"></td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsSincT" name="hrsSincT" placeholder="horas teóricas sincronas"></td>
+						</tr>
+						<tr>
+							<td>Teórico-praticas (TP)</td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsTp" name="hrsTp" placeholder="horas teórico-práticas de contato"></td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsAssTp" name="hrsAssTp" placeholder="horas teórico-práticas assincronas"></td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsSincTp" name="hrsSincTp" placeholder="horas teórico-práticas sincronas"></td>
+						</tr>
+						<tr>
+							<td>Prático e laboratorial (PL)</td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsPl" name="hrsPl" placeholder="horas prático e laboratorial de contato"></td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsAssPl" name="hrsAssPl" placeholder="horas prático e laboriatorial assincronas"></td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsSincPl" name="hrsSincPl" placeholder="horas prático e laboratoriais sincronas"></td>
+						</tr>
+						<tr>
+							<td>Trabalho de campo (TC)</td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsTc" name="hrsTc" placeholder="horas trabalho de campo de contato"></td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsAssTc" name="hrsAssTc" placeholder="horas trabalho de campo assincronas"></td>
+							<td><input type="text" class="form-control form-control-sm integer-only" id="hrsSincTc" name="hrsSincTc" placeholder="horas trabalho de campo sincronas"></td>
+						</tr>
+						<tr>
+							<td>Seminário (S)</td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsS" name="hrsS" placeholder="horas de seminário de contato"></td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsAssS" name="hrsAssS" placeholder="horas de seminário assincronas"></td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsSincS" name="hrsSincS" placeholder="hors de seminário sincronas"></td>
+					</tr>
+					<tr>
+						<td>Estágio (E)</td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsE" name="hrsE" placeholder="horas de estágio de contato"></td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsAssE" name="hrsAssE" placeholder="horas de estágio assincronas"></td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsSincE" name="hrsSincE" placeholder="horas de estágio sincronas"></td>
+					</tr>
+					<tr>
+						<td>Orientação toturial (OT)</td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsOt" name="hrsOt" placeholder="horas de orientação toturial de contato"></td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsAssOt" name="hrsAssOt" placeholder="horas de orientação toturial assincronas"></td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsSincOt" name="hrsSincOt" placeholder="horas de orientação toturial sincronas"></td>
+					</tr>
+					<tr>
+						<td>Outra (O)</td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsO" name="hrsO" placeholder="horas outras de contato"></td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsAssO" name="hrsAssO" placeholder="horas outras assincronas"></td>
+						<td><input type="text" class="form-control form-control-sm integer-only" id="hrsSincO" name="hrsSincO" placeholder="horas outras sincronas"></td>
+					</tr>
+					<tr>
+						<td><strong>Total do nº de horas</strong></td>
+						<td><input type="text" class="form-control form-control-sm" id="hrsTot" name="hrsTot" placeholder="horas total de contato" readonly></td>
+						<td><input type="text" class="form-control form-control-sm" id="hrsAssTot" name="hrsAssTot" placeholder="horas total assincronas" readonly></td>
+						<td><input type="text" class="form-control form-control-sm" id="hrsSincTot" name="hrsSincTot" placeholder="horas total sincronas" readonly></td>
+					</tr>
+				<tbody>
+			</table>
+			<table>
+				<thead>
+					<tr><th colspan="5">Hora de contacto (%)</th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Presenciais:</td>
+						<td><input type="text" class="form-control form-control-sm" id="hrsPres" name="hrsPres" readonly><td>
+						<td>À distância:</td>
+						<td><input type="text" class="form-control form-control-sm" id="hrsDist" name="hrsDist" readonly><td>
+					</tr>
+				</tbody>
+			</table>
+			<script>
+			document.querySelectorAll('.integer-only').forEach(input => {
+
+				input.addEventListener('input', function() {
+
+					this.value = this.value.replace(/[^0-9]/g, '');
+
+				});
+
+			});
+			document.querySelectorAll('.horas').forEach(input => {
+
+				input.addEventListener('keydown', function(e) {
+
+					if (
+						e.key === '.' ||
+						e.key === ',' ||
+						e.key === 'e' ||
+						e.key === 'E' ||
+						e.key === '-' ||
+						e.key === '+'
+					) {
+						e.preventDefault();
+					}
+
+				});
+
+			});
+
+			function toNumber(value) {
+				return parseFloat(value) || 0;
+			}
+
+			function calcularHoras() {
+
+				// Horas presenciais (coluna 2)
+				let totalContacto =
+					toNumber(document.getElementById('hrsT').value) +
+					toNumber(document.getElementById('hrsTp').value) +
+					toNumber(document.getElementById('hrsPl').value) +
+					toNumber(document.getElementById('hrsTc').value) +
+					toNumber(document.getElementById('hrsS').value) +
+					toNumber(document.getElementById('hrsE').value) +
+					toNumber(document.getElementById('hrsOt').value) +
+					toNumber(document.getElementById('hrsO').value);
+
+				// Horas assíncronas (coluna 3)
+				let totalAss =
+					toNumber(document.getElementById('hrsAssT').value) +
+					toNumber(document.getElementById('hrsAssTp').value) +
+					toNumber(document.getElementById('hrsAssPl').value) +
+					toNumber(document.getElementById('hrsAssTc').value) +
+					toNumber(document.getElementById('hrsAssS').value) +
+					toNumber(document.getElementById('hrsAssE').value) +
+					toNumber(document.getElementById('hrsAssOt').value) +
+					toNumber(document.getElementById('hrsAssO').value);
+
+				// Horas síncronas à distância (coluna 4)
+				let totalSinc =
+					toNumber(document.getElementById('hrsSincT').value) +
+					toNumber(document.getElementById('hrsSincTp').value) +
+					toNumber(document.getElementById('hrsSincPl').value) +
+					toNumber(document.getElementById('hrsSincTc').value) +
+					toNumber(document.getElementById('hrsSincS').value) +
+					toNumber(document.getElementById('hrsSincE').value) +
+					toNumber(document.getElementById('hrsSincOt').value) +
+					toNumber(document.getElementById('hrsSincO').value);
+
+				// Totais
+				document.getElementById('hrsTot').value = totalContacto;
+				document.getElementById('hrsAssTot').value = totalAss;
+				document.getElementById('hrsSincTot').value = totalSinc;
+
+				// Percentagens
+				let totalGeral = totalContacto + totalAss + totalSinc;
+
+				if (totalGeral > 0) {
+
+					let percPresencial =
+						(totalContacto / totalGeral) * 100;
+
+					let percDistancia =
+						((totalAss + totalSinc) / totalGeral) * 100;
+
+					document.getElementById('hrsPres').value =
+						percPresencial.toFixed(2);
+
+					document.getElementById('hrsDist').value =
+						percDistancia.toFixed(2);
+
+				} else {
+
+					document.getElementById('hrsPres').value = '';
+					document.getElementById('hrsDist').value = '';
+
+				}
+			}
+
+			// Adiciona o evento a todos os campos de horas
+			document.querySelectorAll('input[id^="hrs"]').forEach(input => {
+
+				if (
+					input.id !== 'hrsTot' &&
+					input.id !== 'hrsAssTot' &&
+					input.id !== 'hrsSincTot' &&
+					input.id !== 'hrsPres' &&
+					input.id !== 'hrsDist'
+				) {
+					input.addEventListener('input', calcularHoras);
+				}
+
+			});
+
+			// cálculo inicial
+			calcularHoras();
+
+			</script>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th colspan="3">Docente responsável e respetiva carga letiva na unidade curricular</th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeResp" name="nomeResp" placeholder="nomeResp" readonly>
+								<label for="nomeResp">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauResp" name="grauResp" placeholder="grauResp" readonly>
+								<label for="grauResp">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catResp" name="catResp" placeholder="catResp" readonly>
+								<label for="catResp">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaResp" name="cargaResp" placeholder="cargaResp" readonly>
+								<label for="cargaResp">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+				<thead>
+					<tr><th colspan="3">Outros docentes e respetivas cargas letivas na unidade curricular</th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc1" name="nomeDoc1" placeholder="nomeDoc1" readonly>
+								<label for="nomeDoc1">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc1" name="grauDoc1" placeholder="grauDoc1" readonly>
+								<label for="grauDoc1">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc1" name="catDoc1" placeholder="catDoc1" readonly>
+								<label for="catDoc1">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc1" name="cargaDoc1" placeholder="cargaDoc1" readonly>
+								<label for="cargaDoc1">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc2" name="nomeDoc2" placeholder="nomeDoc2" readonly>
+								<label for="nomeDoc2">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc2" name="grauDoc2" placeholder="grauDoc2" readonly>
+								<label for="grauDoc2">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc2" name="catDoc2" placeholder="catDoc2" readonly>
+								<label for="catDoc2">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc2" name="cargaDoc2" placeholder="cargaDoc2" readonly>
+								<label for="cargaDoc2">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<tr style="display: none;"><td><a class="btn btn-sm" id="addDoc3">Adicionar Docente</a> </td></tr>
+					<tr id="doc3Div" style="display: none;">
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc3" name="nomeDoc3" placeholder="nomeDoc3"  readonly>
+								<label for="nomeDoc3">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc3Div1" style="display: none;">
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc3" name="grauDoc3" placeholder="grauDoc3" readonly>
+								<label for="grauDoc3">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc3" name="catDoc3" placeholder="catDoc3" readonly>
+								<label for="catDoc3">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc3" name="cargaDoc3" placeholder="cargaDoc3" readonly>
+								<label for="cargaDoc3">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc3Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc4">Adicionar Docente</a> </td></tr>
+					<script>
+						$(document).ready(function(){
+							$("#addDoc3").click(function(){
+								$("#doc3Div").show();
+								$("#doc3Div1").show();
+								$("#doc3Div2").show();
+								$("#addDoc3").hide();
+							});
+						});
+					</script>
+
+					<tr id="doc4Div" style="display: none;">
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc4" name="nomeDoc4" placeholder="nomeDoc4"  readonly>
+								<label for="nomeDoc4">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc4Div1" style="display: none;">
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc4" name="grauDoc4" placeholder="grauDoc4" readonly>
+								<label for="grauDoc4">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc4" name="catDoc4" placeholder="catDoc4" readonly>
+								<label for="catDoc4">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc4" name="cargaDoc4" placeholder="cargaDoc4" readonly>
+								<label for="cargaDoc4">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc4Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc5">Adicionar Docente</a> </td></tr>
+					<script>
+						$(document).ready(function(){
+							$("#addDoc4").click(function(){
+								$("#doc4Div").show();
+								$("#doc4Div1").show();
+								$("#doc4Div2").show();
+								$("#addDoc4").hide();
+							});
+						});
+					</script>
+
+					<tr id="doc5Div" style="display: none;">
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc5" name="nomeDoc5" placeholder="nomeDoc5" readonly>
+								<label for="nomeDoc5">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc5Div1" style="display: none;">
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc5" name="grauDoc5" placeholder="grauDoc5" readonly>
+								<label for="grauDoc5">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc5" name="catDoc5" placeholder="catDoc5" readonly>
+								<label for="catDoc5">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc5" name="cargaDoc5" placeholder="cargaDoc5" readonly>
+								<label for="cargaDoc5">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc5Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc6">Adicionar Docente</a> </td></tr>
+					<script>
+						$(document).ready(function(){
+							$("#addDoc5").click(function(){
+								$("#doc5Div").show();
+								$("#doc5Div1").show();
+								$("#doc5Div2").show();
+								$("#addDoc5").hide();
+							});
+						});
+					</script>
+
+					<tr id="doc6Div" style="display: none;">
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc6" name="nomeDoc6" placeholder="nomeDoc6"  readonly>
+								<label for="nomeDoc6">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc6Div1" style="display: none;">
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc6" name="grauDoc6" placeholder="grauDoc6" readonly>
+								<label for="grauDoc6">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc6" name="catDoc6" placeholder="catDoc6" readonly>
+								<label for="catDoc6">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc6" name="cargaDoc6" placeholder="cargaDoc6" readonly>
+								<label for="cargaDoc6">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc6Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc7">Adicionar Docente</a> </td></tr>
+					<script>
+						$(document).ready(function(){
+							$("#addDoc6").click(function(){
+								$("#doc6Div").show();
+								$("#doc6Div1").show();
+								$("#doc6Div2").show();
+								$("#addDoc6").hide();
+							});
+						});
+					</script>
+
+					<tr id="doc7Div" style="display: none;">
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc7" name="nomeDoc7" placeholder="nomeDoc7" readonly>
+								<label for="nomeDoc7">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc7Div1" style="display: none;">
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc7" name="grauDoc7" placeholder="grauDoc7" readonly>
+								<label for="grauDoc7">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc7" name="catDoc7" placeholder="catDoc7" readonly>
+								<label for="catDoc7">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc7" name="cargaDoc7" placeholder="cargaDoc7" readonly>
+								<label for="cargaDoc7">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc7Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc8">Adicionar Docente</a> </td></tr>
+					<script>
+						$(document).ready(function(){
+							$("#addDoc7").click(function(){
+								$("#doc7Div").show();
+								$("#doc7Div1").show();
+								$("#doc7Div2").show();
+								$("#addDoc7").hide();
+							});
+						});
+					</script>
+
+					<tr id="doc8Div" style="display: none;">
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc8" name="nomeDoc8" placeholder="nomeDoc8" readonly>
+								<label for="nomeDoc8">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc8Div1" style="display: none;">
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc8" name="grauDoc8" placeholder="grauDoc8" readonly>
+								<label for="grauDoc8">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc8" name="catDoc8" placeholder="catDoc8" readonly>
+								<label for="catDoc8">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc8" name="cargaDoc8" placeholder="cargaDoc8" readonly>
+								<label for="cargaDoc8">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc8Div2" style="display: none;"><td><a class="btn btn-sm" id="addDoc9">Adicionar Docente</a> </td></tr>
+					<script>
+						$(document).ready(function(){
+							$("#addDoc8").click(function(){
+								$("#doc8Div").show();
+								$("#doc8Div1").show();
+								$("#doc8Div2").show();
+								$("#addDoc8").hide();
+							});
+						});
+					</script>
+
+					<tr id="doc9Div" style="display: none;">
+						<td colspan="3">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="nomeDoc9" name="nomeDoc9" placeholder="nomeDoc9" readonly>
+								<label for="nomeDoc9">Nome completo:</label>
+							</div>
+						</td>
+					</tr>
+					<tr id="doc9Div1" style="display: none;">
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="grauDoc9" name="grauDoc9" placeholder="grauDoc9" readonly>
+								<label for="grauDoc9">Grau académico:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="catDoc9" name="catDoc9" placeholder="catDoc9" readonly>
+								<label for="catDoc9">Categoria profissional:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="cargaDoc9" name="cargaDoc9" placeholder="cargaDoc9" readonly>
+								<label for="cargaDoc9">Carga Letiva:</label>
+							</div>
+						</td>
+					</tr>
+					<script>
+						$(document).ready(function(){
+							$("#addDoc9").click(function(){
+								$("#doc9Div").show();
+								$("#doc9Div1").show();
+								$("#addDoc9").hide();
+							});
+						});
+					</script>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Objetivos de aprendizagem e a sua compatibilidade com o método (conhecimentos, aptidões e competências a desenvolver pelos estudantes) <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="objetivos" name="objetivos" rows="5" maxlength="1000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum"></span>
+							<script>
+								var text_max = 1000;
+								$("#charNum").html('0 / ' + text_max);
+
+								$("#objetivos").keyup(function(){
+									var text_length = $('#objetivos').val().length;
+									var text_remaining = text_max-text_length;
+									$('#charNum').html(text_length + ' / ' + text_max);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Learning outcomes and its compatibility with teaching methods (Knowledge, skills and competences to be developed by students) <span class="fs-04">(1000 characters spaces included)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="objetivosEn" name="objetivosEn" rows="5" maxlength="1000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNumEn"></span>
+							<script>
+								var text_max = 1000;
+								$("#charNumEn").html('0 / ' + text_max);
+
+								$("#objetivosEn").keyup(function(){
+									var text_length = $('#objetivosEn').val().length;
+									var text_remaining = text_max-text_length;
+									$('#charNumEn').html(text_length + ' / ' + text_max);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Conteúdos programáticos <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="conteudos" name="conteudos" rows="5" maxlength="1000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum2"></span>
+							<script>
+								var text_max = 1000;
+								$("#charNum2").html('0 / ' + text_max);
+
+								$("#conteudos").keyup(function(){
+									var text_length = $('#conteudos').val().length;
+									var text_remaining = text_max-text_length;
+									$('#charNum2').html(text_length + ' / ' + text_max);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Syllabus <span class="fs-04">(1000 characters soaces included)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<script>
+								function countChar2En(val){
+									let len = val.value.length;
+									if(len >= 1000){
+										val.value = val.value.substring(0,1000);
+									}else{
+										$('#charNum2En').text(1000-len);
+									}
+								};
+							</script>
+							<textarea id="conteudosEn" name="conteudosEn" rows="5" maxlength="1000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum2En"></span>
+							<script>
+								var text_max = 1000;
+								$("#charNum2En").html('0 / ' + text_max);
+
+								$("#conteudosEn").keyup(function(){
+									var text_length = $('#conteudosEn').val().length;
+									var text_remaining = text_max-text_length;
+									$('#charNum2En').html(text_length + ' / ' + text_max);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Demonstração da coerência dos conteúdos programáticos com os objetivos de aprendizagem da unidade curricular <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="demoCont" name="demoCont" rows="5" maxlength="1000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum3"></span>
+							<script>
+								var text_max = 1000;
+								$("#charNum3").html('0 / ' + text_max);
+
+								$("#demoCont").keyup(function(){
+									var text_length = $('#demoCont').val().length;
+									var text_remaining = text_max-text_length;
+									$('#charNum3').html(text_length + ' / ' + text_max);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Demonstration of the syllabus coherence with the curricular unit’s intended learning outcomes <span class="fs-04">(1000 characters soaces included)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="demoContEn" name="demoContEn" rows="5" maxlength="1000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum3En"></span>
+							<script>
+								var text_max = 1000;
+								$("#charNum3En").html('0 / ' + text_max);
+
+								$("#demoContEn").keyup(function(){
+									var text_length = $('#demoContEn').val().length;
+									var text_remaining = text_max-text_length;
+									$('#charNum3En').html(text_length + ' / ' + text_max);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Metodologias de ensino e de aprendizagem específicas da unidade curricular articuladas com o modelo pedagógico <span class="fs-04">(3000 caracteres incluindo espaços)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="metod" name="metod" rows="5" maxlength="3000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum4"></span>
+							<script>
+								var text_max3 = 3000;
+								$("#charNum4").html('0 / ' + text_max3);
+
+								$("#metod").keyup(function(){
+									var text_length = $('#metod').val().length;
+									var text_remaining = text_max3-text_length;
+									$('#charNum4').html(text_length + ' / ' + text_max3);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Specific teaching and learning methodologies of the curricular unit in articulation with the pedagogic model <span class="fs-04">(3000 characters soaces included)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="metodEn" name="metodEn" rows="5" maxlength="3000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum4En"></span>
+							<script>
+								var text_max3 = 3000;
+								$("#charNum4En").html('0 / ' + text_max3);
+
+								$("#metodEn").keyup(function(){
+									var text_length = $('#metodEn').val().length;
+									var text_remaining = text_max3-text_length;
+									$('#charNum4En').html(text_length + ' / ' + text_max3);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Avaliação <span class="fs-04">(3000 caracteres incluindo espaços)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="aval" name="aval" rows="5" maxlength="3000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum5"></span>
+							<script>
+								var text_max3 = 3000;
+								$("#charNum5").html('0 / ' + text_max3);
+
+								$("#aval").keyup(function(){
+									var text_length = $('#aval').val().length;
+									var text_remaining = text_max3-text_length;
+									$('#charNum5').html(text_length + ' / ' + text_max3);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Evaluation <span class="fs-04">(3000 characters soaces included)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="avalEn" name="avalEn" rows="5" maxlength="3000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum5En"></span>
+							<script>
+								var text_max3 = 3000;
+								$("#charNum5En").html('0 / ' + text_max3);
+
+								$("#avalEn").keyup(function(){
+									var text_length = $('#avalEn').val().length;
+									var text_remaining = text_max3-text_length;
+									$('#charNum5En').html(text_length + ' / ' + text_max3);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Demonstração da coerência das metodologias de ensino e avaliação com os objetivos de aprendizagem da unidade curricular <span class="fs-04">(3000 caracteres incluindo espaços)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="demoCoer" name="demoCoer" rows="5" maxlength="3000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum6"></span>
+							<script>
+								var text_max3 = 3000;
+								$("#charNum6").html('0 / ' + text_max3);
+
+								$("#demoCoer").keyup(function(){
+									var text_length = $('#demoCoer').val().length;
+									var text_remaining = text_max3-text_length;
+									$('#charNum6').html(text_length + ' / ' + text_max3);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Demonstration of the teaching and evaluation methodologies in articulation with the curricular unit’s intended learning outcomes <span class="fs-04">(3000 characters soaces included)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="demoCoerEn" name="demoCoerEn" rows="5" maxlength="3000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum6En"></span>
+							<script>
+								var text_max3 = 3000;
+								$("#charNum6En").html('0 / ' + text_max3);
+
+								$("#demoCoerEn").keyup(function(){
+									var text_length = $('#demoCoerEn').val().length;
+									var text_remaining = text_max3-text_length;
+									$('#charNum6En').html(text_length + ' / ' + text_max3);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Bibliografia de consulta/ existência obrigatória (norma APA, 7.ª Edição) <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<input type="text"  id="biblio1" name="biblio1" class="form-control form-control-sm" maxlength="200" placeholder="Biblio"></input>
+								<label for="biblio1">Bibliografia 1</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<input type="text"  id="biblio2" name="biblio2" class="form-control form-control-sm" maxlength="200" placeholder="Biblio"></input>
+								<label for="biblio2">Bibliografia 2</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<input type="text"  id="biblio3" name="biblio3" class="form-control form-control-sm" maxlength="200" placeholder="Biblio"></input>
+								<label for="biblio3">Bibliografia 3</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<input type="text"  id="biblio4" name="biblio4" class="form-control form-control-sm" maxlength="200" placeholder="Biblio"></input>
+								<label for="biblio4">Bibliografia 4</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<input type="text"  id="biblio5" name="biblio5" class="form-control form-control-sm" maxlength="200" placeholder="Biblio"></input>
+								<label for="biblio5">Bibliografia 5</label>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-12">
+			<table>
+				<thead>
+					<tr><th>Observações <span class="fs-04">(1000 caracteres incluindo espaços)</span></th></tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="obs" name="obs" rows="5" maxlength="1000" class="form-control"></textarea>
+							<span class="pull-right label label-default" id="charNum8"></span>
+							<script>
+								var text_max = 1000;
+								$("#charNum8").html('0 / ' + text_max);
+
+								$("#obs").keyup(function(){
+									var text_length = $('#obs').val().length;
+									var text_remaining = text_max-text_length;
+									$('#charNum8').html(text_length + ' / ' + text_max);
+								})
+							</script>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row mt-5">
+			<div class="col-12">
+				<table>
+					<thead>
+						<tr><th>Observations <span class="fs-04">(1000 characters soaces included)</span></th></tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<textarea id="obsEn" name="obsEn" rows="5" maxlength="1000" class="form-control"></textarea>
+								<span class="pull-right label label-default" id="charNum8En"></span>
+								<script>
+									var text_max = 1000;
+									$("#charNum8En").html('0 / ' + text_max);
+
+									$("#obsEn").keyup(function(){
+										var text_length = $('#obsEn').val().length;
+										var text_remaining = text_max-text_length;
+										$('#charNum8En').html(text_length + ' / ' + text_max);
+									})
+								</script>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!--
+		<div class="row mt-5 mb-5">
+			<div class="col-12">
+				<table>
+					<thead>
+						<tr><th>Objectivos de Desenvolvimento Sustentável</th><tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="border: 1px solid #deede6">
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods1" name="ods1" value="ods1">
+									<label class="form-check-label" for="ods1"><img src="/img/ods1.png" alt="ods1"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods2" name="ods2" value="ods2">
+									<label class="form-check-label" for="ods2"><img src="/img/ods2.png" alt="ods2"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods3" name="ods3" value="ods3">
+									<label class="form-check-label" for="ods3"><img src="/img/ods3.png" alt="ods3"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods4" name="ods4" value="ods4">
+									<label class="form-check-label" for="ods4"><img src="/img/ods4.png" alt="ods4"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods5" name="ods5" value="ods5">
+									<label class="form-check-label" for="ods5"><img src="/img/ods5.png" alt="ods5"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods6" name="ods6" value="ods6">
+									<label class="form-check-label" for="ods6"><img src="/img/ods6.png" alt="ods6"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods7" name="ods7" value="ods7">
+									<label class="form-check-label" for="ods7"><img src="/img/ods7.png" alt="ods7"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods8" name="ods8" value="ods8">
+									<label class="form-check-label" for="ods8"><img src="/img/ods8.png" alt="ods8"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods9" name="ods9" value="ods9">
+									<label class="form-check-label" for="ods9"><img src="/img/ods9.png" alt="ods9"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods10" name="ods10" value="ods10">
+									<label class="form-check-label" for="ods10"><img src="/img/ods10.png" alt="ods10"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods11" name="ods11" value="ods11">
+									<label class="form-check-label" for="ods11"><img src="/img/ods11.png" alt="ods11"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods12" name="ods12" value="ods12">
+									<label class="form-check-label" for="ods12"><img src="/img/ods12.png" alt="ods12"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods13" name="ods13" value="ods13">
+									<label class="form-check-label" for="ods13"><img src="/img/ods13.png" alt="ods13"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods14" name="ods14" value="ods14">
+									<label class="form-check-label" for="ods14"><img src="/img/ods14.png" alt="ods14"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods15" name="ods15" value="ods15">
+									<label class="form-check-label" for="ods15"><img src="/img/ods15.png" alt="ods15"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods16" name="ods16" value="ods16">
+									<label class="form-check-label" for="ods16"><img src="/img/ods16.png" alt="ods16"></label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" id="ods17" name="ods17" value="ods17">
+									<label class="form-check-label" for="ods17"><img src="/img/ods17.png" alt="ods17"></label>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		-->
+		<div class="row mt-5 mb-5">
+			<div class="col-12">
+				<table>
+					<tr>
+						<td colspan="2">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="respFuc" name="respFuc" placeholder="respFuc">
+								<label for="respFuc">Docente da UC Responsável pela revisão desta FUC:</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<div class="form-floating">
+								<input type="text" class="form-control form-control-sm" id="coordCEResp" name="coordCEResp" placeholder="coordCEResp">
+								<label for="coordCEResp">Coordenador do CE responsável pela validação:</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-floating">
+								<select id="anoLectivo" name="anoLetivo" class="form-select form-select-sm">
+									<option value="2025/26">2025/26</option>
+									<option value="2026/27" selected>2026/27</option>
+									<option value="2027/28">2027/28</option>
+								</select>
+								<label for="anoLetivo">Ano Letivo:</label>
+							</div>
+						</td>
+						<td>
+							<div class="form-floating">
+								<input type="date" class="form-control form-control-sm" id="dataRev" name="dataRev" placeholder="dataRev">
+								<label for="dataRev">Data da revisão desta FUC:</label>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+			<div class="row my-3">
+				<button class="btn btn-sm btn-primary" type="sumbit">Gravar</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<%- include('partials/footer') %>

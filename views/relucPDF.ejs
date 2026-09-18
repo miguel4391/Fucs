@@ -1,0 +1,613 @@
+<%- include('partials/header') %>
+
+<script src="/vendor/pdf/jspdf.umd.min.js"></script>
+<script src="/vendor/pdf/jspdf.plugin.autotable.min.js"></script>
+
+<meta charset="UTF-8">
+
+<script type="text/javascript">
+    function sanitize(str) {
+        return String(encodingText(str))
+            .replace(/[\x00-\x1F\x7F-\x9F]/g, "")  // remove caracteres de controlo invisíveis
+            .replace(/\s+/g, " ")                  // colapsa espaços múltiplos
+            .replace(/\t/g, "")
+            .replace("à", "à")
+            .replace("é", "é")
+            .replace("á", "á")
+            .replace("ç", "ç")
+            .replace("ã", "ã")
+            .replace("ção", "ção")
+            .replace("ó", "ó")
+            .replace("í", "í")
+            .replace("ú", "ú")
+            .replace("á́", "á")
+            .replace("\“", "\"")
+            .replace("\”", "\"")
+            .replace("á́", "á")
+            .replace("â", "â")
+            .replace("ê", "ê")
+            .replace("‑", "-")
+            .replace("á", "á")
+            .replace("à", "à")
+            .replace("â", "â")
+            .replace("−", "-")
+            .replace("‑", "-")
+            .replace("\"", "\"")
+            .replace("&amp;", "&")
+            .replace("&amp;", "&" )
+            .replace(" &#34;", "\"")
+            .replace("&gt;", ">")
+            //.replace(/[^\p{L}\d]+/u, ' ')
+            .trim();
+    }
+    function encodingText(str){
+        const encoder = new TextEncoder();
+        const utf8Array = encoder.encode(str);
+        const decoder = new TextDecoder("utf-8");
+        const decodedString = decoder.decode(utf8Array);
+        return decodedString;
+    }
+
+    const addFooters = doc => {
+        const pageCount = doc.internal.getNumberOfPages()
+                
+        doc.setFont('Helvetica', 'italic')
+        doc.setFontSize(8)
+        
+        for (var i = 1; i <= pageCount; i++) {
+            const fuc = doc.splitTextToSize(sanitize('Relatório Anual de UC: <%= relUC[0].uc %>'),70, {} )
+            doc.text(fuc ,14, 287,{align:'left'})
+            doc.setPage(i)
+            doc.text(sanitize('Página ' + String(i) + ' de ' + String(pageCount)), doc.internal.pageSize.width / 2, 287, {
+            align: 'center'
+            })
+            const curso = doc.splitTextToSize(sanitize('Ano Letivo de <%= relUC[0].anoLetivo %>'),70, {} )
+            doc.text(curso,doc.internal.pageSize.width -14, 287,{align:'right'})
+            
+        }
+        
+    }
+
+    $(function(){
+        generatePDF();
+    });
+
+    function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const siglas = ['L-Enfermagem','L-Fisioterapia','L-Osteopatia','L-Farmácia','M-Enfermagem Médico-Cirúrgica na Área de Enfermagem à Pessoa em Situação Crónica','M-Enfermagem Médico-Cirúrgica na Área de Enfermagem à Pessoa em Situação Crítica','M-Enfermagem Comunitária na área de Enfermagem de Saúde Comunitária e de Saúde Pública','M-Enfermagem de Reabilitação','M-Enfermagem Comunitária na área de Enfermagem de Saúde Familiar','M – Fisioterapia','M – Osteopatia'];
+        
+        var img = new Image()
+        if(siglas.includes("<%= relUC[0].ce %>"))
+            img.src = '/img/logo_essatla.png';
+        else
+            img.src = '/img/logo_old.png'
+        doc.addImage(img, 'png', 23, 20, 85, 20)
+
+        doc.setFont("Helvetica", "normal");
+
+        var header1 = ['RELATÓRIO DE UNIDADE CURRICULAR'];
+        var data1   = [["<%= relUC[0].uc %>"],["<%= relUC[0].ce %>"],["<%= relUC[0].anoLetivo %>"]];
+        doc.autoTable({
+            startY:70,
+            head: [header1],
+            body: data1,
+            margin: { right: 14, left: 14, top: 50 },
+            
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                lineColor: [255, 255, 255],       // black borders
+                lineWidth: 0
+            },
+            bodyStyles: {
+                lineWidth: 0,
+                fillColor: [255, 255, 255], 
+                textColor: [0, 0, 0],
+                fontSize: 16,
+                
+            },   
+            headerStyles:{
+                fillColor: [255, 255, 255], // white background (optional)
+                textColor: [0, 0, 0],
+                fontSize: 16,
+                lineWidth: 0.3, 
+            },
+            theme: 'grid',
+        });
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const currentY0 = doc.lastAutoTable.finalY + 5;
+        const text = "- Autoavaliação -";
+        const textWidth = doc.getTextWidth(text);
+        const x = (pageWidth - textWidth + 20) / 2;
+        
+        doc.setFontSize(8);
+        doc.text(text, x, currentY0);
+
+        if(siglas.includes("<%= relUC[0].ce %>"))
+            var headerTitle ={
+                fillColor: '#fec11f',     
+                textColor: [255, 255, 255],
+                halign: 'left',
+                lineWidth: 0.2,
+                lineColor: '#fec11f',
+            }
+        else
+            var headerTitle ={
+                fillColor: '#2980ba',     
+                textColor: [255, 255, 255],
+                halign: 'left',
+                lineWidth: 0.2,
+                lineColor: '#2980ba',
+            }
+
+        var headerTable ={
+            fillColor: '#909691',     
+            textColor: [255, 255, 255],
+            halign: 'left',
+            lineWidth: 0.2,
+            lineColor: '#909691',
+            fontSize:9,
+        }
+        var bodyStyles= {
+            fillColor: false,       // removes the grey shading under header
+            textColor: [0, 0, 0],
+            halign: 'left',  
+        }
+
+        
+        var header2 = ['Docente Responsável'];
+        var data2 =  [[sanitize("<%= relUC[0].docenteResp %>")]];
+        doc.autoTable({
+            head: [header2],
+            body: data2,
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTable,
+
+            bodyStyles: bodyStyles,
+
+            theme: 'plain',              // ensures full bordered table
+            didDrawTable: function(data) {
+                // Extra spacing after table
+                doc.setY(doc.lastAutoTable.finalY + 15);
+            }
+        });
+
+        var header3 = ['Unidade Curricular', 'Observações'];
+        var data3 =  [[sanitize("<%= relUC[0].uc %>"), sanitize("<%= relUC[0].obs %>") ]];
+        doc.autoTable({
+            head: [header3],
+            body: data3,
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTable,
+
+            bodyStyles: bodyStyles,
+
+            theme: 'plain',              // ensures full bordered table
+            didDrawTable: function(data) {
+                // Extra spacing after table
+                doc.setY(doc.lastAutoTable.finalY + 15);
+            }
+        });
+
+        var header4 = ['Ciclo de Estudos', 'Ano', 'Semestre', 'ECTS', 'Total de Horas'];
+        var data4 =  [[sanitize("<%= relUC[0].ce %>"), sanitize("<%= relUC[0].ano %>"),sanitize("<%= relUC[0].semestre %>"),sanitize("<%= relUC[0].ects %>"), sanitize("<%= relUC[0].totHrs %>") ]];
+        doc.autoTable({
+            head: [header4],
+            body: data4,
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTable,
+
+            bodyStyles: bodyStyles,
+
+            theme: 'plain',              // ensures full bordered table
+            didDrawTable: function(data) {
+                // Extra spacing after table
+                doc.setY(doc.lastAutoTable.finalY + 15);
+            }
+        });
+
+        var header5 = ['Tipologia', 'T', 'TP', 'PL', 'TC', 'S', 'E', 'OT', 'O', 'Total', '% EaD'];
+        var data5 =  [["","<%= relUC[0].hrsT %>", "<%= relUC[0].hrsTP %>", "<%= relUC[0].hrsPL %>", "<%= relUC[0].hrsTC %>", "<%= relUC[0].hrsS %>", "<%= relUC[0].hrsE %>", "<%= relUC[0].hrsOT %>", "<%= relUC[0].hrso %>", "<%= relUC[0].aulasPrev %>", "<%= relUC[0].percEaD %>" ]];
+        doc.autoTable({
+            head: [header5],
+            body: data5,
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTable,
+
+            bodyStyles: bodyStyles,
+
+            theme: 'plain',              // ensures full bordered table
+            didDrawTable: function(data) {
+                // Extra spacing after table
+                doc.setY(doc.lastAutoTable.finalY + 15);
+            }
+        });
+
+        var header3a =  ['Responsável pela UC'];
+        var data3a =  [[sanitize("<%= relUC[0].docenteResp %>")]];
+
+        doc.autoTable({
+            startY:230,
+            head: [header3a],
+            body: data3a,
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'left',       // left text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: {
+                fillColor: false,       // removes blue header background
+                textColor: [0, 0, 0],
+                halign: 'left',
+                fontStyle: 'normal',
+                
+            },
+
+            bodyStyles: {
+                fillColor: false,       // removes the grey shading under header
+                textColor: [0, 0, 0],
+                halign: 'left',
+                
+            },
+
+            theme: 'plain',              // ensures full bordered table
+        });
+
+        let y = doc.lastAutoTable.finalY + 10;
+        doc.setDrawColor(0);       // black
+        doc.setLineWidth(0.3);
+        doc.line(14, y, 100, y);    
+
+        const currentY = doc.lastAutoTable.finalY + 14;
+        const today = new Date().toLocaleString('pt-PT');
+        doc.setFontSize(10);
+        doc.text( today, 14, currentY);
+
+        doc.addPage();
+
+        var header6 = ['1 - Pessoal Docente'];
+        doc.autoTable({
+            head: [header6],
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTitle,
+        });
+        var header7 = ['Nome do Docente', 'T', 'TP', 'PL', 'TC', 'S', 'E', 'OT', 'O', 'Nº horas de contacto previstas', 'Nº horas de contacto lecionadas', '% Horas contacto Dadas'];
+        
+        if("<%= relUC[0].nomeDoc10 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>", "<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>", "<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc3 %>", "<%= relUC[0].doc3T %>", "<%= relUC[0].doc3TP %>", "<%= relUC[0].doc3PL %>", "<%= relUC[0].doc3TC %>", "<%= relUC[0].doc3S %>", "<%= relUC[0].doc3E %>", "<%= relUC[0].doc3OT %>", "<%= relUC[0].doc3O %>", "<%= relUC[0].doc3AulasPrev %>", "<%= relUC[0].doc3AulasLec %>", "<%= relUC[0].doc3PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc4 %>", "<%= relUC[0].doc4T %>", "<%= relUC[0].doc4TP %>", "<%= relUC[0].doc4PL %>", "<%= relUC[0].doc4TC %>", "<%= relUC[0].doc4S %>", "<%= relUC[0].doc4E %>", "<%= relUC[0].doc4OT %>", "<%= relUC[0].doc4O %>", "<%= relUC[0].doc4AulasPrev %>", "<%= relUC[0].doc4AulasLec %>", "<%= relUC[0].doc4PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc5 %>", "<%= relUC[0].doc5T %>", "<%= relUC[0].doc5TP %>", "<%= relUC[0].doc5PL %>", "<%= relUC[0].doc5TC %>", "<%= relUC[0].doc5S %>", "<%= relUC[0].doc5E %>", "<%= relUC[0].doc5OT %>", "<%= relUC[0].doc5O %>", "<%= relUC[0].doc5AulasPrev %>", "<%= relUC[0].doc5AulasLec %>", "<%= relUC[0].doc5PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc6 %>", "<%= relUC[0].doc6T %>", "<%= relUC[0].doc6TP %>", "<%= relUC[0].doc6PL %>", "<%= relUC[0].doc6TC %>", "<%= relUC[0].doc6S %>", "<%= relUC[0].doc6E %>", "<%= relUC[0].doc6OT %>", "<%= relUC[0].doc6O %>", "<%= relUC[0].doc6AulasPrev %>", "<%= relUC[0].doc6AulasLec %>", "<%= relUC[0].doc6PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc7 %>", "<%= relUC[0].doc7T %>", "<%= relUC[0].doc7TP %>", "<%= relUC[0].doc7PL %>", "<%= relUC[0].doc7TC %>", "<%= relUC[0].doc7S %>", "<%= relUC[0].doc7E %>", "<%= relUC[0].doc7OT %>", "<%= relUC[0].doc7O %>", "<%= relUC[0].doc7AulasPrev %>", "<%= relUC[0].doc7AulasLec %>", "<%= relUC[0].doc7PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc8 %>", "<%= relUC[0].doc8T %>", "<%= relUC[0].doc8TP %>", "<%= relUC[0].doc8PL %>", "<%= relUC[0].doc8TC %>", "<%= relUC[0].doc8S %>", "<%= relUC[0].doc8E %>", "<%= relUC[0].doc8OT %>", "<%= relUC[0].doc8O %>", "<%= relUC[0].doc8AulasPrev %>", "<%= relUC[0].doc8AulasLec %>", "<%= relUC[0].doc8PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc9 %>", "<%= relUC[0].doc9T %>", "<%= relUC[0].doc9TP %>", "<%= relUC[0].doc9PL %>", "<%= relUC[0].doc9TC %>", "<%= relUC[0].doc9S %>", "<%= relUC[0].doc9E %>", "<%= relUC[0].doc9OT %>", "<%= relUC[0].doc9O %>", "<%= relUC[0].doc9AulasPrev %>", "<%= relUC[0].doc9AulasLec %>", "<%= relUC[0].doc9PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc10 %>", "<%= relUC[0].doc10T %>", "<%= relUC[0].doc10TP %>", "<%= relUC[0].doc10PL %>", "<%= relUC[0].doc10TC %>", "<%= relUC[0].doc10S %>", "<%= relUC[0].doc10E %>", "<%= relUC[0].doc10OT %>", "<%= relUC[0].doc10O %>", "<%= relUC[0].doc10AulasPrev %>", "<%= relUC[0].doc10AulasLec %>", "<%= relUC[0].doc10PrecAulas %>"]];
+        }else if("<%= relUC[0].nomeDoc9 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>", "<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>", "<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc3 %>", "<%= relUC[0].doc3T %>", "<%= relUC[0].doc3TP %>", "<%= relUC[0].doc3PL %>", "<%= relUC[0].doc3TC %>", "<%= relUC[0].doc3S %>", "<%= relUC[0].doc3E %>", "<%= relUC[0].doc3OT %>", "<%= relUC[0].doc3O %>", "<%= relUC[0].doc3AulasPrev %>", "<%= relUC[0].doc3AulasLec %>", "<%= relUC[0].doc3PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc4 %>", "<%= relUC[0].doc4T %>", "<%= relUC[0].doc4TP %>", "<%= relUC[0].doc4PL %>", "<%= relUC[0].doc4TC %>", "<%= relUC[0].doc4S %>", "<%= relUC[0].doc4E %>", "<%= relUC[0].doc4OT %>", "<%= relUC[0].doc4O %>", "<%= relUC[0].doc4AulasPrev %>", "<%= relUC[0].doc4AulasLec %>", "<%= relUC[0].doc4PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc5 %>", "<%= relUC[0].doc5T %>", "<%= relUC[0].doc5TP %>", "<%= relUC[0].doc5PL %>", "<%= relUC[0].doc5TC %>", "<%= relUC[0].doc5S %>", "<%= relUC[0].doc5E %>","<%= relUC[0].doc5OT %>", "<%= relUC[0].doc5O %>", "<%= relUC[0].doc5AulasPrev %>", "<%= relUC[0].doc5AulasLec %>", "<%= relUC[0].doc5PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc6 %>", "<%= relUC[0].doc6T %>", "<%= relUC[0].doc6TP %>", "<%= relUC[0].doc6PL %>", "<%= relUC[0].doc6TC %>", "<%= relUC[0].doc6S %>", "<%= relUC[0].doc6E %>","<%= relUC[0].doc6OT %>", "<%= relUC[0].doc6O %>", "<%= relUC[0].doc6AulasPrev %>", "<%= relUC[0].doc6AulasLec %>", "<%= relUC[0].doc6PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc7 %>", "<%= relUC[0].doc7T %>", "<%= relUC[0].doc7TP %>", "<%= relUC[0].doc7PL %>", "<%= relUC[0].doc7TC %>", "<%= relUC[0].doc7S %>", "<%= relUC[0].doc7E %>","<%= relUC[0].doc7OT %>", "<%= relUC[0].doc7O %>", "<%= relUC[0].doc7AulasPrev %>", "<%= relUC[0].doc7AulasLec %>", "<%= relUC[0].doc7PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc8 %>", "<%= relUC[0].doc8T %>", "<%= relUC[0].doc8TP %>", "<%= relUC[0].doc8PL %>", "<%= relUC[0].doc8TC %>", "<%= relUC[0].doc8S %>", "<%= relUC[0].doc8E %>","<%= relUC[0].doc8OT %>", "<%= relUC[0].doc8O %>", "<%= relUC[0].doc8AulasPrev %>", "<%= relUC[0].doc8AulasLec %>", "<%= relUC[0].doc8PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc9 %>", "<%= relUC[0].doc9T %>", "<%= relUC[0].doc9TP %>", "<%= relUC[0].doc9PL %>", "<%= relUC[0].doc9TC %>", "<%= relUC[0].doc9S %>", "<%= relUC[0].doc9E %>","<%= relUC[0].doc9OT %>", "<%= relUC[0].doc9O %>", "<%= relUC[0].doc9AulasPrev %>", "<%= relUC[0].doc9AulasLec %>", "<%= relUC[0].doc9PrecAulas %>"]];
+        }else if("<%= relUC[0].nomeDoc8 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>", "<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>", "<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc3 %>", "<%= relUC[0].doc3T %>", "<%= relUC[0].doc3TP %>", "<%= relUC[0].doc3PL %>", "<%= relUC[0].doc3TC %>", "<%= relUC[0].doc3S %>", "<%= relUC[0].doc3E %>","<%= relUC[0].doc3OT %>", "<%= relUC[0].doc3O %>", "<%= relUC[0].doc3AulasPrev %>", "<%= relUC[0].doc3AulasLec %>", "<%= relUC[0].doc3PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc4 %>", "<%= relUC[0].doc4T %>", "<%= relUC[0].doc4TP %>", "<%= relUC[0].doc4PL %>", "<%= relUC[0].doc4TC %>", "<%= relUC[0].doc4S %>", "<%= relUC[0].doc4E %>","<%= relUC[0].doc4OT %>", "<%= relUC[0].doc4O %>", "<%= relUC[0].doc4AulasPrev %>", "<%= relUC[0].doc4AulasLec %>", "<%= relUC[0].doc4PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc5 %>", "<%= relUC[0].doc5T %>", "<%= relUC[0].doc5TP %>", "<%= relUC[0].doc5PL %>", "<%= relUC[0].doc5TC %>", "<%= relUC[0].doc5S %>", "<%= relUC[0].doc5E %>","<%= relUC[0].doc5OT %>", "<%= relUC[0].doc5O %>", "<%= relUC[0].doc5AulasPrev %>", "<%= relUC[0].doc5AulasLec %>", "<%= relUC[0].doc5PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc6 %>", "<%= relUC[0].doc6T %>", "<%= relUC[0].doc6TP %>", "<%= relUC[0].doc6PL %>", "<%= relUC[0].doc6TC %>", "<%= relUC[0].doc6S %>", "<%= relUC[0].doc6E %>","<%= relUC[0].doc6OT %>", "<%= relUC[0].doc6O %>", "<%= relUC[0].doc6AulasPrev %>", "<%= relUC[0].doc6AulasLec %>", "<%= relUC[0].doc6PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc7 %>", "<%= relUC[0].doc7T %>", "<%= relUC[0].doc7TP %>", "<%= relUC[0].doc7PL %>", "<%= relUC[0].doc7TC %>", "<%= relUC[0].doc7S %>", "<%= relUC[0].doc7E %>","<%= relUC[0].doc7OT %>", "<%= relUC[0].doc7O %>", "<%= relUC[0].doc7AulasPrev %>", "<%= relUC[0].doc7AulasLec %>", "<%= relUC[0].doc7PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc8 %>", "<%= relUC[0].doc8T %>", "<%= relUC[0].doc8TP %>", "<%= relUC[0].doc8PL %>", "<%= relUC[0].doc8TC %>", "<%= relUC[0].doc8S %>", "<%= relUC[0].doc8E %>","<%= relUC[0].doc8OT %>", "<%= relUC[0].doc8O %>", "<%= relUC[0].doc8AulasPrev %>", "<%= relUC[0].doc8AulasLec %>", "<%= relUC[0].doc8PrecAulas %>"]];
+        }else if("<%= relUC[0].nomeDoc7 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>","<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>","<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc3 %>", "<%= relUC[0].doc3T %>", "<%= relUC[0].doc3TP %>", "<%= relUC[0].doc3PL %>", "<%= relUC[0].doc3TC %>", "<%= relUC[0].doc3S %>", "<%= relUC[0].doc3E %>","<%= relUC[0].doc3OT %>", "<%= relUC[0].doc3O %>", "<%= relUC[0].doc3AulasPrev %>", "<%= relUC[0].doc3AulasLec %>", "<%= relUC[0].doc3PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc4 %>", "<%= relUC[0].doc4T %>", "<%= relUC[0].doc4TP %>", "<%= relUC[0].doc4PL %>", "<%= relUC[0].doc4TC %>", "<%= relUC[0].doc4S %>", "<%= relUC[0].doc4E %>","<%= relUC[0].doc4OT %>", "<%= relUC[0].doc4O %>", "<%= relUC[0].doc4AulasPrev %>", "<%= relUC[0].doc4AulasLec %>", "<%= relUC[0].doc4PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc5 %>", "<%= relUC[0].doc5T %>", "<%= relUC[0].doc5TP %>", "<%= relUC[0].doc5PL %>", "<%= relUC[0].doc5TC %>", "<%= relUC[0].doc5S %>", "<%= relUC[0].doc5E %>","<%= relUC[0].doc5OT %>", "<%= relUC[0].doc5O %>", "<%= relUC[0].doc5AulasPrev %>", "<%= relUC[0].doc5AulasLec %>", "<%= relUC[0].doc5PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc6 %>", "<%= relUC[0].doc6T %>", "<%= relUC[0].doc6TP %>", "<%= relUC[0].doc6PL %>", "<%= relUC[0].doc6TC %>", "<%= relUC[0].doc6S %>", "<%= relUC[0].doc6E %>","<%= relUC[0].doc6OT %>", "<%= relUC[0].doc6O %>", "<%= relUC[0].doc6AulasPrev %>", "<%= relUC[0].doc6AulasLec %>", "<%= relUC[0].doc6PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc7 %>", "<%= relUC[0].doc7T %>", "<%= relUC[0].doc7TP %>", "<%= relUC[0].doc7PL %>", "<%= relUC[0].doc7TC %>", "<%= relUC[0].doc7S %>", "<%= relUC[0].doc7E %>","<%= relUC[0].doc7OT %>", "<%= relUC[0].doc7O %>", "<%= relUC[0].doc7AulasPrev %>", "<%= relUC[0].doc7AulasLec %>", "<%= relUC[0].doc7PrecAulas %>"]];
+        }else if("<%= relUC[0].nomeDoc6 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>","<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>","<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc3 %>", "<%= relUC[0].doc3T %>", "<%= relUC[0].doc3TP %>", "<%= relUC[0].doc3PL %>", "<%= relUC[0].doc3TC %>", "<%= relUC[0].doc3S %>", "<%= relUC[0].doc3E %>","<%= relUC[0].doc3OT %>", "<%= relUC[0].doc3O %>", "<%= relUC[0].doc3AulasPrev %>", "<%= relUC[0].doc3AulasLec %>", "<%= relUC[0].doc3PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc4 %>", "<%= relUC[0].doc4T %>", "<%= relUC[0].doc4TP %>", "<%= relUC[0].doc4PL %>", "<%= relUC[0].doc4TC %>", "<%= relUC[0].doc4S %>", "<%= relUC[0].doc4E %>","<%= relUC[0].doc4OT %>", "<%= relUC[0].doc4O %>", "<%= relUC[0].doc4AulasPrev %>", "<%= relUC[0].doc4AulasLec %>", "<%= relUC[0].doc4PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc5 %>", "<%= relUC[0].doc5T %>", "<%= relUC[0].doc5TP %>", "<%= relUC[0].doc5PL %>", "<%= relUC[0].doc5TC %>", "<%= relUC[0].doc5S %>", "<%= relUC[0].doc5E %>","<%= relUC[0].doc5OT %>", "<%= relUC[0].doc5O %>", "<%= relUC[0].doc5AulasPrev %>", "<%= relUC[0].doc5AulasLec %>", "<%= relUC[0].doc5PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc6 %>", "<%= relUC[0].doc6T %>", "<%= relUC[0].doc6TP %>", "<%= relUC[0].doc6PL %>", "<%= relUC[0].doc6TC %>", "<%= relUC[0].doc6S %>", "<%= relUC[0].doc6E %>","<%= relUC[0].doc6OT %>", "<%= relUC[0].doc6O %>", "<%= relUC[0].doc6AulasPrev %>", "<%= relUC[0].doc6AulasLec %>", "<%= relUC[0].doc6PrecAulas %>"]];
+        }else if("<%= relUC[0].nomeDoc5 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>","<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>","<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc3 %>", "<%= relUC[0].doc3T %>", "<%= relUC[0].doc3TP %>", "<%= relUC[0].doc3PL %>", "<%= relUC[0].doc3TC %>", "<%= relUC[0].doc3S %>", "<%= relUC[0].doc3E %>","<%= relUC[0].doc3OT %>", "<%= relUC[0].doc3O %>", "<%= relUC[0].doc3AulasPrev %>", "<%= relUC[0].doc3AulasLec %>", "<%= relUC[0].doc3PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc4 %>", "<%= relUC[0].doc4T %>", "<%= relUC[0].doc4TP %>", "<%= relUC[0].doc4PL %>", "<%= relUC[0].doc4TC %>", "<%= relUC[0].doc4S %>", "<%= relUC[0].doc4E %>","<%= relUC[0].doc4OT %>", "<%= relUC[0].doc4O %>", "<%= relUC[0].doc4AulasPrev %>", "<%= relUC[0].doc4AulasLec %>", "<%= relUC[0].doc4PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc5 %>", "<%= relUC[0].doc5T %>", "<%= relUC[0].doc5TP %>", "<%= relUC[0].doc5PL %>", "<%= relUC[0].doc5TC %>", "<%= relUC[0].doc5S %>", "<%= relUC[0].doc5E %>","<%= relUC[0].doc5OT %>", "<%= relUC[0].doc5O %>", "<%= relUC[0].doc5AulasPrev %>", "<%= relUC[0].doc5AulasLec %>", "<%= relUC[0].doc5PrecAulas %>"]];
+        }else if("<%= relUC[0].nomeDoc4 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>","<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>","<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc3 %>", "<%= relUC[0].doc3T %>", "<%= relUC[0].doc3TP %>", "<%= relUC[0].doc3PL %>", "<%= relUC[0].doc3TC %>", "<%= relUC[0].doc3S %>", "<%= relUC[0].doc3E %>","<%= relUC[0].doc3OT %>", "<%= relUC[0].doc3O %>", "<%= relUC[0].doc3AulasPrev %>", "<%= relUC[0].doc3AulasLec %>", "<%= relUC[0].doc3PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc4 %>", "<%= relUC[0].doc4T %>", "<%= relUC[0].doc4TP %>", "<%= relUC[0].doc4PL %>", "<%= relUC[0].doc4TC %>", "<%= relUC[0].doc4S %>", "<%= relUC[0].doc4E %>","<%= relUC[0].doc4OT %>", "<%= relUC[0].doc4O %>", "<%= relUC[0].doc4AulasPrev %>", "<%= relUC[0].doc4AulasLec %>", "<%= relUC[0].doc4PrecAulas %>"]];
+        }else if("<%= relUC[0].nomeDoc3 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>","<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>","<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc3 %>", "<%= relUC[0].doc3T %>", "<%= relUC[0].doc3TP %>", "<%= relUC[0].doc3PL %>", "<%= relUC[0].doc3TC %>", "<%= relUC[0].doc3S %>", "<%= relUC[0].doc3E %>","<%= relUC[0].doc3OT %>", "<%= relUC[0].doc3O %>", "<%= relUC[0].doc3AulasPrev %>", "<%= relUC[0].doc3AulasLec %>", "<%= relUC[0].doc3PrecAulas %>"]];
+        }else if("<%= relUC[0].nomeDoc2 %>" != ""){
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>","<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"],
+                            ["<%= relUC[0].nomeDoc2 %>", "<%= relUC[0].doc2T %>", "<%= relUC[0].doc2TP %>", "<%= relUC[0].doc2PL %>", "<%= relUC[0].doc2TC %>", "<%= relUC[0].doc2S %>", "<%= relUC[0].doc2E %>","<%= relUC[0].doc2OT %>", "<%= relUC[0].doc2O %>", "<%= relUC[0].doc2AulasPrev %>", "<%= relUC[0].doc2AulasLec %>", "<%= relUC[0].doc2PrecAulas %>"]];
+        }else{
+            var data7 =  [["<%= relUC[0].nomeDoc1 %>", "<%= relUC[0].doc1T %>", "<%= relUC[0].doc1TP %>", "<%= relUC[0].doc1PL %>", "<%= relUC[0].doc1TC %>", "<%= relUC[0].doc1S %>", "<%= relUC[0].doc1E %>","<%= relUC[0].doc1OT %>", "<%= relUC[0].doc1O %>", "<%= relUC[0].doc1AulasPrev %>", "<%= relUC[0].doc1AulasLec %>", "<%= relUC[0].doc1PrecAulas %>"]];
+        }
+        
+        doc.autoTable({
+            head: [header7],
+            body: data7,
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTable,
+
+            bodyStyles: bodyStyles,
+
+            theme: 'plain',              // ensures full bordered table
+            didDrawTable: function(data) {
+                // Extra spacing after table
+                doc.setY(doc.lastAutoTable.finalY + 15);
+            }
+        });
+
+        var header8 = ['2 - Momentos de avaliação'];
+        doc.autoTable({
+            head: [header8],
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTitle,
+        });
+
+        var header9 = ['Avaliação Contínua', 'Datas', 'Avaliação Final', 'Datas'];
+        var data9 =  [[sanitize("<%= relUC[0].momAvalCont1 %>"), sanitize("<%= relUC[0].dtaAvalCont1 %>"),"Exame da época normal",sanitize("<%= relUC[0].dtaAvalFimEN %>")],
+                        [sanitize("<%= relUC[0].momAvalCont2 %>"), sanitize("<%= relUC[0].dtaAvalCont2 %>"),"Exame da época extraordinária",sanitize("<%= relUC[0].dtaAvalFimEE %>")],
+                        [sanitize("<%= relUC[0].momAvalCont3 %>"), sanitize("<%= relUC[0].dtaAvalCont3 %>"),"Exame da época especial estudantes estatuto trab-estudante",sanitize("<%= relUC[0].dtaAvalFimET %>")],
+                        [sanitize("<%= relUC[0].momAvalCont4 %>"), sanitize("<%= relUC[0].dtaAvalCont4 %>"),"Exame da época especial para estudantes finalistas",sanitize("<%= relUC[0].dtaAvalFimEF %>")],
+                        [sanitize("<%= relUC[0].momAvalCont5 %>"), sanitize("<%= relUC[0].dtaAvalCont5 %>"),"",""],
+                        [sanitize("<%= relUC[0].momAvalCont6 %>"), sanitize("<%= relUC[0].dtaAvalCont6 %>"),"",""],
+                        [sanitize("<%= relUC[0].momAvalCont7 %>"), sanitize("<%= relUC[0].dtaAvalCont7 %>"),"",""]];
+        doc.autoTable({
+            head: [header9],
+            body: data9,
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTable,
+
+            bodyStyles: bodyStyles,
+
+            theme: 'plain',              // ensures full bordered table
+            didDrawTable: function(data) {
+                // Extra spacing after table
+                doc.setY(doc.lastAutoTable.finalY + 15);
+            }
+        });
+
+        doc.addPage();
+
+        var header10 = ['3 - Análise estatística'];
+        doc.autoTable({
+            head: [header10],
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTitle,
+        });
+
+        let Bperc = "<%= relUC[0].estudB %>" != "" ? ("<%= relUC[0].estudB %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Cperc1 = "<%= relUC[0].estudC %>" != "" ? ("<%= relUC[0].estudC %>" / "<%= relUC[0].estudB %>" * 100).toFixed(1) : "---";
+        let Cperc2 = "<%= relUC[0].estudC %>" != "" ? ("<%= relUC[0].estudC %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Cperc11 = "<%= relUC[0].estudC1 %>" != "" ? ("<%= relUC[0].estudC1 %>" / "<%= relUC[0].estudB %>" * 100).toFixed(1) : "---";
+        let Cperc12 = "<%= relUC[0].estudC1 %>" != "" ? ("<%= relUC[0].estudC1 %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Cperc21 = "<%= relUC[0].estudC2 %>" != "" ? ("<%= relUC[0].estudC2 %>" / "<%= relUC[0].estudB %>" * 100).toFixed(1) : "---";
+        let Cperc22 = "<%= relUC[0].estudC2 %>" != "" ? ("<%= relUC[0].estudC2 %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Cperc31 = "<%= relUC[0].estudC3 %>" != "" ? ("<%= relUC[0].estudC3 %>" / "<%= relUC[0].estudB %>" * 100).toFixed(1) : "---";
+        let Cperc32 = "<%= relUC[0].estudC3 %>" != "" ? ("<%= relUC[0].estudC3 %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Cperc41 = "<%= relUC[0].estudC4 %>" != "" ? ("<%= relUC[0].estudC4 %>" / "<%= relUC[0].estudB %>" * 100).toFixed(1) : "---";
+        let Cperc42 = "<%= relUC[0].estudC4 %>" != "" ? ("<%= relUC[0].estudC4 %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Cperc51 = "<%= relUC[0].estudC5 %>" != "" ? ("<%= relUC[0].estudC5 %>" / "<%= relUC[0].estudB %>" * 100).toFixed(1) : "---";
+        let Cperc52 = "<%= relUC[0].estudC5 %>" != "" ? ("<%= relUC[0].estudC5 %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Dperc = "<%= relUC[0].estudD %>" != "" ? ("<%= relUC[0].estudD %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Dperc11 = "<%= relUC[0].estudD1 %>" != "" ? ("<%= relUC[0].estudD1 %>" / "<%= relUC[0].estudB %>" * 100).toFixed(1) : "---";
+        let Dperc12 = "<%= relUC[0].estudD1 %>" != "" ? ("<%= relUC[0].estudD1 %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Dperc22 = "<%= relUC[0].estudD2 %>" != "" ? ("<%= relUC[0].estudD2 %>" / "<%= relUC[0].estudA %>" * 100).toFixed(1) : "---";
+        let Eperc11 = "<%= relUC[0].estudE1 %>" != "" ? ("<%= relUC[0].estudE1 %>" / "<%= relUC[0].estudC %>" * 100).toFixed(1) : "---";
+        let Eperc12 = "<%= relUC[0].estudE1 %>" != "" ? ("<%= relUC[0].estudE1 %>" / "<%= relUC[0].estudC %>" * 100).toFixed(1) : "---";
+        let Eperc21 = "<%= relUC[0].estudE2 %>" != "" ? ("<%= relUC[0].estudE2 %>" / "<%= relUC[0].estudC %>" * 100).toFixed(1) : "---";
+        let Eperc22 = "<%= relUC[0].estudE2 %>" != "" ? ("<%= relUC[0].estudE2 %>" / "<%= relUC[0].estudC %>" * 100).toFixed(1) : "---";
+        let Eperc31 = "<%= relUC[0].estudE3 %>" != "" ? ("<%= relUC[0].estudE3 %>" / "<%= relUC[0].estudC %>" * 100).toFixed(1) : "---";
+        let Eperc32 = "<%= relUC[0].estudE3 %>" != "" ? ("<%= relUC[0].estudE3 %>" / "<%= relUC[0].estudC %>" * 100).toFixed(1) : "---";
+        let soma = Number("<%= relUC[0].estudC %>")
+        let calculo = (Number(("<%= relUC[0].nota10 %>") * 10 + Number("<%= relUC[0].nota11 %>") * 11 + Number("<%= relUC[0].nota12 %>") * 12 + Number("<%= relUC[0].nota13 %>") * 13 + Number("<%= relUC[0].nota14 %>") * 14 + Number("<%= relUC[0].nota15 %>") * 15 + Number("<%= relUC[0].nota16 %>") * 16 + Number("<%= relUC[0].nota17 %>") * 17 + Number("<%= relUC[0].nota18 %>") * 18 + Number("<%= relUC[0].nota19 %>") * 19 + Number("<%= relUC[0].nota20 %>") * 20 )/soma).toFixed(2); 
+
+        var header11 = ['Distribuição dos estudantes', 'Nº de Estudantes', '%', '% efetivas', '%', "% reais"];
+        var data11 =  [["A - Estudantes INSCRITOS na UC", sanitize("<%= relUC[0].estudA %>"),"","", "100,0", "(A/A*100)"],
+                        ["B - Estudantes AVALIADOS", sanitize("<%= relUC[0].estudB %>"),"100,0","(B/B)*100", Bperc, "(B/A)*100" ],
+                        ["C - Estudantes APROVADOS:", sanitize("<%= relUC[0].estudC %>"), Cperc1,"(C/B)*100", Cperc2, "(C/A)*100" ],
+                        ["\tC1 - em avaliação contínua", sanitize("<%= relUC[0].estudC1 %>"), Cperc11,"(C1/B)*100", Cperc12, "(C1/A)*100" ],
+                        ["\tC2 - em avaliação final: época normal", sanitize("<%= relUC[0].estudC2 %>"), Cperc21,"(C2/B)*100", Cperc22, "(C2/A)*100" ],
+                        ["\tC3 - em avaliação final: época extraordinária", sanitize("<%= relUC[0].estudC3 %>"), Cperc31,"(C3/B)*100", Cperc32, "(C3/A)*100" ],
+                        ["\tC4 - em avaliação final: época especial para \nestudantes finalistas", sanitize("<%= relUC[0].estudC4 %>"), Cperc41,"(C4/B)*100", Cperc42, "(C4/A)*100" ],
+                        ["\tC5 - em avaliação final: época especial estudantes estatuto trab-estudante", sanitize("<%= relUC[0].estudC5 %>"), Cperc51,"(C5/B)*100", Cperc52, "(C5/A)*100" ],
+                        ["D - Estudantes REPROVADOS:", sanitize("<%= relUC[0].estudD %>"), "","", Dperc, "(D/A)*100" ],
+                        ["\tD1 - avaliados", sanitize("<%= relUC[0].estudD1 %>"), Dperc11,"(D1/B)*100", Dperc12, "(D1/A)*100" ],
+                        ["\tD2 - não avaliados", sanitize("<%= relUC[0].estudD2 %>"), "","", Dperc22, "(D2/A)*100" ],
+                        ["E - Distribuição da CLASSIFICAÇÃO dos ESTUDANTES APROVADOS:", "", "","", "", "" ],
+                        ["\tE1 - Estudantes com notas entre 10 e 13 valores", sanitize("<%= relUC[0].estudE1 %>"), Eperc11,"(E1/C)*100", Eperc12, "(E1/A)*100" ],
+                        ["\tE2 - Estudantes com notas entre 14 e 15 valores", sanitize("<%= relUC[0].estudE2 %>"), Eperc21,"(E2/C)*100", Eperc22, "(E2/A)*100" ],
+                        ["\tE3 - Estudantes com notas entre 16 e 20 valores", sanitize("<%= relUC[0].estudE3 %>"), Eperc31,"(E3/C)*100", Eperc32, "(E3/A)*100" ],
+                        ["F - MÉDIA GLOBAL DA UC", "", "",calculo, "", "" ]]
+
+        doc.autoTable({
+            head: [header11],
+            body: data11,
+            margin: { right: 14, left: 14, top: 40 },
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTable,
+
+            bodyStyles: bodyStyles,
+
+            theme: 'plain',              // ensures full bordered table
+            didDrawTable: function(data) {
+                // Extra spacing after table
+                doc.setY(doc.lastAutoTable.finalY + 15);
+            }
+        });
+
+        doc.addPage();
+
+        var header12 = ['4 - Comentários, críticas e conclusões'];
+        var data12 = [[sanitize(`<%= relUC[0].comentarios %>`)]]
+        doc.autoTable({
+            head: [header12],
+            body: data12,
+            margin: { right: 14, left: 14, top: 40 },
+            showHead: 'firstPage',
+
+            // ⭐ STYLE OVERRIDES ⭐
+            styles: {
+                halign: 'center',       // center text
+                valign: 'middle',
+                textColor: [0, 0, 0],   // black text
+                fillColor: false,       // no background color
+                
+            },
+
+            headStyles: headerTitle,
+            bodyStyles: bodyStyles,
+
+            theme: 'plain',              // ensures full bordered table
+            didDrawTable: function(data) {
+                // Extra spacing after table
+                doc.setY(doc.lastAutoTable.finalY + 15);
+            }
+        });
+
+
+        addFooters(doc);
+
+        doc.save("RUC_<%= relUC[0].uc %>_<%= relUC[0].anoLetivo %>.pdf");   
+        
+        setTimeout(function (){
+
+            window.close();
+                    
+        }, 1000);
+    }
+
+
+</script>
+
+
+<%- include('partials/footer') %>

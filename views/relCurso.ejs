@@ -1,0 +1,847 @@
+<%- include('partials/header') %>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<!-- Portuguese locale -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
+<script>
+    // CORREÇÃO: inicializar só depois do DOM estar pronto, senão os inputs
+    // ainda não existem quando este <script> corre (está antes deles no HTML).
+    document.addEventListener("DOMContentLoaded", function () {
+        flatpickr("#tbDtaSophUC", {
+            locale: "pt",
+            dateFormat: "d/m/Y",
+            allowInput: true
+        });
+        flatpickr("#tbDtaSophInscri", {
+            locale: "pt",
+            dateFormat: "d/m/Y",
+            allowInput: true
+        });
+        flatpickr("#tbDtaSophDiplom", {
+            locale: "pt",
+            dateFormat: "d/m/Y",
+            allowInput: true
+        });
+        // CORREÇÃO: faltava inicializar este 4º campo de data
+        flatpickr("#tbDtaSophInter", {
+            locale: "pt",
+            dateFormat: "d/m/Y",
+            allowInput: true
+        });
+    });
+</script>
+
+<div class="container mt-5">
+	<form method='post' action='../setRelCE'>
+        <input type="hidden" id="idCe" name="idCe" value="<%= idCe %>"/>
+        <input type="hidden" id="anoLetivo" name="anoLetivo" value="<%= anoLetivo %>"/>
+		<div class="container border ">
+            <div class="row m-3">
+                <h2>Relatório Anual de Curso</h2><h1> <%= ce[0].CE %></h1><h5>Ano Letivo: <%= anoLetivo %> </h5>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>2. METODOLOGIA</h4>
+            </div>
+            <div class="row m-3">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control form-control-sm " id="tbPlataSurvey" name="tbPlataSurvey" placeholder="PlataformaInquéritos" value="<%= ce[0].platInquerito %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                    <label for="tbPlataSurvey">Plataforma de Inquéritos</label>
+                </div>
+            </div>
+            <div class="row m-3">
+                <div class="col-xs-12 col-md-6 col-xl-3">
+                    <div class="form-floating mb-4">
+                        <input type="text" class="form-control form-control-sm" id="tbDtaSophUC" name="tbDtaSophUC" placeholder="DataSophiaUCs" value="<%= ce[0].DataSophUC %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <label for="tbDtaSophUC">Data Consulta Sophia de UCs</label>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-xl-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbDtaSophInscri" name="tbDtaSophInscri" placeholder="DataSophInscri" value="<%= ce[0].DataSophInscri %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <label for="tbDtaSophUC">Data Consulta Sophia de Inscrições</label>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-xl-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbDtaSophDiplom" name="tbDtaSophDiplom" placeholder="DataSophDiplom" value="<%= ce[0].DataSophDiplom %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <label for="tbDtaSophUC">Data Consulta Sophia de Diplomados</label>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-xl-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbDtaSophInter" name="tbDtaSophInter" placeholder="tbDtaSophInter" value="<%= ce[0].DtaSophInter %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <label for="tbDtaSophUC">Data Consulta - Internacionalização</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>3. SÍNTESE DA APRECIAÇÃO GLOBAL DO QUESTIONÁRIO DA MONITORIZAÇÃO DO ENSINO E APRENDIZAGEM</h4>
+            </div>
+            <div class="row m-3">
+                <div class="col-xs-6 col-md-4 col-xl-2">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbNrInscri" name="tbNrInscri" placeholder="NrAlunosInscritosCE" value="<%= ce[0].NrInscritos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <label for="tbNrInscri">Nº Inscritos no CE</label>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4 col-xl-2">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbNrInscriUC" name="tbNrInscriUC" placeholder="NrAlunosInscritosUC" value="<%= ce[0].nrIscritUC %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <label for="tbNrInscriUC">Nº Inscritos em UC</label>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4 col-xl-2">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbNrResp1Sem" name="tbNrResp1Sem" placeholder="NrRespostasPrimeiroSemestre" onkeyup="doAverage1sem();" value="<%= ce[0].NrResp1Sem %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <label for="tbNrResp1Sem">Nº Respostas 1º Sem</label>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4 col-xl-2">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbPerResp1Sem" name="tbPerResp1Sem" placeholder="PercentagemRespostasPrimeiroSemestre" value="<%= ce[0].PercResp1Sem %>" <% if(ce[0].finalizado==1){%> readonly <% } %> readonly>
+                        <label for="tbPerResp1Sem">% Respostas 1º Sem</label>
+                    </div>
+                </div>
+                <script>
+                    function doAverage1sem(){
+                        let isDecimal = v => /^[+-]?(\d+(\.\d*)?|\.\d+)$/.test(v);
+                        let nrInscri = '';
+                        let inscriUC = '';
+                        let nrResp = '';
+                        nrInscri = $('#tbNrInscri').val().trim();
+                        inscriUC = $('#tbNrInscriUC').val().trim();
+                        nrResp = $('#tbNrResp1Sem').val().trim();
+                        if(!nrInscri)nrInscri = "0";
+                        if(!inscriUC)inscriUC = "0";
+                        if(!nrResp)nrResp = "0";
+                        if(isDecimal(nrInscri) && isDecimal(inscriUC) && isDecimal(nrResp)){            
+                            let total = parseFloat(nrInscri) + parseFloat(inscriUC);
+                            let nrResp = $('#tbNrResp1Sem').val().trim();
+                        
+                            $('#tbPerResp1Sem').val((nrResp / total * 100).toFixed(2));                              
+                        }
+                    }
+                </script>
+                <div class="col-xs-6 col-md-4 col-xl-2">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbNrResp2Sem" name="tbNrResp2Sem" placeholder="NrRespostasSegundoSemestre" onkeyup="doAverage2sem();" value="<%= ce[0].NrResp2Sem %>" <% if(ce[0].finalizado==1){%> readonly <% } %> >
+                        <label for="tbNrResp2Sem">Nº Respostas 2º Sem</label>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4 col-xl-2">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm" id="tbPerResp2Sem" name="tbPerResp2Sem" placeholder="PercentagemRespostasSegundoSemestre" value="<%= ce[0].PercResp2Sem %>" <% if(ce[0].finalizado==1){%> readonly <% } %> readonly>
+                        <label for="tbPerResp2Sem">% Respostas 2º Sem</label>
+                    </div>
+                </div>
+                <script>
+                    function doAverage2sem(){
+                        let isDecimal = v => /^[+-]?(\d+(\.\d*)?|\.\d+)$/.test(v);
+                        let nrInscri = '';
+                        let inscriUC = '';
+                        let nrResp = '';
+                        nrInscri = $('#tbNrInscri').val().trim();
+                        inscriUC = $('#tbNrInscriUC').val().trim();
+                        nrResp = $('#tbNrResp2Sem').val().trim();
+                        if(!nrInscri)nrInscri = "0";
+                        if(!inscriUC)inscriUC = "0";
+                        if(!nrResp)nrResp = "0";
+                        if(isDecimal(nrInscri) && isDecimal(inscriUC) && isDecimal(nrResp)){            
+                            let total = parseFloat(nrInscri) + parseFloat(inscriUC);
+                            let nrResp = $('#tbNrResp2Sem').val().trim();
+                        
+                            $('#tbPerResp2Sem').val((nrResp / total * 100).toFixed(2));                              
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>AVALIAÇÃO DAS UNIDADES CURRICULARES</th>
+                            <th>MÉDIA (ANO LETIVO)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Clareza na definição dos objetivos da unidade curricular</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgClareza" name="tbAvgClareza" placeholder="Clareza" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Clareza %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Grau de interesse da matéria lecionada</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgGrauInt" name="tbAvgGrauInt" placeholder="Grau Interesse" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Interesse %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Articulação com as outras unidades curriculares do curso</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbArticUC" name="tbArticUC" placeholder="Articulação entre UCs" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulaOutUC %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Grau de dificuldade da matéria</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgGrauDific" name="tbAvgGrauDific" placeholder="Grau Dificuldade" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Dificuld %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Relação entre conteúdo e carga horária</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbRelCargaConte" name="tbRelCargaConte" placeholder="Relação Conteúdo Horário" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].RelConteudo %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Articulação entre aulas teóricas e práticas (quando aplicável)</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbRelTeoPrat" name="tbRelTeoPrat" placeholder="Relação Teórico-praticas" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulTeoPratic %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Disponibilidade da bibliografia indicada</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbBiblioDisp" name="tbBiblioDisp" placeholder="Disponibilidade Bibliografia" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].DispBiblio %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Clareza dos elementos de avaliação, face aos objetivos da unidade curricular</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbElemAval" name="tbElemAval" placeholder="Clareza Avaliação" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ClarezaElemAval %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Disponibilidade e adequação dos meios técnicos utilizados (quando aplicável)</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbDispMeios" name="tbDispMeios" placeholder="Disponibilização Meios" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].DisponMeios %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Articulação da unidade curricular com a realidade atual</td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbUCMundoReal" name="tbUCMundoReal" placeholder="Articulação UC - Realidade" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulaRealidade %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Média Geral</td>
+                            <td><input type="text" class="form-control form-control-sm" id="tbAvgGreal" name="tbAvgGreal" placeholder="Média" value="<%= ce[0].MediaInq %>" readonly></td>
+                            <script>
+                                function validarDecimal(input) {
+                                    // Converte vírgula em ponto
+                                    input.value = input.value.replace(/,/g, '.');
+
+                                    // Remove tudo o que não seja número ou ponto
+                                    input.value = input.value.replace(/[^0-9.]/g, '');
+
+                                    // Garante que existe no máximo um ponto decimal
+                                    const partes = input.value.split('.');
+
+                                    if (partes.length > 2) {
+                                        input.value = partes[0] + '.' + partes.slice(1).join('');
+                                    }
+                                }
+
+                                function doAverage(){
+                                    let sum = 0, count = 0;
+                                    let n1 = $('#tbAvgClareza').val().trim();
+                                    let n2 = $('#tbAvgGrauInt').val().trim();
+                                    let n3 = $('#tbArticUC').val().trim();
+                                    let n4 = $('#tbAvgGrauDific').val().trim();
+                                    let n5 = $('#tbRelCargaConte').val().trim();
+                                    let n6 = $('#tbRelTeoPrat').val().trim();
+                                    let n7 = $('#tbBiblioDisp').val().trim();
+                                    let n8 = $('#tbElemAval').val().trim();
+                                    let n9 = $('#tbDispMeios').val().trim();
+                                    let n10 = $('#tbUCMundoReal').val().trim();
+                                    
+                                    let isDecimal = v => /^[+-]?(\d+(\.\d*)?|\.\d+)$/.test(v);
+
+                                    if(isDecimal(n1)){
+                                        sum += parseFloat(n1);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n2)){
+                                        sum += parseFloat(n2);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n3)){
+                                        sum += parseFloat(n3);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n4)){
+                                        sum += parseFloat(n4);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n5)){
+                                        sum += parseFloat(n5);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n6)){
+                                        sum += parseFloat(n6);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n7)){
+                                        sum += parseFloat(n7);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n8)){
+                                        sum += parseFloat(n8);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n9)){
+                                        sum += parseFloat(n9);
+                                        count ++;
+                                    }
+                                    if(isDecimal(n10)){
+                                        sum += parseFloat(n10);
+                                        count ++;
+                                    }
+                                    if (count > 0) {
+                                        $('#tbAvgGreal').val((sum / count).toFixed(2));
+                                    } else {
+                                        $('#tbAvgGreal').val('Sem valores decimais.');
+                                    }
+                                }
+                            </script>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>4. SÍNTESE DOS RESULTADOS ESCOLARES NAS UNIDADES CURRICULARES DO CICLO DE ESTUDOS</h4>
+            </div>
+            <div class="row m-3">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ANO</th>
+                            <th>UNIDADE CURRICULAR</th>
+                            <th>INSCRITOS</th>
+                            <th>MÉDIA</th>
+                            <th>REPROVADOS (%)</th>
+                            <th>APROVADOS (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% fucs.forEach((fuc) => {
+                                const dado = dados.find(d => d.nomeUCRelCE.trim() == fuc.nomeUCPt);
+                            %>
+                                <tr>
+                                    <td><%= fuc.ano %></td>
+                                    <td><%= fuc.nomeUCPt %></td>
+                                    <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_insc" name="<%= fuc.idfucs %>"
+                                        value="<%= dado ? dado.nrInscriUC : '' %>"
+                                        <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                                    <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_media" name="<%= fuc.idfucs %>"
+                                        value="<%= dado ? dado.avgUC : '' %>"
+                                        <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                                    <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_reprov" name="<%= fuc.idfucs %>"
+                                        value="<%= dado ? dado.percReprov : '' %>"
+                                        <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                                    <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_aprov" name="<%= fuc.idfucs %>"
+                                        value="<%= dado ? dado.percAprov : '' %>"
+                                        <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                                </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="container border ">
+        <div class="row m-3">
+            <h4>5. ABANDONO ESCOLAR</h4>
+        </div>
+            <div class="row m-3">
+            <div class="col-6">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ANO CURRICULAR</th>
+                            <th>Nº DE ESTUDANTES QUE ABANDONARAM O CE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1º Ano</td>
+                            <!-- CORREÇÃO: acesso seguro a drops[0]/drops[1], que podiam não existir e rebentar o template -->
+                            <td><input type="text" class="form-control" id="tbNrAband_1ano" name="tbNrAband_1ano" value="<%= (drops[0] && drops[0].dropCE) || 0 %>"></td>
+                        </tr>
+                        <tr>
+                            <td>2º Ano</td>
+                            <td><input type="text" class="form-control" id="tbNrAband_2ano" name="tbNrAband_2ano" value="<%= (drops[1] && drops[1].dropCE) || 0 %>"></td>
+                        </tr>
+                        <% 
+                        let stop = false;
+                        for (let i = 0; i < fucs.length; i++) {
+                                if(stop) break;
+                                if(fucs[i].ano =="3º") { %>
+                                <tr>
+                                    <td>3º Ano</td>
+                                    <td><input type="text" class="form-control" id="tbNrAband_3ano" name="tbNrAband_3ano"
+                                        value="<% drops.forEach(drop => { 
+                                            if (drop.anoCurricular == 3) { %><%= drop.dropCE || 0 %><% } 
+                                        }) %>"    
+                                    ></td>
+                                </tr>  
+                                <% stop=true; 
+                                } %> 
+                        <% } %>
+                        <% 
+                        stop = false;
+                        for (let i = 0; i < fucs.length; i++) {
+                                if(stop) break;
+                                if(fucs[i].ano =="4º") { %>
+                                <tr>
+                                    <td>4º Ano</td>
+                                    <td><input type="text" class="form-control" id="tbNrAband_4ano" name="tbNrAband_4ano"
+                                        value="<% drops.forEach(drop => { 
+                                            if (drop.anoCurricular == 4) { %><%= drop.dropCE || 0 %><% } 
+                                        }) %>"
+                                    ></td>
+                                </tr>  
+                                <% stop=true; 
+                                } %> 
+                        <% } %>
+                        <% 
+                        stop = false;
+                        for (let i = 0; i < fucs.length; i++) {
+                                if(stop) break;
+                                if(fucs[i].ano =="5º") { %>
+                                <tr>
+                                    <td>5º Ano</td>
+                                    <td><input type="text" class="form-control" id="tbNrAband_5ano" name="tbNrAband_5ano"
+                                        value="<% drops.forEach(drop => { 
+                                            if (drop.anoCurricular == 5) { %><%= drop.dropCE || 0 %><% } 
+                                        }) %>"
+                                    ></td>
+                                </tr>  
+                                <% stop=true; 
+                                } %> 
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ANO CURRICULAR</th>
+                            <th>Nº DE ESTUDANTES QUE ANULARAM A INSCRIÇÃO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1º Ano</td>
+                            <td><input type="text" class="form-control" id="tbNrAnul_1ano" name="tbNrAnul_1ano" value="<%= (drops[0] && drops[0].dropIncri) || 0 %>"></td>
+                        </tr>
+                        <tr>
+                            <td>2º Ano</td>
+                            <td><input type="text" class="form-control" id="tbNrAnul_2ano" name="tbNrAnul_2ano" value="<%= (drops[1] && drops[1].dropIncri) || 0 %>"></td>
+                        </tr>
+                        <% 
+                        stop = false;
+                        for (let i = 0; i < fucs.length; i++) {
+                                if(stop) break;
+                                if(fucs[i].ano =="3º") { %>
+                                <tr>
+                                    <td>3º Ano</td>
+                                    <td><input type="text" class="form-control" id="tbNrAnul_3ano" name="tbNrAnul_3ano"
+                                        value="<% drops.forEach(drop => { 
+                                            if (drop.anoCurricular == 3) { %><%= drop.dropIncri || 0 %><% } 
+                                        }) %>"   
+                                    ></td>
+                                </tr>  
+                                <% stop=true; 
+                                } %> 
+                        <% } %>
+                        <% 
+                        stop = false;
+                        for (let i = 0; i < fucs.length; i++) {
+                                if(stop) break;
+                                if(fucs[i].ano =="4º") { %>
+                                <tr>
+                                    <td>4º Ano</td>
+                                    <td><input type="text" class="form-control" id="tbNrAnul_4ano" name="tbNrAnul_4ano"
+                                        value="<% drops.forEach(drop => { 
+                                            if (drop.anoCurricular == 4) { %><%= drop.dropIncri || 0 %><% } 
+                                        }) %>"  
+                                    ></td>
+                                </tr>  
+                                <% stop=true; 
+                                } %> 
+                        <% } %>
+                        <% 
+                        stop = false;
+                        for (let i = 0; i < fucs.length; i++) {
+                                if(stop) break;
+                                if(fucs[i].ano =="5º") { %>
+                                <tr>
+                                    <td>5º Ano</td>
+                                    <td><input type="text" class="form-control" id="tbNrAnul_5ano" name="tbNrAnul_5ano"
+                                        value="<% drops.forEach(drop => { 
+                                            if (drop.anoCurricular == 5) { %><%= drop.dropIncri || 0 %><% } 
+                                        }) %>"  
+                                    ></td>
+                                </tr>  
+                                <% stop=true; 
+                                } %> 
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>6. ESTUDANTES DIPLOMADOS</h4>
+            </div>
+            <div class="row m-3">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>N.º INCRITOS (último ano)</th>
+                            <th>N.º DIPLOMADOS</th>
+                            <th>TAXA APROVAÇÃO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" id="tbNrIncriUltAno" name="tbNrIncriUltAno" onkeyup="doAverageDiplo()" value="<%= ce[0].NrIncriUltAno %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrDiplom" name="tbNrDiplom" onkeyup="doAverageDiplo()" value="<%= ce[0].NrDiplom %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbTxAprov" name="tbTxAprov" value="<%= ce[0].TxAprov %>"  readonly ></td>
+                        </tr>
+                        <script>
+                            function doAverageDiplo(){
+                                let isDecimal = v => /^[+-]?(\d+(\.\d*)?|\.\d+)$/.test(v);
+                                let tbNrIncriUltAno = '';
+                                let tbNrDiplom = '';
+                                let tbTxAprov = '';
+                                tbNrIncriUltAno = $('#tbNrIncriUltAno').val().trim();
+                                tbNrDiplom = $('#tbNrDiplom').val().trim();
+                                
+                                if(!tbNrIncriUltAno)tbNrIncriUltAno = "0";
+                                if(!tbNrDiplom)tbNrDiplom = "0";
+                                if(isDecimal(tbNrIncriUltAno) && isDecimal(tbNrDiplom)){            
+                                    $('#tbTxAprov').val((tbNrDiplom / tbNrIncriUltAno * 100).toFixed(2));                              
+                                }
+                            }
+                        </script>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row m-3">
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>INDICADOR</th>
+                            <th>ANTEPENÚLTIMO ANO</th>
+                            <th>PENÚLTIMO ANO</th>
+                            <th>ÚLTIMO ANO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nº de graduados</td>
+                            <td><input type="text" class="form-control" id="tbNrGrad_ano3" name="tbNrGrad_ano3" value="<%= ce[0].Graduados3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGrad_ano2" name="tbNrGrad_ano2" value="<%= ce[0].Graduados2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGrad_ano1" name="tbNrGrad_ano1" value="<%= ce[0].Graduados1ano %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Nº de graduados em N anos</td>
+                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano3" name="tbNrGradNAnos_ano3" value="<%= ce[0].GraduadosNAnos3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano2" name="tbNrGradNAnos_ano2" value="<%= ce[0].GraduadosNAnos2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano1" name="tbNrGradNAnos_ano1" value="<%= ce[0].GraduadosNAnos1anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Nº de graduados em N+1 anos</td>
+                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano3" name="tbNrGradN1Anos_ano3" value="<%= ce[0].GraduadosN1Anos3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano2" name="tbNrGradN1Anos_ano2" value="<%= ce[0].GraduadosN1Anos2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano1" name="tbNrGradN1Anos_ano1" value="<%= ce[0].GraduadosN1Anos1anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Nº de graduados em N+2 anos</td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano3" name="tbNrGradN2Anos_ano3" value="<%= ce[0].GraduadosN2Anos3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano2" name="tbNrGradN2Anos_ano2" value="<%= ce[0].GraduadosN2Anos2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano1" name="tbNrGradN2Anos_ano1" value="<%= ce[0].graduadosN2Anos1anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Nº de graduados em mais de N+2 anos</td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano3" name="tbNrGradN2MAnos_ano3" value="<%= ce[0].GraduadosN2MAnos3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano2" name="tbNrGradN2MAnos_ano2" value="<%= ce[0].GraduadosN2MAnos2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano1" name="tbNrGradN2MAnos_ano1" value="<%= ce[0].GraduadosN2MAnos1anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>7. INTERNACIONALIZAÇÃO</h4>
+                <table class="table table-striped table-sm table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Indicador</th>
+                            <th>ANTEPENÚLTIMO ANO</th>
+                            <th>PENÚLTIMO ANO</th>
+                            <th>ÚLTIMO ANO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Estudantes estrangeiros matriculados no CE</td>
+                            <td><input type="text" id="estudEstragAnt" name="estudEstragAnt" value="<%= ce[0].estudEstragAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudEstragPen" name="estudEstragPen" value="<%= ce[0].estudEstragPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudEstragUlt" name="estudEstragUlt" value="<%= ce[0].estudEstragUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Estudantes em programas internacionais de mobilidade (in)</td>
+                            <td><input type="text" id="estudMobInAnt" name="estudMobInAnt" value="<%= ce[0].estudMobInAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobInPen" name="estudMobInPen" value="<%= ce[0].estudMobInPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobInUlt" name="estudMobInUlt" value="<%= ce[0].estudMobInUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Estudantes em programas internacionais de mobilidade (out)</td>
+                            <td><input type="text" id="estudMobOutAnt" name="estudMobOutAnt" value="<%= ce[0].estudMobOutAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobOutPen" name="estudMobOutPen" value="<%= ce[0].estudMobOutPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobOutUlt" name="estudMobOutUlt" value="<%= ce[0].estudMobOutUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Docentes estrangeiros (in)</td>
+                            <td><input type="text" id="estudDocInAnt" name="estudDocInAnt" value="<%= ce[0].estudDocInAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocInPen" name="estudDocInPen" value="<%= ce[0].estudDocInPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocInUlt" name="estudDocInUlt" value="<%= ce[0].estudDocInUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Docentes (out)</td>
+                            <td><input type="text" id="estudDocOutAnt" name="estudDocOutAnt" value="<%= ce[0].estudDocOutAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocOutPen" name="estudDocOutPen" value="<%= ce[0].estudDocOutPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocOutUlt" name="estudDocOutUlt" value="<%= ce[0].estudDocOutUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Pessoal técnico, administrativo e de gestão estrangeiro (in)</td>
+                            <td><input type="text" id="estudStaffInAnt" name="estudStaffInAnt" value="<%= ce[0].estudStaffInAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffInPen" name="estudStaffInPen" value="<%= ce[0].estudStaffInPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffInUlt" name="estudStaffInUlt" value="<%= ce[0].estudStaffInUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                        <tr>
+                            <td>Pessoal técnico, administrativo e de gestão (out)</td>
+                            <td><input type="text" id="estudStaffOutAnt" name="estudStaffOutAnt" value="<%= ce[0].estudStaffOutAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffOutPen" name="estudStaffOutPen" value="<%= ce[0].estudStaffOutPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffOutUlt" name="estudStaffOutUlt" value="<%= ce[0].estudStaffOutUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h6 class="mt-2">Participação em redes internacionais com relevância para o CE</h6>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 3000 caracteres)</span></div>
+                    <div class="col-auto"><span id="tbIntRevCount" class="">0</span></div>
+                </div>  
+            </div>
+            <div class="row m-3">
+                <textarea id="tbIntRev" name="tbIntRev" rows="5" maxlength="3001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="tbIntRevCount" uimaxlength="3000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].tbIntRev %></textarea>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>8. ATIVIDADES DE ARTICULAÇÃO COM A COMUNIDADE DESENVOLVIDA NO ÂMBITO DO CICLO DE ESTUDOS</h4>
+                <span>Atividades de desenvolvimento tecnológico e artístico, prestação de serviços à comunidade e formação avançada na(s) área(s) científica(s) fundamental(ais) do ciclo de estudos, e seu contributo real para o desenvolvimento nacional, regional e local, a cultura científica e a ação cultural, desportiva e artística:</span>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 15000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbArticulComunCount" class="">0</span></div>
+                </div>  
+            </div>
+            <div class="row m-3">
+                <textarea id="tbArtiComu" name="tbArtiComu" rows="5" maxlength="15000" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbArticulComunCount" uimaxlength="15000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].AtivComunidade %></textarea>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>9. ATIVIDADES DE INVESTIGAÇÃO CIENTÍFICA RELACIONADA COM O CICLO DE ESTUDOS</h4>
+                <span>Lista dos principais projetos e/ou parcerias nacionais e internacionais em que se integram as atividades científicas, tecnológicas, culturais e artísticas desenvolvidas na área do ciclo de estudos incluindo, quando aplicável, indicação dos principais projetos financiados e do volume de financiamento envolvido:</span>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 15000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbInvCietifCount" class="">0</span></div>
+                </div>  
+            </div>
+            <div class="row m-3">
+                <textarea id="tbIvest" name="tbIvest" rows="5" maxlength="15000" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbInvCietifCount" uimaxlength="15000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].AtivInvestig %></textarea>
+            </div>
+            <div class="row m-3">
+                <h6>Produção científica (opcional)</h6>
+                <div class="row justify-content-between">
+                    <table class="table table-striped table-sm table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="min-width: 500px;">Indicador</th>
+                                <th>Quartil 1</th>
+                                <th>Quartil 2</th>
+                                <th>Quartil 3</th>
+                                <th>Quartil 4</th>
+                                <th>N</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Web of Science – WoS - Clarivate</td>
+                                <td><input type="text" style="width: 40px;" id="wosq1" name="wosq1" value="<%= ce[0].wosq1 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="wosq2" name="wosq2" value="<%= ce[0].wosq2 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="wosq3" name="wosq3" value="<%= ce[0].wosq3 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="wosq4" name="wosq4" value="<%= ce[0].wosq4 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="wosn" name="wosn" value="<%= ce[0].wosn %>" readonly ></td>
+                            </tr>
+                            <tr>
+                                <td>Scopus (Elsevier)</td>
+                                <td><input type="text" style="width: 40px;" id="elsq1" name="elsq1" value="<%= ce[0].elsq1 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="elsq2" name="elsq2" value="<%= ce[0].elsq2 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="elsq3" name="elsq3" value="<%= ce[0].elsq3 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="elsq4" name="elsq4" value="<%= ce[0].elsq4 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="elsn" name="elsn" value="<%= ce[0].elsn %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Scimago Journal Ranking (SJR)/ Scopus</td>
+                                <td><input type="text" style="width: 40px;" id="sjrq1" name="sjrq1" value="<%= ce[0].sjrq1 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="sjrq2" name="sjrq2" value="<%= ce[0].sjrq2 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="sjrq3" name="sjrq3" value="<%= ce[0].sjrq3 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="sjrq4" name="sjrq4" value="<%= ce[0].sjrq4 %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                                <td><input type="text" style="width: 40px;" id="sjrn" name="sjrn" value="<%= ce[0].sjrn %>" readonly></td>
+                            </tr>
+                            <tr>
+                                <td>Outros (ex. CINAHL Complete/ Latindex/ Redalyc/ SciELO/ ...)</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><input type="text" style="width: 40px;" id="outn" name="outn" value="<%= ce[0].outn %>" <% if(ce[0].finalizado==1){%> readonly <% } %> oninput="calculateSumInv()"></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><input type="text" style="width: 40px;" id="pubTot" name="pubTot" value="<%= ce[0].pubTot %>" readonly ></td>
+                            </tr>
+                            <script>
+                                function calculateSumInv() {
+                                    let wosq1 = !isNaN(parseFloat($("#wosq1").val()))? parseFloat($("#wosq1").val()) : 0;
+                                    let wosq2 = !isNaN(parseFloat($("#wosq2").val()))? parseFloat($("#wosq2").val()) : 0;
+                                    let wosq3 = !isNaN(parseFloat($("#wosq3").val()))? parseFloat($("#wosq3").val()) : 0;
+                                    let wosq4 = !isNaN(parseFloat($("#wosq4").val()))? parseFloat($("#wosq4").val()) : 0;
+                                    let elsq1 = !isNaN(parseFloat($("#elsq1").val()))? parseFloat($("#elsq1").val()) : 0;
+                                    let elsq2 = !isNaN(parseFloat($("#elsq2").val()))? parseFloat($("#elsq2").val()) : 0;
+                                    let elsq3 = !isNaN(parseFloat($("#elsq3").val()))? parseFloat($("#elsq3").val()) : 0;
+                                    let elsq4 = !isNaN(parseFloat($("#elsq4").val()))? parseFloat($("#elsq4").val()) : 0;
+                                    let sjrq1 = !isNaN(parseFloat($("#sjrq1").val()))? parseFloat($("#sjrq1").val()) : 0;
+                                    let sjrq2 = !isNaN(parseFloat($("#sjrq2").val()))? parseFloat($("#sjrq2").val()) : 0;
+                                    let sjrq3 = !isNaN(parseFloat($("#sjrq3").val()))? parseFloat($("#sjrq3").val()) : 0;
+                                    let sjrq4 = !isNaN(parseFloat($("#sjrq4").val()))? parseFloat($("#sjrq4").val()) : 0;
+                                    let outn = !isNaN(parseFloat($("#outn").val()))? parseFloat($("#outn").val()) : 0;
+                                    
+                                    $("#wosn").val(parseFloat(wosq1+wosq2+wosq3+wosq4));
+                                
+                                    $("#elsn").val(parseFloat(elsq1+elsq2+elsq3+elsq4));
+                                
+                                    $("#sjrn").val(parseFloat(sjrq1+sjrq2+sjrq3+sjrq4));
+                                    
+                                    $('#pubTot').val(parseFloat(wosq1+wosq2+wosq3+wosq4+elsq1+elsq2+elsq3+elsq4+sjrq1+sjrq2+sjrq3+sjrq4+outn))
+                                }
+                            </script>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row m-3">
+                <h5>Publicações (opcional):</h5>
+                <h6>Artigos em revistas científicas</h6>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 10000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbRevCientCount" class="">0</span></div>
+                </div>
+                <div class="row m-3">
+                    <textarea id="lbRevCient" name="lbRevCient" rows="3" maxlength="10001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbRevCientCount" uimaxlength="10000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].lbRevCient %></textarea>
+                </div>
+                <h6>Livros e Capítulos de Livros</h6>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 10000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbLivroCount" class="">0</span></div>
+                </div>
+                <div class="row m-3">
+                    <textarea id="lbLivro" name="lbLivro" rows="3" maxlength="10001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbLivroCount" uimaxlength="10000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].lbLivro %></textarea>
+                </div>
+                <h6>Atas de encontros científicos</h6>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 10000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbAtasCount" class="">0</span></div>
+                </div>
+                <div class="row m-3">
+                    <textarea id="lbAtas" name="lbAtas" rows="3" maxlength="10001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbAtasCount" uimaxlength="10000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].lbAtas %></textarea>
+                </div>
+                <h6>Outras publicações</h6>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 10000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbOutPubCount" class="">0</span></div>
+                </div>
+                <div class="row m-3">
+                    <textarea id="lbOutPub" name="lbOutPub" rows="3" maxlength="10001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbOutPubCount" uimaxlength="10000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].lbOutPub %></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>10. SÍNTESE DOS PONTOS FORTES E FRACOS DO CICLO DE ESTUDOS</h4>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 5000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbPontFortesCount" class="">0</span></div>
+                </div>  
+            </div>
+            <div class="row m-3">
+                <textarea id="tbPontosFortes" name="tbPontosFortes" rows="3" maxlength="5000" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbPontFortesCount" uimaxlength="5000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].PontosFortes %></textarea>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>11. AÇÕES DE FORMAÇÃO COMPLEMENTAR DOS ESTUDANTES</h4>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 5000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbFormComplCount" class="">0</span></div>
+                </div>   
+            </div>
+            <div class="row m-3">
+                <textarea id="tbFormCompl" name="tbFormCompl" rows="3" maxlength="5000" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbFormComplCount" uimaxlength="5000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].AcoesFormac %></textarea>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>12. SUGESTÕES DE MELHORIA</h4>
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 5000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbSugMelhorCount" class="">0</span></div>
+                </div>   
+            </div>
+            <div class="row m-3">
+                <textarea id="tbSugestMelhor" name="tbSugestMelhor" rows="3" maxlength="5000" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbSugMelhorCount" uimaxlength="5000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].SugestMelhoria %></textarea>
+            </div>
+        </div>
+        <div class="container border ">
+            <div class="row m-3">
+                <h4>13. CONSIDERAÇÕES FINAIS</h4> 
+                <div class="row justify-content-between">
+                    <div class="col-auto me-auto"><span style="font-size: 10 !important; color: rgb(104, 104, 104);">(Máximo 5000 caracteres)</span></div>
+                    <div class="col-auto"><span id="lbConsFinaisCount" class="">0</span></div>
+                </div>        
+            </div>
+            <div class="row m-3">
+                <textarea id="tbConsidFinal" name="tbConsidFinal" rows="3" maxlength="5000" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="lbConsFinaisCount" uimaxlength="5000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].ConsidFinais %></textarea>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-4">
+                <button class="btn btn-sm btn-primary w-100" type="sumbit">Gravar</button>
+            </div>
+            <div class="col-4">
+                <a href="/pdfRelCe/<%= ce[0].IdCE %>" class="btn btn-sm btn-danger w-100" target="_blank">Criar PDF</a>
+            </div>
+             <div class="col-4">
+                <a href="/pdfsendRAC/<%= ce[0].IdCE %>" class="btn btn-sm btn-danger w-100" target="_blank">Submeter RAC</a>
+            </div> 
+        </div>
+        
+    </form>
+</div>
+
+
+<%- include('partials/footer') %>

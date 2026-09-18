@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+<script>
+    $(document).ready(function () {
+        $('#anoLetivo').on('change', function () {
+            console.log('CHANGE FIRED');
+
+            var val = $(this).val();
+            var base = $('#lnkFuc').attr('data-base');
+
+            console.log('base:', base);
+            console.log('val:', val);
+
+            $('#lnkFuc').attr('href', base + val);
+
+            console.log('new href:', $('#lnkFuc').attr('href'));
+        });
+    });
+</script>
+<div class="container mt-5">
+	<div class="row">
+		<div class="col-md-12">
+            <p class="h2 text-red">Editar FUC - Ficha de Unidade Curricular</p>
+			<p class="h2 text-red">Fichas de Unidade Curricular</p>
+		</div>
+	</div>
+    <div class="row">
+        <div class="col-md-12">
+            <label for="anoLetivo">Selecione o Ano Letivo</label>
+            <select class="form-select" id="anoLetivo">
+                <option value="0" selected>--------------------</option>
+                <option value="2025_26">2025/26</option>
+                <option value="2026_27" >2026/27</option>
+                <option value="2027_28">2027/28</option>
+            </select>
+            <script>
+                $('#anoLetivo').on("change", function(){
+                    let anoCur = $(this).val();
+                    let ce = $("#curso").val();
+                    if(anoCur != null){
+                        if(anoCur != '0') $("#sbmt").removeClass("invisible");
+                        else $("#sbmt").addClass("invisible");
+                    }
+                })
+            </script>
+
+        </div>
+        <div id="sbmt" class="row my-3 ps-4 invisible">
+            <a id="lnkFuc" data-base="editaCurso/" href="editaCurso/" class="btn btn-outline-primary">Avançar</a>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+	<head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+
+
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="/stylesheets/main.css">
+
+
+        <!-- Font Awsome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+		<title>Quality Atlantica</title>
+        
+	</head>
+	<body>
+		<div class="container">
+            <% if(error && error.length > 0){ %>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+            <% } %>
+        </div>
+        <div class="container">
+            <% if(success && success.length > 0){ %>
+                <div class="alert alert-success">
+                    <%= success %>
+                </div>
+            <% } %>
+        </div>
+        <div class="text-center landing-header">
+            <form class="form-signin mt-4" method="POST" action="/login" accept-charset="utf-8">
+<!--                <form class="form-signin mt-4" method="POST" action="/login" accept-charset="ISO-8859-1">-->
+                <img class="mb-4" src="/img/logoTrans.png" alt="" width="90%">
+                <h1 class="h3 mb-3 font-weight-normal">Portal FUC/ RUC/ RAC</h1>
+                <label class="sr-only" for="username">Log in</label>
+                <div class="input-group">
+                    <input class="form-control" id="username" name="username" type="text" placeholder="Login" required="" autofocus="">
+                    <div class="input-group-text" style="background:#0087cf;color:#fff;">@uatla.pt</div>
+                </div>
+                <label class="sr-only" for="password">Password</label>
+                <input class="form-control" id="password" type="password" name="password" placeholder="Password" required="">
+                <br />
+                <label class="form-label" for="role">Tipo de Acesso</label>
+                <select class="form-select" id="role" name="role">
+                    <option value="docente">Responsável de UC</option>
+                    <option value="coordenador">Coordenador</option>
+                    <option value="gestor">Gestor</option>
+                    <option value="administrador">Administrador</option>
+                </select>
+                <button class="btn btn-lg login-btn btn-block mt-4" type="submit">Sign in</button>
+                
+                <label name="login[message]"></label>
+                <p class="mt-5 mb-3 text-muted">© Atlântica 2024</p>
+            </form>
+
+        </div>
+        <ul class="slideshow">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="/vendor/jquery/jquery-3.7.1.min.js"></script>
+        <script src="/vendor/popper/popper.min.js"></script>
+        <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+	</body>
+</html>

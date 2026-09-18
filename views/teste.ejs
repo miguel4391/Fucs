@@ -1,0 +1,67 @@
+<%- include('partials/header') %>
+
+<style>
+.blueheader{
+	background-color: #0087cf;
+	color:#fff;
+}
+table{
+	width: 100%;
+}
+
+th{
+	background-color: #0087cf;
+	color:#fff;
+	
+	padding: 0.7em;
+}
+.fs-04{
+	font-size: .75em;
+	font-style: italic;
+}
+</style>
+
+
+<div class="row mt-5">
+    <div class="col-12">
+        <table>
+            <thead>
+                <tr><th colspan="3">Docente responsável e respetiva carga letiva na unidade curricular</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control form-control-sm" id="nomeResp" name="nomeResp" value="" >
+                            <label for="nomeResp">Nome completo:</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-floating">
+                            <input type="text" class="form-control form-control-sm" id="grauResp" name="grauResp" value="" >
+                            <label for="grauResp">Grau académico:</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-floating">
+                            <input type="text" class="form-control form-control-sm" id="catResp" name="catResp" value="" >
+                            <label for="catResp">Categoria profissional:</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-floating">
+                            <input type="text" class="form-control form-control-sm" id="cargaResp" name="cargaResp" value="">
+                            <label for="cargaResp">Carga Letiva:</label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<%- include('partials/footer') %>
