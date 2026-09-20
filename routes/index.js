@@ -1355,13 +1355,13 @@ async function sendRucNotif(relUC){
 	}
 }
 
-const vazioSeZero = (v) => (v === 0 || v === '0' || v == null ? '' : v);
+//const vazioSeZero = (v) => (v === 0 || v === '0' || v == null ? '' : v);
 router.post('/saveDocentes', (req, res) => {
     const b = req.body;
 
     const docs = [];
     for (let i = 2; i <= 10; i++) {
-        docs.push(vazioSeZero(b['doc' + i]));
+        docs.push(b['doc' + i]); // valor bruto, sem conversão
     }
 
     require('../models/setDocAux.js')(b.idUc, ...docs, (err) => {
