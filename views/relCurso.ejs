@@ -50,32 +50,32 @@
             </div>
             <div class="row m-3">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control form-control-sm " id="tbPlataSurvey" name="tbPlataSurvey" placeholder="PlataformaInquéritos" value="<%= ce[0].platInquerito %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                    <input type="text" class="form-control form-control-sm " id="tbPlataSurvey" name="tbPlataSurvey" placeholder="PlataformaInquéritos" value="<%= ce[0].platInquerito %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %> >
                     <label for="tbPlataSurvey">Plataforma de Inquéritos</label>
                 </div>
             </div>
             <div class="row m-3">
                 <div class="col-xs-12 col-md-6 col-xl-3">
                     <div class="form-floating mb-4">
-                        <input type="text" class="form-control form-control-sm" id="tbDtaSophUC" name="tbDtaSophUC" placeholder="DataSophiaUCs" value="<%= ce[0].DataSophUC %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <input type="text" class="form-control form-control-sm" id="tbDtaSophUC" name="tbDtaSophUC" placeholder="DataSophiaUCs" value="<%= ce[0].DataSophUC %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>>
                         <label for="tbDtaSophUC">Data Consulta Sophia de UCs</label>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6 col-xl-3">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbDtaSophInscri" name="tbDtaSophInscri" placeholder="DataSophInscri" value="<%= ce[0].DataSophInscri %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <input type="text" class="form-control form-control-sm" id="tbDtaSophInscri" name="tbDtaSophInscri" placeholder="DataSophInscri" value="<%= ce[0].DataSophInscri %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>>
                         <label for="tbDtaSophUC">Data Consulta Sophia de Inscrições</label>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6 col-xl-3">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbDtaSophDiplom" name="tbDtaSophDiplom" placeholder="DataSophDiplom" value="<%= ce[0].DataSophDiplom %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <input type="text" class="form-control form-control-sm" id="tbDtaSophDiplom" name="tbDtaSophDiplom" placeholder="DataSophDiplom" value="<%= ce[0].DataSophDiplom %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>>
                         <label for="tbDtaSophUC">Data Consulta Sophia de Diplomados</label>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-6 col-xl-3">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbDtaSophInter" name="tbDtaSophInter" placeholder="tbDtaSophInter" value="<%= ce[0].DtaSophInter %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <input type="text" class="form-control form-control-sm" id="tbDtaSophInter" name="tbDtaSophInter" placeholder="tbDtaSophInter" value="<%= ce[0].DtaSophInter %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>>
                         <label for="tbDtaSophUC">Data Consulta - Internacionalização</label>
                     </div>
                 </div>
@@ -88,25 +88,25 @@
             <div class="row m-3">
                 <div class="col-xs-6 col-md-4 col-xl-2">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbNrInscri" name="tbNrInscri" placeholder="NrAlunosInscritosCE" value="<%= ce[0].NrInscritos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <input type="text" class="form-control form-control-sm" id="tbNrInscri" name="tbNrInscri" placeholder="NrAlunosInscritosCE" value="<%= ce[0].NrInscritos %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>>
                         <label for="tbNrInscri">Nº Inscritos no CE</label>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-4 col-xl-2">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbNrInscriUC" name="tbNrInscriUC" placeholder="NrAlunosInscritosUC" value="<%= ce[0].nrIscritUC %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <input type="text" class="form-control form-control-sm" id="tbNrInscriUC" name="tbNrInscriUC" placeholder="NrAlunosInscritosUC" value="<%= ce[0].nrIscritUC %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>>
                         <label for="tbNrInscriUC">Nº Inscritos em UC</label>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-4 col-xl-2">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbNrResp1Sem" name="tbNrResp1Sem" placeholder="NrRespostasPrimeiroSemestre" onkeyup="doAverage1sem();" value="<%= ce[0].NrResp1Sem %>" <% if(ce[0].finalizado==1){%> readonly <% } %>>
+                        <input type="text" class="form-control form-control-sm" id="tbNrResp1Sem" name="tbNrResp1Sem" placeholder="NrRespostasPrimeiroSemestre" onkeyup="doAverage1sem();" value="<%= ce[0].NrResp1Sem %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>>
                         <label for="tbNrResp1Sem">Nº Respostas 1º Sem</label>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-4 col-xl-2">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbPerResp1Sem" name="tbPerResp1Sem" placeholder="PercentagemRespostasPrimeiroSemestre" value="<%= ce[0].PercResp1Sem %>" <% if(ce[0].finalizado==1){%> readonly <% } %> readonly>
+                        <input type="text" class="form-control form-control-sm" id="tbPerResp1Sem" name="tbPerResp1Sem" placeholder="PercentagemRespostasPrimeiroSemestre" value="<%= ce[0].PercResp1Sem %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %> readonly>
                         <label for="tbPerResp1Sem">% Respostas 1º Sem</label>
                     </div>
                 </div>
@@ -132,13 +132,13 @@
                 </script>
                 <div class="col-xs-6 col-md-4 col-xl-2">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbNrResp2Sem" name="tbNrResp2Sem" placeholder="NrRespostasSegundoSemestre" onkeyup="doAverage2sem();" value="<%= ce[0].NrResp2Sem %>" <% if(ce[0].finalizado==1){%> readonly <% } %> >
+                        <input type="text" class="form-control form-control-sm" id="tbNrResp2Sem" name="tbNrResp2Sem" placeholder="NrRespostasSegundoSemestre" onkeyup="doAverage2sem();" value="<%= ce[0].NrResp2Sem %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %> >
                         <label for="tbNrResp2Sem">Nº Respostas 2º Sem</label>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-4 col-xl-2">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm" id="tbPerResp2Sem" name="tbPerResp2Sem" placeholder="PercentagemRespostasSegundoSemestre" value="<%= ce[0].PercResp2Sem %>" <% if(ce[0].finalizado==1){%> readonly <% } %> readonly>
+                        <input type="text" class="form-control form-control-sm" id="tbPerResp2Sem" name="tbPerResp2Sem" placeholder="PercentagemRespostasSegundoSemestre" value="<%= ce[0].PercResp2Sem %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %> readonly>
                         <label for="tbPerResp2Sem">% Respostas 2º Sem</label>
                     </div>
                 </div>
@@ -176,43 +176,43 @@
                     <tbody>
                         <tr>
                             <td>Clareza na definição dos objetivos da unidade curricular</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgClareza" name="tbAvgClareza" placeholder="Clareza" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Clareza %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgClareza" name="tbAvgClareza" placeholder="Clareza" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Clareza %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Grau de interesse da matéria lecionada</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgGrauInt" name="tbAvgGrauInt" placeholder="Grau Interesse" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Interesse %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgGrauInt" name="tbAvgGrauInt" placeholder="Grau Interesse" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Interesse %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Articulação com as outras unidades curriculares do curso</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbArticUC" name="tbArticUC" placeholder="Articulação entre UCs" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulaOutUC %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbArticUC" name="tbArticUC" placeholder="Articulação entre UCs" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulaOutUC %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Grau de dificuldade da matéria</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgGrauDific" name="tbAvgGrauDific" placeholder="Grau Dificuldade" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Dificuld %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbAvgGrauDific" name="tbAvgGrauDific" placeholder="Grau Dificuldade" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].Dificuld %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Relação entre conteúdo e carga horária</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbRelCargaConte" name="tbRelCargaConte" placeholder="Relação Conteúdo Horário" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].RelConteudo %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbRelCargaConte" name="tbRelCargaConte" placeholder="Relação Conteúdo Horário" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].RelConteudo %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Articulação entre aulas teóricas e práticas (quando aplicável)</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbRelTeoPrat" name="tbRelTeoPrat" placeholder="Relação Teórico-praticas" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulTeoPratic %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbRelTeoPrat" name="tbRelTeoPrat" placeholder="Relação Teórico-praticas" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulTeoPratic %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Disponibilidade da bibliografia indicada</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbBiblioDisp" name="tbBiblioDisp" placeholder="Disponibilidade Bibliografia" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].DispBiblio %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbBiblioDisp" name="tbBiblioDisp" placeholder="Disponibilidade Bibliografia" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].DispBiblio %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Clareza dos elementos de avaliação, face aos objetivos da unidade curricular</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbElemAval" name="tbElemAval" placeholder="Clareza Avaliação" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ClarezaElemAval %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbElemAval" name="tbElemAval" placeholder="Clareza Avaliação" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ClarezaElemAval %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Disponibilidade e adequação dos meios técnicos utilizados (quando aplicável)</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbDispMeios" name="tbDispMeios" placeholder="Disponibilização Meios" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].DisponMeios %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbDispMeios" name="tbDispMeios" placeholder="Disponibilização Meios" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].DisponMeios %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Articulação da unidade curricular com a realidade atual</td>
-                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbUCMundoReal" name="tbUCMundoReal" placeholder="Articulação UC - Realidade" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulaRealidade %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" inputmode="decimal" class="form-control form-control-sm" id="tbUCMundoReal" name="tbUCMundoReal" placeholder="Articulação UC - Realidade" oninput="validarDecimal(this); doAverage();" value="<%= ce[0].ArticulaRealidade %>" <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Média Geral</td>
@@ -325,16 +325,16 @@
                                     <td><%= fuc.nomeUCPt %></td>
                                     <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_insc" name="<%= fuc.idfucs %>"
                                         value="<%= dado ? dado.nrInscriUC : '' %>"
-                                        <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                                        <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                                     <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_media" name="<%= fuc.idfucs %>"
                                         value="<%= dado ? dado.avgUC : '' %>"
-                                        <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                                        <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                                     <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_reprov" name="<%= fuc.idfucs %>"
                                         value="<%= dado ? dado.percReprov : '' %>"
-                                        <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                                        <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                                     <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_aprov" name="<%= fuc.idfucs %>"
                                         value="<%= dado ? dado.percAprov : '' %>"
-                                        <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                                        <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                                 </tr>
                             <% }) %>
                     </tbody>
@@ -358,11 +358,11 @@
                         <tr>
                             <td>1º Ano</td>
                             <!-- CORREÇÃO: acesso seguro a drops[0]/drops[1], que podiam não existir e rebentar o template -->
-                            <td><input type="text" class="form-control" id="tbNrAband_1ano" name="tbNrAband_1ano" value="<%= (drops[0] && drops[0].dropCE) || 0 %>"></td>
+                            <td><input type="text" class="form-control" id="tbNrAband_1ano" name="tbNrAband_1ano" value="<%= (drops[0] && drops[0].dropCE) || 0 %>" <% if( role !="gestor"){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>2º Ano</td>
-                            <td><input type="text" class="form-control" id="tbNrAband_2ano" name="tbNrAband_2ano" value="<%= (drops[1] && drops[1].dropCE) || 0 %>"></td>
+                            <td><input type="text" class="form-control" id="tbNrAband_2ano" name="tbNrAband_2ano" value="<%= (drops[1] && drops[1].dropCE) || 0 %>" <% if( role !="gestor"){%> readonly <% } %>></td>
                         </tr>
                         <% 
                         let stop = false;
@@ -374,7 +374,7 @@
                                     <td><input type="text" class="form-control" id="tbNrAband_3ano" name="tbNrAband_3ano"
                                         value="<% drops.forEach(drop => { 
                                             if (drop.anoCurricular == 3) { %><%= drop.dropCE || 0 %><% } 
-                                        }) %>"    
+                                        }) %>" <% if( role !="gestor"){%> readonly <% } %>
                                     ></td>
                                 </tr>  
                                 <% stop=true; 
@@ -390,7 +390,7 @@
                                     <td><input type="text" class="form-control" id="tbNrAband_4ano" name="tbNrAband_4ano"
                                         value="<% drops.forEach(drop => { 
                                             if (drop.anoCurricular == 4) { %><%= drop.dropCE || 0 %><% } 
-                                        }) %>"
+                                        }) %>" <% if( role !="gestor"){%> readonly <% } %>
                                     ></td>
                                 </tr>  
                                 <% stop=true; 
@@ -406,7 +406,7 @@
                                     <td><input type="text" class="form-control" id="tbNrAband_5ano" name="tbNrAband_5ano"
                                         value="<% drops.forEach(drop => { 
                                             if (drop.anoCurricular == 5) { %><%= drop.dropCE || 0 %><% } 
-                                        }) %>"
+                                        }) %>" <% if( role !="gestor"){%> readonly <% } %>
                                     ></td>
                                 </tr>  
                                 <% stop=true; 
@@ -426,11 +426,11 @@
                     <tbody>
                         <tr>
                             <td>1º Ano</td>
-                            <td><input type="text" class="form-control" id="tbNrAnul_1ano" name="tbNrAnul_1ano" value="<%= (drops[0] && drops[0].dropIncri) || 0 %>"></td>
+                            <td><input type="text" class="form-control" id="tbNrAnul_1ano" name="tbNrAnul_1ano" value="<%= (drops[0] && drops[0].dropIncri) || 0 %>" <% if( role !="gestor"){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>2º Ano</td>
-                            <td><input type="text" class="form-control" id="tbNrAnul_2ano" name="tbNrAnul_2ano" value="<%= (drops[1] && drops[1].dropIncri) || 0 %>"></td>
+                            <td><input type="text" class="form-control" id="tbNrAnul_2ano" name="tbNrAnul_2ano" value="<%= (drops[1] && drops[1].dropIncri) || 0 %>" <% if( role !="gestor"){%> readonly <% } %>></td>
                         </tr>
                         <% 
                         stop = false;
@@ -442,7 +442,7 @@
                                     <td><input type="text" class="form-control" id="tbNrAnul_3ano" name="tbNrAnul_3ano"
                                         value="<% drops.forEach(drop => { 
                                             if (drop.anoCurricular == 3) { %><%= drop.dropIncri || 0 %><% } 
-                                        }) %>"   
+                                        }) %>" <% if( role !="gestor"){%> readonly <% } %>
                                     ></td>
                                 </tr>  
                                 <% stop=true; 
@@ -458,7 +458,7 @@
                                     <td><input type="text" class="form-control" id="tbNrAnul_4ano" name="tbNrAnul_4ano"
                                         value="<% drops.forEach(drop => { 
                                             if (drop.anoCurricular == 4) { %><%= drop.dropIncri || 0 %><% } 
-                                        }) %>"  
+                                        }) %>" <% if( role !="gestor"){%> readonly <% } %>
                                     ></td>
                                 </tr>  
                                 <% stop=true; 
@@ -474,7 +474,7 @@
                                     <td><input type="text" class="form-control" id="tbNrAnul_5ano" name="tbNrAnul_5ano"
                                         value="<% drops.forEach(drop => { 
                                             if (drop.anoCurricular == 5) { %><%= drop.dropIncri || 0 %><% } 
-                                        }) %>"  
+                                        }) %>" <% if( role !="gestor"){%> readonly <% } %>
                                     ></td>
                                 </tr>  
                                 <% stop=true; 
@@ -500,8 +500,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input type="text" class="form-control" id="tbNrIncriUltAno" name="tbNrIncriUltAno" onkeyup="doAverageDiplo()" value="<%= ce[0].NrIncriUltAno %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrDiplom" name="tbNrDiplom" onkeyup="doAverageDiplo()" value="<%= ce[0].NrDiplom %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrIncriUltAno" name="tbNrIncriUltAno" onkeyup="doAverageDiplo()" value="<%= ce[0].NrIncriUltAno %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrDiplom" name="tbNrDiplom" onkeyup="doAverageDiplo()" value="<%= ce[0].NrDiplom %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                             <td><input type="text" class="form-control" id="tbTxAprov" name="tbTxAprov" value="<%= ce[0].TxAprov %>"  readonly ></td>
                         </tr>
                         <script>
@@ -536,33 +536,33 @@
                     <tbody>
                         <tr>
                             <td>Nº de graduados</td>
-                            <td><input type="text" class="form-control" id="tbNrGrad_ano3" name="tbNrGrad_ano3" value="<%= ce[0].Graduados3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGrad_ano2" name="tbNrGrad_ano2" value="<%= ce[0].Graduados2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGrad_ano1" name="tbNrGrad_ano1" value="<%= ce[0].Graduados1ano %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGrad_ano3" name="tbNrGrad_ano3" value="<%= ce[0].Graduados3anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGrad_ano2" name="tbNrGrad_ano2" value="<%= ce[0].Graduados2anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGrad_ano1" name="tbNrGrad_ano1" value="<%= ce[0].Graduados1ano %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Nº de graduados em N anos</td>
-                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano3" name="tbNrGradNAnos_ano3" value="<%= ce[0].GraduadosNAnos3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano2" name="tbNrGradNAnos_ano2" value="<%= ce[0].GraduadosNAnos2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano1" name="tbNrGradNAnos_ano1" value="<%= ce[0].GraduadosNAnos1anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano3" name="tbNrGradNAnos_ano3" value="<%= ce[0].GraduadosNAnos3anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano2" name="tbNrGradNAnos_ano2" value="<%= ce[0].GraduadosNAnos2anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradNAnos_ano1" name="tbNrGradNAnos_ano1" value="<%= ce[0].GraduadosNAnos1anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Nº de graduados em N+1 anos</td>
-                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano3" name="tbNrGradN1Anos_ano3" value="<%= ce[0].GraduadosN1Anos3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano2" name="tbNrGradN1Anos_ano2" value="<%= ce[0].GraduadosN1Anos2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano1" name="tbNrGradN1Anos_ano1" value="<%= ce[0].GraduadosN1Anos1anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano3" name="tbNrGradN1Anos_ano3" value="<%= ce[0].GraduadosN1Anos3anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano2" name="tbNrGradN1Anos_ano2" value="<%= ce[0].GraduadosN1Anos2anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN1Anos_ano1" name="tbNrGradN1Anos_ano1" value="<%= ce[0].GraduadosN1Anos1anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Nº de graduados em N+2 anos</td>
-                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano3" name="tbNrGradN2Anos_ano3" value="<%= ce[0].GraduadosN2Anos3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano2" name="tbNrGradN2Anos_ano2" value="<%= ce[0].GraduadosN2Anos2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano1" name="tbNrGradN2Anos_ano1" value="<%= ce[0].graduadosN2Anos1anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano3" name="tbNrGradN2Anos_ano3" value="<%= ce[0].GraduadosN2Anos3anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano2" name="tbNrGradN2Anos_ano2" value="<%= ce[0].GraduadosN2Anos2anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2Anos_ano1" name="tbNrGradN2Anos_ano1" value="<%= ce[0].graduadosN2Anos1anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Nº de graduados em mais de N+2 anos</td>
-                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano3" name="tbNrGradN2MAnos_ano3" value="<%= ce[0].GraduadosN2MAnos3anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano2" name="tbNrGradN2MAnos_ano2" value="<%= ce[0].GraduadosN2MAnos2anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano1" name="tbNrGradN2MAnos_ano1" value="<%= ce[0].GraduadosN2MAnos1anos %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano3" name="tbNrGradN2MAnos_ano3" value="<%= ce[0].GraduadosN2MAnos3anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano2" name="tbNrGradN2MAnos_ano2" value="<%= ce[0].GraduadosN2MAnos2anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" class="form-control" id="tbNrGradN2MAnos_ano1" name="tbNrGradN2MAnos_ano1" value="<%= ce[0].GraduadosN2MAnos1anos %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                     </tbody>
                 </table>
@@ -583,45 +583,45 @@
                     <tbody>
                         <tr>
                             <td>Estudantes estrangeiros matriculados no CE</td>
-                            <td><input type="text" id="estudEstragAnt" name="estudEstragAnt" value="<%= ce[0].estudEstragAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudEstragPen" name="estudEstragPen" value="<%= ce[0].estudEstragPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudEstragUlt" name="estudEstragUlt" value="<%= ce[0].estudEstragUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudEstragAnt" name="estudEstragAnt" value="<%= ce[0].estudEstragAnt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudEstragPen" name="estudEstragPen" value="<%= ce[0].estudEstragPen %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudEstragUlt" name="estudEstragUlt" value="<%= ce[0].estudEstragUlt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Estudantes em programas internacionais de mobilidade (in)</td>
-                            <td><input type="text" id="estudMobInAnt" name="estudMobInAnt" value="<%= ce[0].estudMobInAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudMobInPen" name="estudMobInPen" value="<%= ce[0].estudMobInPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudMobInUlt" name="estudMobInUlt" value="<%= ce[0].estudMobInUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobInAnt" name="estudMobInAnt" value="<%= ce[0].estudMobInAnt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobInPen" name="estudMobInPen" value="<%= ce[0].estudMobInPen %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobInUlt" name="estudMobInUlt" value="<%= ce[0].estudMobInUlt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Estudantes em programas internacionais de mobilidade (out)</td>
-                            <td><input type="text" id="estudMobOutAnt" name="estudMobOutAnt" value="<%= ce[0].estudMobOutAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudMobOutPen" name="estudMobOutPen" value="<%= ce[0].estudMobOutPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudMobOutUlt" name="estudMobOutUlt" value="<%= ce[0].estudMobOutUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobOutAnt" name="estudMobOutAnt" value="<%= ce[0].estudMobOutAnt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobOutPen" name="estudMobOutPen" value="<%= ce[0].estudMobOutPen %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudMobOutUlt" name="estudMobOutUlt" value="<%= ce[0].estudMobOutUlt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Docentes estrangeiros (in)</td>
-                            <td><input type="text" id="estudDocInAnt" name="estudDocInAnt" value="<%= ce[0].estudDocInAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudDocInPen" name="estudDocInPen" value="<%= ce[0].estudDocInPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudDocInUlt" name="estudDocInUlt" value="<%= ce[0].estudDocInUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocInAnt" name="estudDocInAnt" value="<%= ce[0].estudDocInAnt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocInPen" name="estudDocInPen" value="<%= ce[0].estudDocInPen %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocInUlt" name="estudDocInUlt" value="<%= ce[0].estudDocInUlt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Docentes (out)</td>
-                            <td><input type="text" id="estudDocOutAnt" name="estudDocOutAnt" value="<%= ce[0].estudDocOutAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudDocOutPen" name="estudDocOutPen" value="<%= ce[0].estudDocOutPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudDocOutUlt" name="estudDocOutUlt" value="<%= ce[0].estudDocOutUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocOutAnt" name="estudDocOutAnt" value="<%= ce[0].estudDocOutAnt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocOutPen" name="estudDocOutPen" value="<%= ce[0].estudDocOutPen %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudDocOutUlt" name="estudDocOutUlt" value="<%= ce[0].estudDocOutUlt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Pessoal técnico, administrativo e de gestão estrangeiro (in)</td>
-                            <td><input type="text" id="estudStaffInAnt" name="estudStaffInAnt" value="<%= ce[0].estudStaffInAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudStaffInPen" name="estudStaffInPen" value="<%= ce[0].estudStaffInPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudStaffInUlt" name="estudStaffInUlt" value="<%= ce[0].estudStaffInUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffInAnt" name="estudStaffInAnt" value="<%= ce[0].estudStaffInAnt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffInPen" name="estudStaffInPen" value="<%= ce[0].estudStaffInPen %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffInUlt" name="estudStaffInUlt" value="<%= ce[0].estudStaffInUlt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                         <tr>
                             <td>Pessoal técnico, administrativo e de gestão (out)</td>
-                            <td><input type="text" id="estudStaffOutAnt" name="estudStaffOutAnt" value="<%= ce[0].estudStaffOutAnt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudStaffOutPen" name="estudStaffOutPen" value="<%= ce[0].estudStaffOutPen %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
-                            <td><input type="text" id="estudStaffOutUlt" name="estudStaffOutUlt" value="<%= ce[0].estudStaffOutUlt %>" <% if(ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffOutAnt" name="estudStaffOutAnt" value="<%= ce[0].estudStaffOutAnt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffOutPen" name="estudStaffOutPen" value="<%= ce[0].estudStaffOutPen %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                            <td><input type="text" id="estudStaffOutUlt" name="estudStaffOutUlt" value="<%= ce[0].estudStaffOutUlt %>" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
                         </tr>
                     </tbody>
                 </table>
@@ -632,7 +632,7 @@
                 </div>  
             </div>
             <div class="row m-3">
-                <textarea id="tbIntRev" name="tbIntRev" rows="5" maxlength="3001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="tbIntRevCount" uimaxlength="3000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].tbIntRev %></textarea>
+                <textarea id="tbIntRev" name="tbIntRev" rows="5" maxlength="3001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="tbIntRevCount" uimaxlength="3000" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].tbIntRev %></textarea>
             </div>
         </div>
         <div class="container border ">

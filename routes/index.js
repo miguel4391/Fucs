@@ -321,7 +321,7 @@ router.get("/relCurso/:idCe/:anoLetivo", isLoggedIn, (req, res) => {
 						return res.status(500).send('Erro ao carregar os dados de abandono.');
 					}
 					console.log(dados)
-					res.render("relCurso", {ce:ce, fucs:fucs, dados:dados || [], drops:drops || [], idCe:req.params.idCe, anoLetivo:anoLetivo});
+					res.render("relCurso", {ce:ce, fucs:fucs, dados:dados || [], drops:drops || [], idCe:req.params.idCe, anoLetivo:anoLetivo, role:req.session.role});
 				})
 			})
 		})
