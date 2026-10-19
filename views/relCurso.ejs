@@ -632,7 +632,7 @@
                 </div>  
             </div>
             <div class="row m-3">
-                <textarea id="tbIntRev" name="tbIntRev" rows="5" maxlength="3001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="tbIntRevCount" uimaxlength="3000" <% if( role != "gestor" || ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].tbIntRev %></textarea>
+                <textarea id="tbIntRev" name="tbIntRev" rows="5" maxlength="3001" class="form-control" onchange="checkNumberOfChars(this);" onpaste="checkNumberOfChars(this);" onkeyup="checkNumberOfChars(this);" uidestino="tbIntRevCount" uimaxlength="3000" <% if(ce[0].finalizado==1){%> readonly <% } %>><%= ce[0].tbIntRev %></textarea>
             </div>
         </div>
         <div class="container border ">

@@ -835,47 +835,51 @@
                 <tbody>
                     <tr>
                         <td><b>A - Estudantes INSCRITOS na UC</b> (ver pauta dos serviços académicos)</td>
-                        <td style="max-width: 50px;"><input id="estudA" name="estudA" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudA : 0 %>"></td>
+                        <td style="max-width: 50px;"><input id="estudA" name="estudA" class="form-control form-control-sm" oninput="calcEstudB(); calcEstudD();" value="<%= relUC[0] ? relUC[0].estudA : 0 %>"></td>
                     </tr>
                     <tr>
                         <td><b>B - Estudantes AVALIADOS</b> (em pelo menos um dos momentos de avaliação)</td>
-                        <td style="max-width: 50px;"><input id="estudB" name="estudB" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudB : 0 %>"></td>
+                        <!-- CORREÇÃO: automático = A - D2 -->
+                        <td style="max-width: 50px;"><input id="estudB" name="estudB" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudB : 0 %>" readonly></td>
                     </tr>
                     <tr>
                         <td><b>C - Estudantes APROVADOS:</b></td>
-                        <td style="max-width: 50px;"><input id="estudC" name="estudC" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC : 0 %>"></td>
+                        <!-- CORREÇÃO: automático = C1+C2+C3+C4+C5 -->
+                        <td style="max-width: 50px;"><input id="estudC" name="estudC" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC : 0 %>" readonly></td>
                     </tr>
                     <tr>
                         <td>&nbsp;&nbsp;C1 - em avaliação contínua;</td>
-                        <td style="max-width: 50px;"><input id="estudC1" name="estudC1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC1 : 0 %>"></td>
+                        <td style="max-width: 50px;"><input id="estudC1" name="estudC1" class="form-control form-control-sm" oninput="calcEstudC();" value="<%= relUC[0] ? relUC[0].estudC1 : 0 %>"></td>
                     </tr>
                     <tr>
                         <td>&nbsp;&nbsp;C2 - em avaliação final: época normal;</td>
-                        <td style="max-width: 50px;"><input id="estudC2" name="estudC2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC2 : 0 %>"></td>
+                        <td style="max-width: 50px;"><input id="estudC2" name="estudC2" class="form-control form-control-sm" oninput="calcEstudC();" value="<%= relUC[0] ? relUC[0].estudC2 : 0 %>"></td>
                     </tr>
                     <tr>
                         <td>&nbsp;&nbsp;C3 - em avaliação final: época extraordinária;</td>
-                        <td style="max-width: 50px;"><input id="estudC3" name="estudC3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC3 : 0 %>"></td>
+                        <td style="max-width: 50px;"><input id="estudC3" name="estudC3" class="form-control form-control-sm" oninput="calcEstudC();" value="<%= relUC[0] ? relUC[0].estudC3 : 0 %>"></td>
                     </tr>
                     <tr>
                         <td>&nbsp;&nbsp;C4 - em avaliação final: época especial para estudantes finalistas;</td>
-                        <td style="max-width: 50px;"><input id="estudC4" name="estudC4" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC4 : 0 %>"></td>
+                        <td style="max-width: 50px;"><input id="estudC4" name="estudC4" class="form-control form-control-sm" oninput="calcEstudC();" value="<%= relUC[0] ? relUC[0].estudC4 : 0 %>"></td>
                     </tr>
                     <tr>
                         <td>&nbsp;&nbsp;C5 - em avaliação final: época especial para estud/ estatuto trab. estudante;</td>
-                        <td style="max-width: 50px;"><input id="estudC5" name="estudC5" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudC5 : 0 %>"></td>
+                        <td style="max-width: 50px;"><input id="estudC5" name="estudC5" class="form-control form-control-sm" oninput="calcEstudC();" value="<%= relUC[0] ? relUC[0].estudC5 : 0 %>"></td>
                     </tr>
                     <tr>
                         <td><b>D - Estudantes REPROVADOS</b></td>
-                        <td style="max-width: 50px;"><input id="estudD" name="estudD" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudD : 0 %>"></td>
+                        <!-- CORREÇÃO: automático = D1+D2 -->
+                        <td style="max-width: 50px;"><input id="estudD" name="estudD" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudD : 0 %>" readonly></td>
                     </tr>
                     <tr>
                         <td>&nbsp;&nbsp;D1 - avaliados;</td>
-                        <td style="max-width: 50px;"><input id="estudD1" name="estudD1" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudD1 : 0 %>"></td>
+                        <td style="max-width: 50px;"><input id="estudD1" name="estudD1" class="form-control form-control-sm" oninput="calcEstudD();" value="<%= relUC[0] ? relUC[0].estudD1 : 0 %>"></td>
                     </tr>
                     <tr>
                         <td>&nbsp;&nbsp;D2 - não avaliados;</td>
-                        <td style="max-width: 50px;"><input id="estudD2" name="estudD2" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudD2 : 0 %>"></td>
+                        <!-- D2 afeta o D (D1+D2) e também o B (A-D2), por isso chama as duas -->
+                        <td style="max-width: 50px;"><input id="estudD2" name="estudD2" class="form-control form-control-sm" oninput="calcEstudD(); calcEstudB();" value="<%= relUC[0] ? relUC[0].estudD2 : 0 %>"></td>
                     </tr>
                     <tr>
                         <td><b>E - Distribuição da CLASSIFICAÇÃO dos ESTUDANTES APROVADOS:</b></td>
@@ -893,6 +897,41 @@
                         <td>&nbsp;&nbsp;E3 - estudantes com notas entre 16 e 20 valores;</td>
                         <td style="max-width: 50px;"><input id="estudE3" name="estudE3" class="form-control form-control-sm" value="<%= relUC[0] ? relUC[0].estudE3 : 0 %>" readonly></td>
                     </tr>
+
+                    <script>
+                        function toNumber(v) {
+                            v = (v || '').toString().trim();
+                            return v === '' ? 0 : (parseFloat(v) || 0);
+                        }
+
+                        function calcEstudB() {
+                            const a = toNumber($('#estudA').val());
+                            const d2 = toNumber($('#estudD2').val());
+                            $('#estudB').val(a - d2);
+                        }
+
+                        function calcEstudC() {
+                            const c1 = toNumber($('#estudC1').val());
+                            const c2 = toNumber($('#estudC2').val());
+                            const c3 = toNumber($('#estudC3').val());
+                            const c4 = toNumber($('#estudC4').val());
+                            const c5 = toNumber($('#estudC5').val());
+                            $('#estudC').val(c1 + c2 + c3 + c4 + c5);
+                        }
+
+                        function calcEstudD() {
+                            const d1 = toNumber($('#estudD1').val());
+                            const d2 = toNumber($('#estudD2').val());
+                            $('#estudD').val(d1 + d2);
+                        }
+
+                        // Cálculo inicial ao carregar a página (para os valores já vindos da BD)
+                        $(document).ready(function () {
+                            calcEstudB();
+                            calcEstudC();
+                            calcEstudD();
+                        });
+                    </script>
                 </tbody>
             </table>
             <div class="col-3">
