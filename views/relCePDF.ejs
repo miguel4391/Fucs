@@ -1,5 +1,20 @@
 <%- include('partials/header') %>
 
+<%
+// Serializa um valor para dentro de um <script> de forma segura.
+// O JSON.stringify trata de quebras de linha, aspas, barras invertidas, etc.
+// O escape de "<" evita que um fecho de script dentro do texto termine o bloco mais cedo.
+const jsJson = (v) => JSON.stringify(v)
+    .replace(/</g, '\\u003c')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+
+// null/undefined passam a '' e o resto a texto (o mesmo que a tag de escape HTML fazia).
+const norm = (o) => Object.fromEntries(
+    Object.entries(o).map(([k, v]) => [k, v == null ? '' : String(v)])
+);
+%>
+
 <script src="/vendor/pdf/jspdf.umd.min.js"></script>
 <script src="/vendor/pdf/jspdf.plugin.autotable.min.js"></script>
 
@@ -7,41 +22,48 @@
 <meta charset="UTF-8">
 
 <script type="text/javascript">
+    // Dados do relatório, injetados UMA vez e de forma segura (JSON).
+    // Daqui para baixo usa-se ce0.<campo> e fuc0.<campo> em vez de injetar texto em literais.
+    const ce0  = <%- jsJson(norm(ce[0])) %>;
+    const fuc0 = <%- jsJson(norm(fucs[0])) %>;
+
+    // sanitize.js
     function sanitize(str) {
-        return String(encodingText(str))
-            //.replace(/[\x00-\x1F\x7F-\x9F]/g, "")  // remove caracteres de controlo invisíveis
-            //.replace(/\s+/g, " ")                  // colapsa espaços múltiplos
-            //.replace(/\t/g, "")
-            .replace("à", "à")
-            .replace("é", "é")
-            .replace("á", "á")
-            .replace("ç", "ç")
-            .replace("ã", "ã")
-            .replace("ção", "ção")
-            .replace("ó", "ó")
-            .replace("í", "í")
-            .replace("ú", "ú")
-            .replace("á́", "á")
-            .replace("\“", "\"")
-            .replace("\”", "\"")
-            .replace("á́", "á")
-            .replace("â", "â")
-            .replace("ê", "ê")
-            .replace("‑", "-")
-            .replace("á", "á")
-            .replace("à", "à")
-            .replace("â", "â")
-            .replace("−", "-")
-            .replace("‑", "-")
-            .replace("\"", "\"")
-            .replace("&amp;", "&")
-            .replace("&amp;", "&" )
-            .replace(" &#34;", "\"")
-            .replace("&gt;", ">")
-            .replace("\n", "")
-            //.replace(/[^\p{L}\d]+/u, ' ')
-            .trim();
+        let s = String(encodingText(str)); // mantido tal como estava
+
+        // 1) Compõe letra + acento combinante (NFD) em caractere único (NFC).
+        s = s.normalize('NFC');
+
+        // 2) Aspas curvas e hífenes "especiais" -> ASCII (todas as ocorrências)
+        s = s
+            .replace(/[\u201C\u201D]/g, '"')   // aspas curvas -> "
+            .replace(/[\u2011\u2212]/g, '-');  // hífen não separável e sinal de menos -> -
+
+        // 3) Entidades HTML (todas as ocorrências). &amp; por último.
+        s = s
+            .replace(/&gt;/g, '>')
+            .replace(/&lt;/g, '<')
+            .replace(/&#34;/g, '"')
+            .replace(/&#39;/g, "'")
+            .replace(/&amp;/g, '&');
+
+        // 4) Quebras de linha: normaliza \r\n para \n, mas MANTÉM as quebras
+        s = s.replace(/\r\n?/g, '\n');
+
+        return s.trim();
     }
+
+    // Diagnóstico: lista caracteres não-ASCII e de controlo, com o código Unicode.
+    //   debugChars(valor);
+    function debugChars(str) {
+        [...String(str)].forEach((c, i) => {
+            const cp = c.codePointAt(0);
+            if (cp > 126 || (cp < 32 && c !== '\n')) {
+                console.log(i, 'U+' + cp.toString(16).toUpperCase().padStart(4, '0'), JSON.stringify(c));
+            }
+        });
+    }
+
     function encodingText(str){
         const encoder = new TextEncoder();
         const utf8Array = encoder.encode(str);
@@ -56,13 +78,13 @@
         doc.setFontSize(8)
         
         for (var i = 1; i <= pageCount; i++) {
-            const fuc = doc.splitTextToSize(sanitize('Relatório Anual de Curso: <%= fucs[0].nomeCE %>'),70, {} )
+            const fuc = doc.splitTextToSize(sanitize('Relatório Anual de Curso: ' + fuc0.nomeCE),70, {} )
             doc.text(fuc ,14, 287,{align:'left'})
             doc.setPage(i)
             doc.text(sanitize('Página ' + String(i) + ' de ' + String(pageCount)), doc.internal.pageSize.width / 2, 287, {
             align: 'center'
             })
-            const curso = doc.splitTextToSize(sanitize('Ano Letivo de <%= ce[0].AnoLetivo %>'),70, {} )
+            const curso = doc.splitTextToSize(sanitize('Ano Letivo de ' + ce0.AnoLetivo),70, {} )
             doc.text(curso,doc.internal.pageSize.width -14, 287,{align:'right'})
             
         }
@@ -79,7 +101,7 @@
         const siglas = ['L-Enfermagem','L-Fisioterapia','L-Osteopatia','L-Farmácia','M-Enfermagem Médico-Cirúrgica na Área de Enfermagem à Pessoa em Situação Crónica','M-Enfermagem Médico-Cirúrgica na Área de Enfermagem à Pessoa em Situação Crítica','M-Enfermagem Comunitária na área de Enfermagem de Saúde Comunitária e de Saúde Pública','M-Enfermagem de Reabilitação','M-Enfermagem Comunitária na área de Enfermagem de Saúde Familiar','M – Fisioterapia','M – Osteopatia'];
 
         var img = new Image()
-        if(siglas.includes("<%= ce[0].CE %>"))
+        if(siglas.includes(ce0.CE))
             img.src = '/img/logo_essatla.png';
         else
             img.src = '/img/logo_old.png'
@@ -117,7 +139,7 @@
             },
             theme: 'grid',
         });
-        if(siglas.includes("<%= ce[0].CE %>"))
+        if(siglas.includes(ce0.CE))
             var headerTitle ={
                 fillColor: '#fec11f',     
                 textColor: [255, 255, 255],
@@ -147,7 +169,7 @@
         
 
         var header2a = ['Ano Letivo:'];
-        var data2a =  [[sanitize("<%= ce[0].AnoLetivo %>")]];
+        var data2a =  [[sanitize(ce0.AnoLetivo)]];
         doc.autoTable({
             startY:110,
             head: [header2a],
@@ -188,7 +210,7 @@
 
 
         var header2 = ['CE - Ciclo de Estudos:'];
-        var data2 =  [[sanitize("<%= fucs[0].nomeCE %>")]];
+        var data2 =  [[sanitize(fuc0.nomeCE)]];
         doc.autoTable({
             head: [header2],
             body: data2,
@@ -228,7 +250,7 @@
 
         
         var header3 =  ['Coordenador do Ciclo de Estudos'];
-        var data3 =  [[sanitize("<%= fucs[0].coordCe %>")]];
+        var data3 =  [[sanitize(fuc0.coordCe)]];
 
         doc.autoTable({
             startY:230,
@@ -276,7 +298,7 @@
         doc.addPage();
 
         var header5 = ['1. INTRODUÇÃO'];
-        var data5 = [['Este relatório foi elaborado no âmbito do SIGQ - Sistema Interno de Garantia da Qualidade da Atlântica - Instituto Universitário, com o objetivo de sintetizar os resultados da avaliação realizada pelos estudantes do ciclo de estudos <%= fucs[0].nomeCE %> no ano letivo de <%= ce[0].AnoLetivo %>.\n\nA ATLÂNTICA está comprometida com a melhoria contínua do desempenho organizacional, e este relatório desempenha um papel fundamental como instrumento de monitorização do ensino-aprendizagem no curso.\n\nCom recurso a mecanismos próprios, estratégias de autoavaliação e recolha e tratamento de dados, tendo em vista a melhoria contínua do ciclo de estudos, este documento abrange não apenas os inquéritos pedagógicos das unidades curriculares e dos docentes, mas também uma análise abrangente das taxas de sucesso escolar e eficiência formativa, abandono escolar, diplomados e dados da internacionalização, para além de indicadores associados à investigação e de atividades desenvolvidas em articulação com a comunidade.\n\nOs resultados obtidos são partilhados com a Reitoria e a Direção-geral da Entidade Instituidora a E. I. A. — Ensino, Investigação e Administração, S. A., visando contribuir para o aprimoramento contínuo do curso.\n\nA análise dos relatórios deve, sempre que os resultados o justifiquem, conduzir à formulação de planos de melhoria.']] 
+        var data5 = [['Este relatório foi elaborado no âmbito do SIGQ - Sistema Interno de Garantia da Qualidade da Atlântica - Instituto Universitário, com o objetivo de sintetizar os resultados da avaliação realizada pelos estudantes do ciclo de estudos ' + fuc0.nomeCE + ' no ano letivo de ' + ce0.AnoLetivo + '.\n\nA ATLÂNTICA está comprometida com a melhoria contínua do desempenho organizacional, e este relatório desempenha um papel fundamental como instrumento de monitorização do ensino-aprendizagem no curso.\n\nCom recurso a mecanismos próprios, estratégias de autoavaliação e recolha e tratamento de dados, tendo em vista a melhoria contínua do ciclo de estudos, este documento abrange não apenas os inquéritos pedagógicos das unidades curriculares e dos docentes, mas também uma análise abrangente das taxas de sucesso escolar e eficiência formativa, abandono escolar, diplomados e dados da internacionalização, para além de indicadores associados à investigação e de atividades desenvolvidas em articulação com a comunidade.\n\nOs resultados obtidos são partilhados com a Reitoria e a Direção-geral da Entidade Instituidora a E. I. A. — Ensino, Investigação e Administração, S. A., visando contribuir para o aprimoramento contínuo do curso.\n\nA análise dos relatórios deve, sempre que os resultados o justifiquem, conduzir à formulação de planos de melhoria.']] 
         doc.autoTable({
             head: [header5],
             body: data5,
@@ -308,7 +330,7 @@
         });
 
         var header6 = ['2. METODOLOGIA'];
-        var data6 = [['No âmbito da avaliação das unidades curriculares lecionadas no ano letivo de <%= ce[0].AnoLetivo %> e respetivos docentes, optou-se por utilizar a plataforma <%= ce[0].platInquerito %> para disponibilizar o questionário de monitorização do ensino-aprendizagem.\n\nOs questionários foram enviados para os e-mails institucionais de cada estudante inscrito no ciclo de estudos, bem como a todos os estudantes inscritos em unidades curriculares ao abrigo do n.º 4 do artigo 46.º-A do Decreto-Lei n.º 65/2018, de 16 de agosto, sendo os resultados posteriormente analisados.\n\nPara a avaliação da satisfação, recorreu-se a uma escala de classificação de Likert, que varia entre 1 e 5. Nesta escala, o valor 1 representa total insatisfação e o valor 5, total satisfação.\n\nEsta escala permite avaliar a experiência em relação às unidades curriculares frequentadas e o desempenho dos docentes.\n\nAo longo de todo o processo, está assegurada a confidencialidade dos dados em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD).\n\nNo respeitante aos resultados académicos necessários para a elaboração deste relatório, procedeu-se à importação de dados da Plataforma de Gestão Académica - Sophia Plus.']] 
+        var data6 = [['No âmbito da avaliação das unidades curriculares lecionadas no ano letivo de ' + ce0.AnoLetivo + ' e respetivos docentes, optou-se por utilizar a plataforma ' + ce0.platInquerito + ' para disponibilizar o questionário de monitorização do ensino-aprendizagem.\n\nOs questionários foram enviados para os e-mails institucionais de cada estudante inscrito no ciclo de estudos, bem como a todos os estudantes inscritos em unidades curriculares ao abrigo do n.º 4 do artigo 46.º-A do Decreto-Lei n.º 65/2018, de 16 de agosto, sendo os resultados posteriormente analisados.\n\nPara a avaliação da satisfação, recorreu-se a uma escala de classificação de Likert, que varia entre 1 e 5. Nesta escala, o valor 1 representa total insatisfação e o valor 5, total satisfação.\n\nEsta escala permite avaliar a experiência em relação às unidades curriculares frequentadas e o desempenho dos docentes.\n\nAo longo de todo o processo, está assegurada a confidencialidade dos dados em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD).\n\nNo respeitante aos resultados académicos necessários para a elaboração deste relatório, procedeu-se à importação de dados da Plataforma de Gestão Académica - Sophia Plus.']] 
         doc.autoTable({
             head: [header6],
             body: data6,
@@ -339,12 +361,12 @@
         });
 
         doc.addPage();
-        let per1sem = parseFloat('<%= ce[0].PercResp1Sem %>');
-        let per2sem = parseFloat('<%= ce[0].PercResp2Sem %>');
+        let per1sem = parseFloat(ce0.PercResp1Sem);
+        let per2sem = parseFloat(ce0.PercResp2Sem);
         let mediaAnual = (per1sem + per2sem)/2
 
         var header7 = ['3. SÍNTESE DA APRECIAÇÃO GLOBAL DO QUESTIONÁRIO DA MONITORIZAÇÃO DO ENSINO-APRENDIZAGEM'];
-        var data7 = [['O GAQ - Gabinete de Autoavaliação para a Qualidade enviou convites do questionário de monitorização do ensino-aprendizagem aos estudantes inscritos no ciclo de estudos <%= fucs[0].nomeCE %>, bem como aos inscritos em unidades curriculares ao abrigo do n.º 4 do artigo 46.º-A do Decreto-Lei n.º 65/2018, de 16 de agosto.\n\nEste processo foi efetuado com uma antecedência mínima de duas semanas antes do termo de cada semestre do ano letivo.\n\nOs resultados detalhados deste questionário são enviados no final de cada semestre para a Coordenação do Curso, Reitoria e Direção-geral da Entidade Instituidora, com o propósito de contribuir para a melhoria contínua do ensino-aprendizagem.\n\nNo ano letivo em questão, temos um total de <%= ce[0].NrInscritos %> estudantes inscritos no CE <%= fucs[0].nomeCE %> e um total de <%= ce[0].nrIscritUC %> inscritos em unidades curriculares ao abrigo do n.º 4 do artigo 46.º-A do Decreto-Lei n.º 65/2018, de 16 de agosto.\n\nNo primeiro semestre, foram obtidas <%= ce[0].NrResp1Sem %> respostas completas, o que corresponde a cerca de <%= ce[0].PercResp1Sem %>% das respostas em relação ao total de estudantes inscritos.\n\nNo segundo semestre, foram recebidas <%= ce[0].NrResp2Sem %> respostas completas, representando aproximadamente <%= ce[0].PercResp2Sem %>% das respostas em relação ao total de estudantes inscritos.\n\nA média anual em valores percentuais de respostas em relação ao total de estudantes inscritos foi de aproximadamente ' + mediaAnual + '%.\n\nA avaliação das unidades curriculares pelos estudantes no ano letivo resultou numa média anual de <%= ce[0].MediaInq %> na escala de Likert, em conformidade com os indicadores apresentados na Tabela 1.']]
+        var data7 = [['O GAQ - Gabinete de Autoavaliação para a Qualidade enviou convites do questionário de monitorização do ensino-aprendizagem aos estudantes inscritos no ciclo de estudos ' + fuc0.nomeCE + ', bem como aos inscritos em unidades curriculares ao abrigo do n.º 4 do artigo 46.º-A do Decreto-Lei n.º 65/2018, de 16 de agosto.\n\nEste processo foi efetuado com uma antecedência mínima de duas semanas antes do termo de cada semestre do ano letivo.\n\nOs resultados detalhados deste questionário são enviados no final de cada semestre para a Coordenação do Curso, Reitoria e Direção-geral da Entidade Instituidora, com o propósito de contribuir para a melhoria contínua do ensino-aprendizagem.\n\nNo ano letivo em questão, temos um total de ' + ce0.NrInscritos + ' estudantes inscritos no CE ' + fuc0.nomeCE + ' e um total de ' + ce0.nrIscritUC + ' inscritos em unidades curriculares ao abrigo do n.º 4 do artigo 46.º-A do Decreto-Lei n.º 65/2018, de 16 de agosto.\n\nNo primeiro semestre, foram obtidas ' + ce0.NrResp1Sem + ' respostas completas, o que corresponde a cerca de ' + ce0.PercResp1Sem + '% das respostas em relação ao total de estudantes inscritos.\n\nNo segundo semestre, foram recebidas ' + ce0.NrResp2Sem + ' respostas completas, representando aproximadamente ' + ce0.PercResp2Sem + '% das respostas em relação ao total de estudantes inscritos.\n\nA média anual em valores percentuais de respostas em relação ao total de estudantes inscritos foi de aproximadamente ' + mediaAnual + '%.\n\nA avaliação das unidades curriculares pelos estudantes no ano letivo resultou numa média anual de ' + ce0.MediaInq + ' na escala de Likert, em conformidade com os indicadores apresentados na Tabela 1.']]
 
         doc.autoTable({
             head: [header7],
@@ -383,17 +405,17 @@
 
     
         var header8 = ['AVALIAÇÃO DAS UNIDADES CURRICULARES', 'MÉDIA (ANO LETIVO)'];
-        var data8 = [['Clareza na definição dos objetivos da unidade curricular', '<%= ce[0].Clareza %>'],
-                    ['Grau de interesse da matéria lecionada', '<%= ce[0].Interesse %>'],
-                    ['Articulação com as outras unidades curriculares do curso', '<%= ce[0].ArticulaOutUC %>'],
-                    ['Grau de dificuldade da matéria', '<%= ce[0].Dificuld %>'],
-                    ['Relação entre conteúdo e carga horária', '<%= ce[0].RelConteudo %>'],
-                    ['Articulação entre aulas teóricas e práticas (quando aplicável)', '<%= ce[0].ArticulTeoPratic %>'],
-                    ['Disponibilidade da bibliografia indicada', '<%= ce[0].DispBiblio %>'],
-                    ['Clareza dos elementos de avaliação, face aos objetivos da unidade curricular', '<%= ce[0].ClarezaElemAval %>'],
-                    ['Disponibilidade e adequação dos meios técnicos utilizados (quando aplicável)', '<%= ce[0].DisponMeios %>'],
-                    ['Articulação da unidade curricular com a realidade atual', '<%= ce[0].ArticulaRealidade %>'],
-                    ['MÉDIA GERAL', '<%= ce[0].MediaInq %>']]
+        var data8 = [['Clareza na definição dos objetivos da unidade curricular', ce0.Clareza],
+                    ['Grau de interesse da matéria lecionada', ce0.Interesse],
+                    ['Articulação com as outras unidades curriculares do curso', ce0.ArticulaOutUC],
+                    ['Grau de dificuldade da matéria', ce0.Dificuld],
+                    ['Relação entre conteúdo e carga horária', ce0.RelConteudo],
+                    ['Articulação entre aulas teóricas e práticas (quando aplicável)', ce0.ArticulTeoPratic],
+                    ['Disponibilidade da bibliografia indicada', ce0.DispBiblio],
+                    ['Clareza dos elementos de avaliação, face aos objetivos da unidade curricular', ce0.ClarezaElemAval],
+                    ['Disponibilidade e adequação dos meios técnicos utilizados (quando aplicável)', ce0.DisponMeios],
+                    ['Articulação da unidade curricular com a realidade atual', ce0.ArticulaRealidade],
+                    ['MÉDIA GERAL', ce0.MediaInq]]
         
         doc.autoTable({
             head: [header8],
@@ -415,7 +437,7 @@
         doc.addPage();
 
         var header9 = ['4. SÍNTESE DOS RESULTADOS ESCOLARES NAS UNIDADES CURRICULARES DO CURSO'];
-        var data9 = [['Os resultados académicos discriminados alcançados no ano letivo de <%= ce[0].AnoLetivo %> nas unidades curriculares que compõem o plano de estudos do CE, são apresentados pela Tabela 2, com o desempenho dos estudantes em cada unidade curricular, evidenciando as médias obtidas, bem como as respetivas percentagens de aprovação e reprovação.']];
+        var data9 = [['Os resultados académicos discriminados alcançados no ano letivo de ' + ce0.AnoLetivo + ' nas unidades curriculares que compõem o plano de estudos do CE, são apresentados pela Tabela 2, com o desempenho dos estudantes em cada unidade curricular, evidenciando as médias obtidas, bem como as respetivas percentagens de aprovação e reprovação.']];
 
         doc.autoTable({
             head: [header9],
@@ -446,7 +468,7 @@
         });
 
         const currentY2 = doc.lastAutoTable.finalY + 5;
-        const text2 = "Tabela 2 – Resultados escolares nas unidades curriculares do CE no ano letivo de <%= ce[0].AnoLetivo %> [1].";
+        const text2 = "Tabela 2 – Resultados escolares nas unidades curriculares do CE no ano letivo de " + ce0.AnoLetivo + " [1].";
         const textWidth2 = doc.getTextWidth(text2);
 
         const x2 = (pageWidth - textWidth2) / 2;
@@ -455,7 +477,7 @@
         
         
         var header10 = ['ANO', 'UNIDADE CURRICULAR','INSCRITOS', 'MÉDIA', 'REPROVADOS (%)', 'APROVADOS (%)'];
-        const dados = <%- JSON.stringify(dados) %>;
+        const dados = <%- jsJson(dados) %>;
     
         let data10 = [];
 
@@ -500,7 +522,7 @@
         const usableWidth2a = pageWidth2a - margin2a * 2;
         
         const currentY2a = doc.lastAutoTable.finalY + 5;
-        const text2a = "[1] Resultados das unidades curriculares da <%= fucs[0].nomeCE %> extraídos da Plataforma de Gestão Académica - Sophia Plus a <%= ce[0].DataSophUC %>.";
+        const text2a = "[1] Resultados das unidades curriculares da " + fuc0.nomeCE + " extraídos da Plataforma de Gestão Académica - Sophia Plus a " + ce0.DataSophUC + ".";
         const wrapped2a = doc.splitTextToSize(text2a, usableWidth2a);
         doc.setFontSize(8);
         doc.text( wrapped2a, margin2a, currentY2a);
@@ -508,7 +530,7 @@
         doc.addPage();
         
         var header11 = ['5. ABANDONO ESCOLAR'];
-        var data11 = [['As Tabelas 3 e 4 apresentam os dados em relação ao número de estudantes, divididos por ano curricular, que não procederam à renovação da inscrição na <%= fucs[0].nomeCE %> para o presente ano letivo, bem como os dados relacionados com o número de inscritos no CE que anularam a inscrição neste ano letivo.']];
+        var data11 = [['As Tabelas 3 e 4 apresentam os dados em relação ao número de estudantes, divididos por ano curricular, que não procederam à renovação da inscrição na ' + fuc0.nomeCE + ' para o presente ano letivo, bem como os dados relacionados com o número de inscritos no CE que anularam a inscrição neste ano letivo.']];
         
         doc.autoTable({
             head: [header11],
@@ -551,7 +573,7 @@
         doc.text( text3, x3, currentY3);
 
         var header12 = ['ANO CURRICULAR', 'Nº DE ESTUDANTES QUE ABANDONARAM O CURSO'];
-        const dados2 = <%- JSON.stringify(drops) %>;
+        const dados2 = <%- jsJson(drops) %>;
 
         var data12 = [];
         dados2.forEach(element => {
@@ -583,7 +605,7 @@
         const usableWidth = pageWidth3a - margin * 2;
         
         const currentY3a = doc.lastAutoTable.finalY + 5;
-        const text3a = "[2] Dados sobre estudantes inscritos no ano letivo anterior e que não efetuaram a inscrição para o ano letivo de <%= ce[0].AnoLetivo %>,\nextraídos da Plataforma de Gestão Académica - Sophia Plus a <%= ce[0].DataSophInscri %>.";
+        const text3a = "[2] Dados sobre estudantes inscritos no ano letivo anterior e que não efetuaram a inscrição para o ano letivo de " + ce0.AnoLetivo + ",\nextraídos da Plataforma de Gestão Académica - Sophia Plus a " + ce0.DataSophDiplom + ".";
         const wrapped = doc.splitTextToSize(text3a, usableWidth);
         doc.setFontSize(8);
         doc.text( wrapped, margin, currentY3a);
@@ -601,7 +623,6 @@
         doc.text( text4, x4, currentY4);
 
         var header13 = ['ANO CURRICULAR', 'Nº DE ESTUDANTES QUE ANULARAM A INSCRIÇÃO'];
-        const dados3 = <%- JSON.stringify(drops) %>;
 
         var data13 = [];
         dados2.forEach(element => {
@@ -636,7 +657,7 @@
         const usableWidth4a = pageWidth4a - margin4a * 2;
         
         const currentY4a = doc.lastAutoTable.finalY + 5;
-        const text4a = "[3] Dados extraídos da Plataforma de Gestão Académica - Sophia Plus, a <%= ce[0].DataSophInscri %>.";
+        const text4a = "[3] Dados extraídos da Plataforma de Gestão Académica - Sophia Plus, a " + ce0.DataSophDiplom + ".";
         const wrapped4a = doc.splitTextToSize(text4a, usableWidth4a);
         doc.setFontSize(8);
         doc.text( wrapped4a, margin4a, currentY4a);
@@ -647,7 +668,7 @@
         let finalY1 = doc.lastAutoTable.finalY;
 
         var header14 = ['6. ESTUDANTES DIPLOMADOS'];
-        var data14 = [['A Tabela 5 apresenta um panorama detalhado sobre os estudantes diplomados no ciclo de estudos <%= fucs[0].nomeCE %> no ano letivo de <%= ce[0].AnoLetivo %>.']];
+        var data14 = [['A Tabela 5 apresenta um panorama detalhado sobre os estudantes diplomados no ciclo de estudos ' + fuc0.nomeCE + ' no ano letivo de ' + ce0.AnoLetivo + '.']];
         
 
         doc.autoTable({
@@ -694,7 +715,7 @@
 
         
         var header15 = ['N.º INSCRITOS (ÚLTIMO ANO)', 'N.º DIPLOMADOS', 'TAXA DE APROVAÇÂO'];
-        var data15 = [['<%= ce[0].NrIncriUltAno %> ', '<%= ce[0].NrDiplom %>', '<%= ce[0].TxAprov %>']]
+        var data15 = [[ce0.NrIncriUltAno + ' ', ce0.NrDiplom, ce0.TxAprov]]
         
         doc.autoTable({
             head: [header15],
@@ -713,16 +734,16 @@
                 }
             }
         });
-        let anoAtual = '<%= ce[0].AnoLetivo %>'.split('/');
+        let anoAtual = ce0.AnoLetivo.split('/');
         let antepenultimo = parseInt(anoAtual[0]) - 3;
         let penultimo = parseInt(anoAtual[0]) - 2;
         let ultimo =parseInt(anoAtual[0]) -1
         var header16 = ['INDICADOR', 'ANTEPENÚLTIMO ANO\n(' + antepenultimo + "/" + (penultimo % 100) + ')'  , 'PENÚLTIMO ANO\n(' + penultimo + '/' + (ultimo % 100) + ')', 'ÚLTIMO ANO\n(' + ultimo + '/' + (anoAtual[0] % 100) + ')'];
-        var data16 = [['Nª de graduados', '<%= ce[0].Graduados3anos %>','<%= ce[0].Graduados2anos %>', '<%= ce[0].Graduados1ano %>'],
-                    ['Nº de graduados em N anos', '<%= ce[0].GraduadosNAnos3anos %>','<%= ce[0].GraduadosNAnos2anos %>', '<%= ce[0].GraduadosNAnos1anos %>'],
-                    ['Nº de graduados em N+1 anos', '<%= ce[0].GraduadosN1Anos3anos %>','<%= ce[0].GraduadosN1Anos2anos %>', '<%= ce[0].GraduadosN1Anos1anos %>'],
-                    ['Nº de graduados em N+2 anos', '<%= ce[0].GraduadosN2Anos3anos %>','<%= ce[0].GraduadosN2Anos2anos %>', '<%= ce[0].graduadosN2Anos1anos %>'],
-                    ['Nº de graduados em mais de N+2 anos', '<%= ce[0].GraduadosN2MAnos3anos %>','<%= ce[0].GraduadosN2MAnos2anos %>', '<%= ce[0].GraduadosN2MAnos1anos %>']]
+        var data16 = [['Nª de graduados', ce0.Graduados3anos, ce0.Graduados2anos, ce0.Graduados1ano],
+                    ['Nº de graduados em N anos', ce0.GraduadosNAnos3anos, ce0.GraduadosNAnos2anos, ce0.GraduadosNAnos1anos],
+                    ['Nº de graduados em N+1 anos', ce0.GraduadosN1Anos3anos, ce0.GraduadosN1Anos2anos, ce0.GraduadosN1Anos1anos],
+                    ['Nº de graduados em N+2 anos', ce0.GraduadosN2Anos3anos, ce0.GraduadosN2Anos2anos, ce0.graduadosN2Anos1anos],
+                    ['Nº de graduados em mais de N+2 anos', ce0.GraduadosN2MAnos3anos, ce0.GraduadosN2MAnos2anos, ce0.GraduadosN2MAnos1anos]]
 
 
         doc.autoTable({
@@ -753,8 +774,8 @@
         const margin5a = 16;   // left/right margin
         const usableWidth5a = pageWidth4a - margin4a * 2;
         
-        const currentY5a = doc.lastAutoTable.finalY + 5;
-        const text5a = "[4] Dados extraídos da Plataforma de Gestão Académica - Sophia Plus, a <%= ce[0].DataSophDiplom %>";
+        const currentY5a = doc.lastAutoTable.finalY + 2;
+        const text5a = "[4] Dados extraídos da Plataforma de Gestão Académica - Sophia Plus, a " + ce0.DataSophDiplom;
         const wrapped5a = doc.splitTextToSize(text5a, usableWidth5a);
         doc.setFontSize(8);
         doc.text( wrapped5a, margin5a, currentY5a);
@@ -763,7 +784,7 @@
         doc.addPage();
 
         var header17Int = ['7. INTERNACIONALIZAÇÃO'];
-        var data17Int = [['A Tabela 6 apresenta os resultados da internacionalização do CE no ano letivo de <%= ce[0].AnoLetivo %>: mobilidade de estudantes, docentes e de pessoal técnico, administrativo e de gestão.']]
+        var data17Int = [['A Tabela 6 apresenta os resultados da internacionalização do CE no ano letivo de ' + ce0.AnoLetivo + ': mobilidade de estudantes, docentes e de pessoal técnico, administrativo e de gestão.']]
         doc.autoTable({
             //startY:nextTableStart2,
             head: [header17Int],
@@ -805,13 +826,13 @@
         doc.text( text5int, x5int, currentY5int);
 
         var header17IntTbl = ['INDICADOR', 'ANTEPENÚLTIMO ANO\n(' + antepenultimo + "/" + (penultimo % 100) + ')', 'PENÚLTIMO ANO\n(' + penultimo + '/' + (ultimo % 100) + ')', 'ÚLTIMO ANO\n(' + ultimo + '/' + (anoAtual[0] % 100) + ')'];
-        var data17IntTbl = [['Estudantes estrangeiros matriculados no CE','<%= ce[0].estudEstragAnt %> ', '<%= ce[0].estudEstragPen %>', '<%= ce[0].estudEstragUlt %>'],
-                            ['Estudantes em programas internacionais de mobilidade (in)','<%= ce[0].estudMobInAnt %> ','<%= ce[0].estudMobInPen %> ','<%= ce[0].estudMobInUlt %> '],
-                            ['Estudantes em programas internacionais de mobilidade (out)','<%= ce[0].estudMobOutAnt %> ','<%= ce[0].estudMobOutPen %> ','<%= ce[0].estudMobOutUlt %> '],
-                            ['Docentes estrangeiros (in)','<%= ce[0].estudDocInAnt %> ','<%= ce[0].estudDocInPen %> ','<%= ce[0].estudDocInUlt %> '],
-                            ['Docentes (out)','<%= ce[0].estudDocOutAnt %> ','<%= ce[0].estudDocOutPen %> ','<%= ce[0].estudDocOutUlt %> '],
-                            ['Pessoal técnico, administrativo e de gestão estrangeiro (in)','<%= ce[0].estudStaffInAnt %> ','<%= ce[0].estudStaffInPen %> ','<%= ce[0].estudStaffInUlt %> '],
-                            ['Pessoal técnico, administrativo e de gestão (out)','<%= ce[0].estudStaffOutAnt %> ','<%= ce[0].estudStaffOutPen %> ','<%= ce[0].estudStaffOutUlt %> ']]
+        var data17IntTbl = [['Estudantes estrangeiros matriculados no CE', ce0.estudEstragAnt + ' ', ce0.estudEstragPen, ce0.estudEstragUlt],
+                            ['Estudantes em programas internacionais de mobilidade (in)', ce0.estudMobInAnt + ' ', ce0.estudMobInPen + ' ', ce0.estudMobInUlt + ' '],
+                            ['Estudantes em programas internacionais de mobilidade (out)', ce0.estudMobOutAnt + ' ', ce0.estudMobOutPen + ' ', ce0.estudMobOutUlt + ' '],
+                            ['Docentes estrangeiros (in)', ce0.estudDocInAnt + ' ', ce0.estudDocInPen + ' ', ce0.estudDocInUlt + ' '],
+                            ['Docentes (out)', ce0.estudDocOutAnt + ' ', ce0.estudDocOutPen + ' ', ce0.estudDocOutUlt + ' '],
+                            ['Pessoal técnico, administrativo e de gestão estrangeiro (in)', ce0.estudStaffInAnt + ' ', ce0.estudStaffInPen + ' ', ce0.estudStaffInUlt + ' '],
+                            ['Pessoal técnico, administrativo e de gestão (out)', ce0.estudStaffOutAnt + ' ', ce0.estudStaffOutPen + ' ', ce0.estudStaffOutUlt + ' ']]
         
         doc.autoTable({
             head: [header17IntTbl],
@@ -844,13 +865,14 @@
         const margin5tbnInt = 16;   // left/right margin
         const usableWidth5tbnInt = pageWidth4a - margin4a * 2;
         const currentY5tbnInt = doc.lastAutoTable.finalY + 5;
-        const text5tbnInt = "[5] Dados extraídos da Plataforma de Gestão de Académica - Sophia Plus, a <%= ce[0].DtaSophInter %>";
+        const text5tbnInt = "[5] Dados extraídos da Plataforma de Gestão de Académica - Sophia Plus, a " + ce0.DtaSophInter;
         const wrapped5tbnInt = doc.splitTextToSize(text5tbnInt, usableWidth5tbnInt);
         doc.setFontSize(8);
         doc.text( wrapped5tbnInt, margin5tbnInt, currentY5tbnInt);
 
         var header17IntTxt = ['Participação em redes internacionais com relevância para o CE'];
-        var data17IntTxt = [['<%= ce[0].tbIntRev %>']];
+        // Campo de texto livre (várias linhas): passa pelo sanitize como os restantes
+        var data17IntTxt = [[sanitize(ce0.tbIntRev)]];
         doc.autoTable({
             head: [header17IntTxt],
             body: data17IntTxt,
@@ -879,7 +901,7 @@
         });
 
         var header17 = ['8. ATIVIDADES DE ARTICULAÇÃO COM A COMUNIDADE DESENVOLVIDA NO ÂMBITO DO CE'];
-        var data17 = [['Atividades de desenvolvimento tecnológico e artístico, prestação de serviços à comunidade e formação avançada na(s) área(s) científica(s) fundamental(ais) do ciclo de estudos, e seu contributo real para o desenvolvimento nacional, regional e local, a cultura científica e a ação cultural, desportiva e artística:'],[sanitize(`<%= ce[0].AtivComunidade %>`)]];
+        var data17 = [['Atividades de desenvolvimento tecnológico e artístico, prestação de serviços à comunidade e formação avançada na(s) área(s) científica(s) fundamental(ais) do ciclo de estudos, e seu contributo real para o desenvolvimento nacional, regional e local, a cultura científica e a ação cultural, desportiva e artística:'],[sanitize(ce0.AtivComunidade)]];
         
         doc.autoTable({
             head: [header17],
@@ -923,7 +945,7 @@
         });
 
         var header18 = [`9. ATIVIDADES DE INVESTIGAÇÃO CIENTÍFICA RELACIONADA COM O CE`];
-        var data18 = [['Lista dos principais projetos e/ou parcerias nacionais e internacionais em que se integram as atividades científicas, tecnológicas, culturais e artísticas desenvolvidas na área do ciclo de estudos incluindo, quando aplicável, indicação dos principais projetos financiados e do volume de financiamento envolvido:'],[sanitize(`<%= ce[0].AtivInvestig %>`)]];
+        var data18 = [['Lista dos principais projetos e/ou parcerias nacionais e internacionais em que se integram as atividades científicas, tecnológicas, culturais e artísticas desenvolvidas na área do ciclo de estudos incluindo, quando aplicável, indicação dos principais projetos financiados e do volume de financiamento envolvido:'],[sanitize(ce0.AtivInvestig)]];
         
         doc.autoTable({
             head: [header18],
@@ -966,9 +988,9 @@
             }
         });
 
-        if(typeof '<%= ce[0].pubTot %>' !== "undefined" && '<%= ce[0].pubTot %>' > 0  ){
+        if(Number(ce0.pubTot) > 0){
             var header17Inv = ['Produção científica'];
-            var data17IntInv = [['Foram publicados de um total de <%= ce[0].pubTot %> artigos em revistas científicas. Considerando os principais indicadores disponíveis temos a seguinte distribuição (tabela 7): ']];
+            var data17IntInv = [['Foram publicados de um total de ' + ce0.pubTot + ' artigos em revistas científicas. Considerando os principais indicadores disponíveis temos a seguinte distribuição (tabela 7): ']];
             doc.autoTable({
                 head: [header17Inv],
                 body: data17IntInv,
@@ -1003,11 +1025,11 @@
             doc.text( text5inv, x5inv, currentY5inv);
 
             var header17InvTbl = ['INDICADOR', 'QUARTIL 1', 'QUARTIL 2', 'QUARTIL 3', 'QUARTIL 4', 'N'];
-            var data17InvTbl = [['Web of Science - WoS - Clarivate','<%= ce[0].wosq1 %> ', '<%= ce[0].wosq2 %>', '<%= ce[0].wosq3 %>','<%= ce[0].wosq4 %>','<%= ce[0].wosn %>' ],
-                                ['Scopus (Elsevier)','<%= ce[0].elsq1 %> ','<%= ce[0].elsq2 %> ','<%= ce[0].elsq3 %> ','<%= ce[0].elsq4 %> ', '<%= ce[0].elsn %> '],
-                                ['Scimago Journal Ranking (SJR)/ Scopus','<%= ce[0].sjrq1 %> ','<%= ce[0].sjrq2 %> ','<%= ce[0].sjrq3 %> ','<%= ce[0].sjrq4 %> ','<%= ce[0].sjrn %> '],
-                                ['Outros (ex. CINAHL Complete/ Latindex/ Redalyc/ SciELO/ ...)','','','','','<%= ce[0].outn %> '],
-                                ['','','','', 'Total:', '<%= ce[0].pubTot %> ']]
+            var data17InvTbl = [['Web of Science - WoS - Clarivate', ce0.wosq1 + ' ', ce0.wosq2, ce0.wosq3, ce0.wosq4, ce0.wosn],
+                                ['Scopus (Elsevier)', ce0.elsq1 + ' ', ce0.elsq2 + ' ', ce0.elsq3 + ' ', ce0.elsq4 + ' ', ce0.elsn + ' '],
+                                ['Scimago Journal Ranking (SJR)/ Scopus', ce0.sjrq1 + ' ', ce0.sjrq2 + ' ', ce0.sjrq3 + ' ', ce0.sjrq4 + ' ', ce0.sjrn + ' '],
+                                ['Outros (ex. CINAHL Complete/ Latindex/ Redalyc/ SciELO/ ...)','','','','', ce0.outn + ' '],
+                                ['','','','', 'Total:', ce0.pubTot + ' ']]
             
             doc.autoTable({
                 head: [header17InvTbl],
@@ -1069,127 +1091,43 @@
 
         let finalY = doc.lastAutoTable.finalY;
 
-        let revCient = sanitize('<%= ce[0].lbRevCient %>')
-        if(typeof revCient !== "undefined" && typeof revCient === 'string' && sanitize('<%= ce[0].lbRevCient %>').trim() != ""){
-            var headerRevCient = ['Artigos em revistas científicas'];
-            var data17IRevCient = [[sanitize('<%= ce[0].lbRevCient %>')]];
-            doc.autoTable({
-                startY: finalY - 2,
-                head: [headerRevCient],
-                body: data17IRevCient,
-                showHead: 'firstPage',
+        // Os 4 campos de publicações são texto livre com várias linhas (uma referência por linha).
+        // Chegam já como valores JS (ce0.*), por isso as quebras de linha não partem nada.
+        const revCient = sanitize(ce0.lbRevCient);
+        const livros   = sanitize(ce0.lbLivro);
+        const atas     = sanitize(ce0.lbAtas);
+        const outPub   = sanitize(ce0.lbOutPub);
 
-                columnStyles: {
-                    0: { halign: 'left' } 
-                },
-                headerStyles:{
-                    fillColor: '#909691',     
-                    textColor: [255, 255, 255],
-                    halign: 'left',
-                    lineWidth: 0.2,
-                    lineColor: '#909691',
-                    fontSize:9,
-                },
-                theme: 'plain', 
-                didParseCell: function (data) {
-                    // Identify the last row ("MÉDIA GERAL")
-                    if (data.row.index === data8.length - 1) {
-                        data.cell.styles.fontStyle = 'bold';
-                    }
-                }
-            });
-        }
-        
-        if(typeof (sanitize('<%= ce[0].lbLivro %>')) !== "undefined" && typeof (sanitize('<%= ce[0].lbLivro %>')) === 'string' && sanitize('<%= ce[0].lbLivro %>').trim() != ""){
-            var headerLivr = ['Livros e Capítulos de Livros'];
-            var data17ILivr = [[sanitize('<%= ce[0].lbLivro %>')]];
-            doc.autoTable({
-                head: [headerLivr],
-                body: data17ILivr,
-                showHead: 'firstPage',
+        const estiloCabecalhoPub = {
+            fillColor: '#909691',
+            textColor: [255, 255, 255],
+            halign: 'left',
+            lineWidth: 0.2,
+            lineColor: '#909691',
+            fontSize: 9,
+        };
 
-                columnStyles: {
-                    0: { halign: 'left' }  
-                },
-                headerStyles:{
-                    fillColor: '#909691',     
-                    textColor: [255, 255, 255],
-                    halign: 'left',
-                    lineWidth: 0.2,
-                    lineColor: '#909691',
-                    fontSize:9,
-                },
-                theme: 'plain', 
-                didParseCell: function (data) {
-                    // Identify the last row ("MÉDIA GERAL")
-                    if (data.row.index === data8.length - 1) {
-                        data.cell.styles.fontStyle = 'bold';
-                    }
-                }
-            });
-        }
-        
-        if(typeof (sanitize('<%= ce[0].lbAtas %>')) !== "undefined" && typeof (sanitize('<%= ce[0].lbAtas %>')) === 'string' && sanitize('<%= ce[0].lbAtas %>').trim() != ""){
-            var headerAtas = ['Atas de encontros científicos'];
-            var data17IAtas = [[sanitize('<%= ce[0].lbAtas %>')]];
-            doc.autoTable({
-                head: [headerAtas],
-                body: data17IAtas,
+        // Um só sítio para as 4 tabelas (antes eram 4 blocos quase iguais).
+        function blocoPublicacoes(titulo, texto, opcoes) {
+            if (texto.trim() === '') return;
+            doc.autoTable(Object.assign({
+                head: [[titulo]],
+                body: [[texto]],
                 showHead: 'firstPage',
-
-                columnStyles: {
-                    0: { halign: 'left' } 
-                },
-                headerStyles:{
-                    fillColor: '#909691',     
-                    textColor: [255, 255, 255],
-                    halign: 'left',
-                    lineWidth: 0.2,
-                    lineColor: '#909691',
-                    fontSize:9,
-                },
-                theme: 'plain', 
-                didParseCell: function (data) {
-                    // Identify the last row ("MÉDIA GERAL")
-                    if (data.row.index === data8.length - 1) {
-                        data.cell.styles.fontStyle = 'bold';
-                    }
-                }
-            });
+                columnStyles: { 0: { halign: 'left' } },
+                headerStyles: estiloCabecalhoPub,
+                theme: 'plain'
+            }, opcoes || {}));
         }
-        
-        if(typeof (sanitize('<%= ce[0].lbOutPub %>')) !== "undefined" && typeof (sanitize('<%= ce[0].lbOutPub %>')) === 'string' && sanitize('<%= ce[0].lbOutPub %>').trim() != ""){
-            var headerOutPub = ['Outras publicações'];
-            var data17IlbOutPub = [[sanitize('<%= ce[0].lbOutPub %>')]];
-            doc.autoTable({
-                head: [headerOutPub],
-                body: data17IlbOutPub,
-                showHead: 'firstPage',
 
-                columnStyles: {
-                    0: { halign: 'left' } 
-                },
-                theme: 'plain', 
-                headerStyles:{
-                    fillColor: '#909691',     
-                    textColor: [255, 255, 255],
-                    halign: 'left',
-                    lineWidth: 0.2,
-                    lineColor: '#909691',
-                    fontSize:9,
-                },
-                didParseCell: function (data) {
-                    // Identify the last row ("MÉDIA GERAL")
-                    if (data.row.index === data8.length - 1) {
-                        data.cell.styles.fontStyle = 'bold';
-                    }
-                }
-            });
-        }
+        blocoPublicacoes('Artigos em revistas científicas', revCient, { startY: finalY - 2 });
+        blocoPublicacoes('Livros e Capítulos de Livros', livros);
+        blocoPublicacoes('Atas de encontros científicos', atas);
+        blocoPublicacoes('Outras publicações', outPub);
         
 
         var header19 = ['10. SÍNTESE DOS PONTOS FORTES E FRACOS DO CE'];
-        var data19 = [[sanitize(`<%= ce[0].PontosFortes %>`)]];
+        var data19 = [[sanitize(ce0.PontosFortes)]];
         
         doc.autoTable({
             head: [header19],
@@ -1223,7 +1161,7 @@
         });
 
         var header20 = ['11. AÇÕES DE FORMAÇÃO COMPLEMENTAR PARA OS ESTUDANTES'];
-        var data20 = [[sanitize(`<%= ce[0].AcoesFormac %>`)]];
+        var data20 = [[sanitize(ce0.AcoesFormac)]];
         
         doc.autoTable({
             head: [header20],
@@ -1257,7 +1195,7 @@
         });
 
         var header21 = ['12. SUGESTÕES DE MELHORIA'];
-        var data21 = [[sanitize(`<%= ce[0].SugestMelhoria %>`)]];
+        var data21 = [[sanitize(ce0.SugestMelhoria)]];
         
         doc.autoTable({
             head: [header21],
@@ -1291,7 +1229,7 @@
         });
 
         var header22 = ['13. CONSIDERAÇÕES FINAIS '];
-        var data22 = [[sanitize(`<%= ce[0].ConsidFinais %>`)]];
+        var data22 = [[sanitize(ce0.ConsidFinais)]];
         
         doc.autoTable({
             head: [header22],
@@ -1325,7 +1263,7 @@
         });
 
         addFooters(doc);
-        doc.save("RAC_<%= fucs[0].nomeCE %>_<%= ce[0].AnoLetivo %>.pdf");   
+        doc.save("RAC_" + fuc0.nomeCE + "_" + ce0.AnoLetivo + ".pdf");   
         
         setTimeout(function (){
 

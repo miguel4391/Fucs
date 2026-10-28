@@ -582,7 +582,7 @@ doc.text(text, x, currentY0);
     const usableWidth = pageWidth3a - margin * 2;
     
     const currentY3a = doc.lastAutoTable.finalY + 5;
-    const text3a = "[2] Dados sobre estudantes inscritos no ano letivo anterior e que não efetuaram a inscrição para o ano letivo de " + ce[0].AnoLetivo + ",\nextraídos da Plataforma de Gestão Académica - Sophia Plus a " + ce[0].DataSophInscri +".";
+    const text3a = "[2] Dados sobre estudantes inscritos no ano letivo anterior e que não efetuaram a inscrição para o ano letivo de " + ce[0].AnoLetivo + ",\nextraídos da Plataforma de Gestão Académica - Sophia Plus a " + ce[0].DataSophDiplom +".";
     const wrapped = doc.splitTextToSize(text3a, usableWidth);
     doc.setFontSize(8);
     doc.text( wrapped, margin, currentY3a);
@@ -635,7 +635,7 @@ doc.text(text, x, currentY0);
     const usableWidth4a = pageWidth4a - margin4a * 2;
     
     const currentY4a = doc.lastAutoTable.finalY + 5;
-    const text4a = "[3] Dados extraídos da Plataforma de Gestão Académica - Sophia Plus, a " + ce[0].DataSophInscri + ".";
+    const text4a = "[3] Dados extraídos da Plataforma de Gestão Académica - Sophia Plus, a " + ce[0].DataSophDiplom + ".";
     const wrapped4a = doc.splitTextToSize(text4a, usableWidth4a);
     doc.setFontSize(8);
     doc.text( wrapped4a, margin4a, currentY4a);

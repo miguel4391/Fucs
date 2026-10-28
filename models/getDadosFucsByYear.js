@@ -1,7 +1,7 @@
 let fuc = function getCursos(idCE, anoLetivo, callback){
 	var sql = require('./db.js');
 
-	sql.query("SELECT * FROM Qualidade.fucsRelCE where idCERelCE =" + idCE + " and anoLetivoRelCE like '" + anoLetivo + "';", (err, result) => {
+	sql.query("SELECT * FROM Qualidade.fucsRelCE where idCERelCE =" + idCE + " and anoLetivoRelCE like '" + anoLetivo + "' ORDER BY anoCurr, nomeUCRelCE;", (err, result) => {
 		if(err){
 			console.log(err);
 		}else{

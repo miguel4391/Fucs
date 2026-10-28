@@ -859,7 +859,7 @@ router.get('/pdfsendRAC/:codCE', isLoggedIn, (req, res) =>{
 	let ced = require("../models/getRelCE.js")(codCe, anoLetivo, (err, ce) => {
 		if(err)console.log(err);
 		else{
-			let fuc = require("../models/getFucsByyear.js")(codCe, (err, fucs) =>{
+			let fuc = require("../models/getFucsByyear.js")(codCe, anoLetivo, (err, fucs) =>{
 				if(err)console.log(err);
 				else{
 					let dadosFuc = require("../models/getDadosFucsByYear.js")(codCe, anoLetivo, (err, dados) => {

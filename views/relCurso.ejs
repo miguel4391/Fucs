@@ -126,7 +126,7 @@
                             let total = parseFloat(nrInscri) + parseFloat(inscriUC);
                             let nrResp = $('#tbNrResp1Sem').val().trim();
                         
-                            $('#tbPerResp1Sem').val((nrResp / total * 100).toFixed(2));                              
+                            $('#tbPerResp1Sem').val((nrResp / inscriUC * 100).toFixed(2));                              
                         }
                     }
                 </script>
@@ -158,7 +158,7 @@
                             let total = parseFloat(nrInscri) + parseFloat(inscriUC);
                             let nrResp = $('#tbNrResp2Sem').val().trim();
                         
-                            $('#tbPerResp2Sem').val((nrResp / total * 100).toFixed(2));                              
+                            $('#tbPerResp2Sem').val((nrResp / nrInscri * 100).toFixed(2));                              
                         }
                     }
                 </script>
@@ -310,34 +310,81 @@
                         <tr>
                             <th>ANO</th>
                             <th>UNIDADE CURRICULAR</th>
-                            <th>INSCRITOS</th>
+                            <th>Nº INSCRITOS</th>
                             <th>MÉDIA</th>
-                            <th>REPROVADOS (%)</th>
+                            <th>Nº REPROVADOS</th>
                             <th>APROVADOS (%)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% fucs.forEach((fuc) => {
-                                const dado = dados.find(d => d.nomeUCRelCE.trim() == fuc.nomeUCPt);
-                            %>
-                                <tr>
-                                    <td><%= fuc.ano %></td>
-                                    <td><%= fuc.nomeUCPt %></td>
-                                    <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_insc" name="<%= fuc.idfucs %>"
-                                        value="<%= dado ? dado.nrInscriUC : '' %>"
-                                        <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
-                                    <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_media" name="<%= fuc.idfucs %>"
-                                        value="<%= dado ? dado.avgUC : '' %>"
-                                        <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
-                                    <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_reprov" name="<%= fuc.idfucs %>"
-                                        value="<%= dado ? dado.percReprov : '' %>"
-                                        <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
-                                    <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_aprov" name="<%= fuc.idfucs %>"
-                                        value="<%= dado ? dado.percAprov : '' %>"
-                                        <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
-                                </tr>
-                            <% }) %>
+                        <%
+  const anoNum = (v) => {
+    const n = parseInt(String(v ?? '').replace(/\D+/g, ''), 10);
+    return isNaN(n) ? 999 : n;   // anos inválidos vão para o fim
+  };
+  const nome = (v) => String(v ?? '').trim();
+
+  const fucsOrdenadas = [...fucs].sort((a, b) => {
+    const difAno = anoNum(a.ano) - anoNum(b.ano);
+    if (difAno !== 0) return difAno;
+    return nome(a.nomeUCPt).localeCompare(nome(b.nomeUCPt), 'pt', { sensitivity: 'base' });
+  });
+%>
+<% fucsOrdenadas.forEach((fuc) => {
+     const dado = dados.find(d => d.nomeUCRelCE.trim() == fuc.nomeUCPt);
+%>
+                            <tr>
+                                <td><%= fuc.ano %></td>
+                                <td><%= fuc.nomeUCPt %></td>
+                                <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_insc" name="<%= fuc.idfucs %>"
+                                    value="<%= dado ? dado.nrInscriUC : '' %>"
+                                    <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                                <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_media" name="<%= fuc.idfucs %>"
+                                    value="<%= dado ? dado.avgUC : '' %>"
+                                    <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                                <td><input inputmode="numeric" pattern="[0-9]*" class="form-control" id="<%= fuc.idfucs %>_reprov" name="<%= fuc.idfucs %>"
+                                    value="<%= dado ? dado.percReprov : '' %>"
+                                    <% if( role !="gestor" || ce[0].finalizado==1){%> readonly <% } %>></td>
+                                <td><input type="text" class="form-control" id="<%= fuc.idfucs %>_aprov" name="<%= fuc.idfucs %>"
+                                    value="<%= dado ? dado.percAprov : '' %>" readonly></td>
+                            </tr>
+                        <% }) %>
                     </tbody>
+                    <script>
+                        // Calculo puro (sem DOM): devolve a percentagem de aprovados com 2 casas, ou '' se os dados nao fizerem sentido.
+                        function calcPercAprov(inscritos, reprovados) {
+                            const num = (v) => {
+                                v = String(v == null ? '' : v).trim().replace(',', '.');
+                                return v === '' ? NaN : Number(v);
+                            };
+                            const insc = num(inscritos);
+                            const reprov = num(reprovados);
+
+                            if (isNaN(insc) || isNaN(reprov)) return '';
+                            if (insc <= 0 || reprov < 0 || reprov > insc) return '';
+
+                            return ((insc - reprov) / insc * 100).toFixed(2);
+                        }
+
+                        $(function () {
+                            // Recalcula quando o utilizador escreve em Inscritos (_insc) ou Reprovados (_reprov) de uma UC.
+                            // Os ids tem a forma <idfucs>_insc, <idfucs>_reprov e <idfucs>_aprov.
+                            $(document).on('input', '[id$="_insc"], [id$="_reprov"]', function () {
+                                const prefixo = this.id.replace(/_(insc|reprov)$/, '');
+                                const $insc = $('#' + prefixo + '_insc');
+                                const $reprov = $('#' + prefixo + '_reprov');
+
+                                const resultado = calcPercAprov($insc.val(), $reprov.val());
+                                $('#' + prefixo + '_aprov').val(resultado);
+
+                                // Sinaliza o caso "reprovados maior que inscritos"
+                                const insc = parseFloat(String($insc.val()).replace(',', '.'));
+                                const reprov = parseFloat(String($reprov.val()).replace(',', '.'));
+                                $reprov.toggleClass('is-invalid', !isNaN(insc) && !isNaN(reprov) && reprov > insc);
+                            });
+                        });
+                    </script>
+
                 </table>
             </div>
         </div>
